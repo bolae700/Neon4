@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ar">
 <head>
@@ -185,7 +184,7 @@
                 <h2 class="text-2xl font-bold text-center flex-shrink-0 gradient-text">Gemini Chat</h2>
                 <div id="chat-messages" class="flex-grow min-h-0 w-full p-1 pr-2 space-y-3 overflow-y-auto"></div>
                 <form id="chat-form" class="flex gap-2 flex-shrink-0">
-                    <input type="text" id="chat-input" placeholder="Ask anything..." class="flex-grow bg-[var(--bg-deep-space)] border-2 border-[var(--bg-card)] rounded-full px-4 py-2 text-sm text-[var(--text-primary)] placeholder-[var(--text-secondary)] focus:ring-0 transition" disabled>
+                    <input type="text" id="chat-input" placeholder="Provide API key to start chat..." class="flex-grow bg-[var(--bg-deep-space)] border-2 border-[var(--bg-card)] rounded-full px-4 py-2 text-sm text-[var(--text-primary)] placeholder-[var(--text-secondary)] focus:ring-0 transition" disabled>
                     <button type="submit" id="chat-submit" class="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-[var(--gradient-start)] to-[var(--gradient-end)] rounded-full flex items-center justify-center text-white disabled:opacity-50 disabled:cursor-not-allowed transition-transform hover:scale-105 shadow-lg shadow-[var(--border-glow)]" disabled>
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M3.105 3.105a.75.75 0 011.06 0L16.75 14.69V10.5a.75.75 0 011.5 0v5.25a.75.75 0 01-.75.75H12a.75.75 0 010-1.5h4.19L3.105 4.165a.75.75 0 010-1.06z" clip-rule="evenodd" fill-rule="evenodd"></path></svg>
                     </button>
@@ -243,23 +242,12 @@
 
             constants: {
                 tracks: [
-                    { url: "https://audio.jukehost.co.uk/3SwFzuOJdwkrBopTFgOzkDOT5FDN6ITH", title: "Fakrak Ya Nasiny", artist: "Mohamed Foad" },
-                    { url: "https://audio.jukehost.co.uk/6IQhCPy39Jv5Uxj9WI4fFMeUuJMWWR2D", title: "Khalik Ganbi", artist: "Haitham Shaker" },
-                    { url: "https://audio.jukehost.co.uk/gHFak76ZMfll7B4AxEeDbJjPRWgXvhc8", title: "Alb ElAsheq Dalelo", artist: "George Wasouf" },
-                    { url: "https://audio.jukehost.co.uk/NuLgFpCxa1HTsUQUUVhWtBDQJ76xsQwz", title: "Seket Leih", artist: "Ramy Sabry" },
-                    { url: "https://audio.jukehost.co.uk/LTTXfGln1F0s2pQpHLgb0JapbBOxUpGn", title: "Khosara", artist: "Mohamed Foad" },
-                    { url: "https://audio.jukehost.co.uk/bbabQwnKnYhXlaRD8alUDCzGEhyu9Rwm", title: "Khadny 7aneen", artist: "George Wasouf" },
-                    { url: "https://audio.jukehost.co.uk/jciF6sfSouobTpBl2Krqc3UaZfMX3oeJ", title: "Enty Nesity Nafsek", artist: "Tamer Hosny" },
-                    { url: "https://audio.jukehost.co.uk/FhU9VQWsajSdhBd1mXmWq5kXnw1IaFLr", title: "Kol youm", artist: "Tamer Ashour" },
-                    { url: "https://audio.jukehost.co.uk/nR6XjZwYTEh3Y5tzwS3NwKZrazhE0qGz", title: "Rabak Lama Yered", artist: "Mohamed Mounir" },
-                    { url: "https://audio.jukehost.co.uk/kwvKuE1GOiFiyJB9r2qgbSdCEwNYicoY", title: "Shed Eldafaer", artist: "Hanan Madi" },
-                    { url: "https://audio.jukehost.co.uk/lrUXO0jmrJRZANKo0Gx9XEQ0PFuQxKN5", title: "Yalli Bitghib Aleiya", artist: "Haitham Shaker" },
-                    { url: "https://audio.jukehost.co.uk/eQbGikyF1Aog1gTZILSPznXQ3rLXymGw", title: "ElSabri Tayib", artist: "George Wasouf" },
-                    { url: "https://audio.jukehost.co.uk/l2Mk2abKCcRGWpSoxSlcxBL80RAjYvMe", title: "Fagaa Eftarana", artist: "Tamer Hosny" },
-                    { url: "https://audio.jukehost.co.uk/HN649ig7AsLZ1vaS9mdsGPl8q0uI8z7m", title: "Lw Batlna Nehlm", artist: "Mohamed Mounir" },
-                    { url: "https://audio.jukehost.co.uk/f9oiefTzRGZvp6iyMJKGbxLe3ZFCv390", title: "Sed El-Habayeb", artist: "Shadia" },
-                    { url: "https://audio.jukehost.co.uk/c77yqDnvZV6lAmIPQPanmSgqVpnlnDyv", title: "Saber W.Radi", artist: "George Wasouf" },
-                    { url: "https://audio.jukehost.co.uk/16F3ncIKS16sa5AciCMrGmuJa9doyvDX", title: "Zkryat", artist: "George Wasouf" },
+                    { url: "https://audio.jukehost.co.uk/lnUyIfD2wXjDHuRpTnbs3IKUfrY42d9J", title: "كيف قدرت تتغير", artist: "SoundSurge" },
+                    { url: "https://audio.jukehost.co.uk/lPScCfpYJHhjHRALSIxGztrtY3v64G1D", title: "وين ما بروح", artist: "SoundSurge" },
+                    { url: "https://audio.jukehost.co.uk/s7QBLiRoWHQ3J0AthraitySBdXssQ30I", title: "ماشي الحال", artist: "SoundSurge" },
+                    { url: "https://audio.jukehost.co.uk/UnRL2nn78numFLEp1Yl5f0eKDbqYrNEw", title: "جرح عميق", artist: "SoundSurge" },
+                    { url: "https://audio.jukehost.co.uk/swyTw5xfbssHfuPHwnBQbY57OQze2UR4", title: "زرعت الدرب", artist: "SoundSurge" },
+                    { url: "https://audio.jukehost.co.uk/0XO0oPS6NmiVoj87WxBJ46YGDtq0cGnW", title: "سكّرت الدفتر", artist: "SoundSurge" },
                 ],
                 images: [
                     "https://i.ibb.co/pXfwCcv/2d79b46de2deb3744fd330d815b76751.jpg", "https://i.ibb.co/Jyq80hX/bfa64e7da2612eb344663aa3fbcf2f59.png",
@@ -417,12 +405,16 @@
                     // Make a simple, low-cost call to verify the key
                     await ai.models.generateContent({ model: "gemini-2.5-flash", contents: "hello" });
                     
-                    this.state.chat = ai.chats.create({ model: 'gemini-2.5-flash' });
+                    this.state.chat = ai.chats.create({ 
+                        model: 'gemini-2.5-flash',
+                        systemInstruction: "You are a helpful and friendly assistant named PolaBot, part of Pola's portfolio. Keep your answers concise and friendly."
+                     });
                     sessionStorage.setItem('geminiApiKey', apiKey);
                     this.elements.chatMessages.innerHTML = '';
-                    this.appendChatMessage('Welcome to Gemini Chat! How can I help?', 'gemini');
+                    this.appendChatMessage("Welcome to Gemini Chat! I'm PolaBot. How can I help?", 'gemini');
                     this.elements.chatSubmit.disabled = false;
                     this.elements.chatInput.disabled = false;
+                    this.elements.chatInput.placeholder = "Ask anything...";
                     this.showApiKeyModal(false);
                 } catch (error) {
                     console.error("Gemini AI initialization failed:", error);
@@ -580,7 +572,7 @@
                 try {
                     const result = await this.state.chat.sendMessage({ message: prompt });
                     const text = result.text;
-                    typingIndicator.querySelector('div').textContent = text;
+                    typingIndicator.querySelector('div').innerHTML = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
                     typingIndicator.classList.remove('typing');
                 } catch (error) {
                     console.error("Gemini AI error:", error);
@@ -598,25 +590,22 @@
                 messageWrapper.className = `flex gap-2 ${sender === 'user' ? 'justify-end' : 'justify-start'}`;
 
                 const messageBubble = document.createElement('div');
-                let bubbleContent;
-
+                
                 if (sender === 'user') {
                     messageBubble.className = `max-w-xs md:max-w-sm rounded-2xl p-3 text-sm bg-gradient-to-br from-[var(--gradient-start)] to-[var(--gradient-end)] text-white rounded-br-lg`;
                     messageBubble.textContent = text;
                 } else if (sender === 'system') {
-                    messageBubble.className = `max-w-xs md:max-w-sm rounded-2xl p-3 text-sm bg-yellow-500/20 text-yellow-300 w-full text-center`;
+                    messageBubble.className = `max-w-xs md:max-w-sm rounded-2xl p-3 text-sm bg-red-500/20 text-red-300 w-full text-center`;
                     messageBubble.textContent = text;
                 } else {
                     messageBubble.className = 'max-w-xs md:max-w-sm rounded-2xl p-3 text-sm bg-[var(--bg-deep-space)] text-[var(--text-secondary)] rounded-bl-lg';
-                    bubbleContent = document.createElement('div');
-if (isTyping) {
-    bubbleContent.innerHTML = '<div class="typing-indicator"><span></span><span></span><span></span></div>';
-    messageWrapper.classList.add('typing');
-} else {
-    // Basic markdown for bold text
-    text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-    bubbleContent.innerHTML = text;
-}
+                    const bubbleContent = document.createElement('div');
+                    if (isTyping) {
+                        bubbleContent.innerHTML = '<div class="typing-indicator"><span></span><span></span><span></span></div>';
+                        messageWrapper.classList.add('typing');
+                    } else {
+                        bubbleContent.innerHTML = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                    }
                     messageBubble.appendChild(bubbleContent);
                 }
                 
