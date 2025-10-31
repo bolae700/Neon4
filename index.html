@@ -1,0 +1,633 @@
+
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pola's Portfolio</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-deep-space: #0a0f1f;
+            --bg-card: #101935;
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --gradient-start: #6366f1;
+            --gradient-end: #0ea5e9;
+            --border-glow: rgba(14, 165, 233, 0.2);
+        }
+
+        @keyframes cosmic-dust {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-100vh); }
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-deep-space);
+            color: var(--text-primary);
+        }
+        
+        #cosmic-background {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .dust {
+            position: absolute; width: 2px; height: 2px;
+            background: white; border-radius: 50%; opacity: 0;
+            animation: cosmic-dust 20s linear infinite;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-card); }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, var(--gradient-start), var(--gradient-end));
+            border-radius: 3px;
+        }
+
+        .window {
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%;
+            opacity: 0; visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            will-change: opacity, visibility;
+            padding: 1.25rem;
+        }
+        .window.active { opacity: 1; visibility: visible; }
+        
+        .content-card {
+            background-color: var(--bg-card);
+            border: 1px solid;
+            border-image-slice: 1;
+            border-image-source: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+            box-shadow: 0 0 20px var(--border-glow);
+        }
+        
+        .nav-indicator {
+            background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+        .nav-button.active svg { color: white; }
+        .nav-button:not(.active) svg { color: var(--text-secondary); }
+        .nav-button:hover svg { color: white; }
+        
+        .gradient-text {
+            background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .social-link:hover {
+            box-shadow: 0 0 15px var(--border-glow);
+            border-color: var(--gradient-end);
+        }
+
+        .playlist-item.active {
+            background-color: rgba(99, 102, 241, 0.2);
+            border-left-color: var(--gradient-end);
+        }
+        
+        .gallery-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px var(--border-glow);
+        }
+        #gallery-modal { transition: opacity 0.3s ease-in-out; }
+        #gallery-modal img { max-width: 90vw; max-height: 80vh; }
+        
+        input:focus {
+            box-shadow: 0 0 0 2px var(--bg-deep-space), 0 0 0 4px var(--gradient-end);
+        }
+        .typing-indicator { display: flex; align-items: center; justify-content: center; height: 1.25rem; }
+        .typing-indicator span {
+            height: 6px; width: 6px; margin: 0 2px;
+            background-color: var(--text-secondary); border-radius: 50%; display: inline-block;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+        .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+        .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1.0); }
+        }
+    </style>
+     <script type="importmap">
+      {
+        "imports": {
+          "@google/genai": "https://aistudiocdn.com/@google/genai@^1.28.0"
+        }
+      }
+    </script>
+</head>
+<body class="antialiased overflow-hidden">
+    <div id="cosmic-background"></div>
+
+    <main class="relative w-full h-screen flex flex-col items-center justify-center p-4">
+        
+        <div id="content-card" class="content-card relative w-full max-w-sm h-full max-h-[640px] rounded-2xl flex flex-col mb-20 md:mb-24 overflow-hidden">
+            <!-- Home Window -->
+            <div id="home" class="window active flex flex-col items-center justify-center text-center">
+                <img src="https://xatimg.com/image/rWDHtSw2pqG2.jpg" alt="Pola" class="w-24 h-24 rounded-full object-cover">
+                <div class="relative mt-4">
+                    <h1 class="text-3xl font-bold gradient-text">Pola</h1>
+                </div>
+                <p class="text-xs text-[var(--text-secondary)] max-w-xs mt-3">"But those who hope in the LORD will renew their strength..." (Isaiah 40:31)</p>
+                <div class="flex gap-4 mt-6">
+                    <a href="https://github.com/bolae700" target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="social-link w-10 h-10 bg-[var(--bg-card)] rounded-full flex items-center justify-center text-white border-2 border-transparent transition-all duration-300">
+                        <svg fill="currentColor" viewBox="0 0 24 24" class="w-6 h-6"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.168 6.839 9.492.5.092.682-.217.682-.482 0-.237-.009-.868-.014-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.031-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.203 2.398.1 2.651.64.7 1.03 1.595 1.03 2.688 0 3.848-2.338 4.695-4.566 4.942.359.308.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.001 10.001 0 0022 12c0-5.523-4.477-10-10-10z"></path></svg>
+                    </a>
+                    <a href="https://www.youtube.com/@SoundSurge3" target="_blank" rel="noopener noreferrer" aria-label="YouTube" class="social-link w-10 h-10 bg-[var(--bg-card)] rounded-full flex items-center justify-center text-white border-2 border-transparent transition-all duration-300">
+                       <svg fill="currentColor" viewBox="0 0 24 24" class="w-6 h-6"><path d="M12.001,4.5C7.2,4.5,4.5,7.2,4.5,12s2.7,7.5,7.501,7.5c4.799,0,7.499-2.7,7.499-7.5S16.8,4.5,12.001,4.5z M10.493,15.197V8.803L15.3,12L10.493,15.197z"/></svg>
+                    </a>
+                </div>
+            </div>
+            <!-- Music Window -->
+            <div id="music" class="window flex flex-col text-center gap-3">
+                <audio id="audio-player"></audio>
+                <div class="flex-shrink-0 p-3 bg-[var(--bg-deep-space)] rounded-xl text-center">
+                    <h3 id="track-title" class="text-sm font-semibold truncate">Select a song</h3>
+                    <p id="track-artist" class="text-xs text-[var(--text-secondary)]">-</p>
+                </div>
+                <div class="flex-shrink-0">
+                    <div id="progress-bar-container" class="h-1.5 bg-[var(--bg-deep-space)] rounded-full cursor-pointer"><div id="progress-bar" class="h-full bg-gradient-to-r from-[var(--gradient-start)] to-[var(--gradient-end)] rounded-full" style="width: 0%;"></div></div>
+                </div>
+                <div class="flex-shrink-0 flex items-center justify-center gap-5">
+                    <button id="prev-btn" aria-label="Previous Track" class="text-[var(--text-secondary)] transition-transform hover:scale-110"><svg viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5"><path d="M18.75 5.653c0-1.426-1.529-2.33-2.779-1.643l-7.58 4.348a2.25 2.25 0 000 3.99l7.58 4.347c1.25.717 2.779-.217 2.779-1.643V5.653zM8.25 5.25v13.5a.75.75 0 01-1.5 0V5.25a.75.75 0 011.5 0z"></path></svg></button>
+                    <button id="play-pause-btn" aria-label="Play" class="bg-gradient-to-br from-[var(--gradient-start)] to-[var(--gradient-end)] rounded-full w-14 h-14 flex items-center justify-center text-white transition transform hover:scale-105 shadow-lg shadow-[var(--border-glow)]">
+                        <span id="play-icon"><svg viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7 ml-1"><path d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.647c1.295.742 1.295 2.545 0 3.286L7.279 20.99c-1.25.717-2.779-.217-2.779-1.643V5.653z"></path></svg></span>
+                        <span id="pause-icon" style="display: none;"><svg viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7"><path d="M5.25 7.5A2.25 2.25 0 017.5 5.25h1.5A2.25 2.25 0 0111.25 7.5v9A2.25 2.25 0 019 18.75h-1.5A2.25 2.25 0 015.25 16.5v-9zM12.75 7.5A2.25 2.25 0 0115 5.25h1.5A2.25 2.25 0 0118.75 7.5v9A2.25 2.25 0 0116.5 18.75h-1.5A2.25 2.25 0 0112.75 16.5v-9z"></path></svg></span>
+                    </button>
+                    <button id="next-btn" aria-label="Next Track" class="text-[var(--text-secondary)] transition-transform hover:scale-110"><svg viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5"><path d="M5.25 5.653c0-1.426 1.529-2.33 2.779-1.643l7.58 4.348a2.25 2.25 0 010 3.99l-7.58 4.347c-1.25.717-2.779-.217-2.779-1.643V5.653zM15.75 5.25v13.5a.75.75 0 001.5 0V5.25a.75.75 0 00-1.5 0z"></path></svg></button>
+                </div>
+                <div id="playlist" class="flex-grow min-h-0 overflow-y-auto h-full pr-1 space-y-2"></div>
+            </div>
+            <!-- Gallery Window -->
+            <div id="gallery" class="window flex flex-col text-center gap-3">
+                <h2 class="text-2xl font-bold flex-shrink-0 gradient-text">Gallery</h2>
+                <div id="gallery-grid" class="flex-grow min-h-0 w-full grid grid-cols-3 gap-2 overflow-y-auto"></div>
+            </div>
+            <!-- Clock Window -->
+            <div id="clock" class="window flex flex-col items-center justify-center text-center gap-2">
+                <div id="time" class="text-5xl md:text-6xl font-bold tracking-wider"></div>
+                <div id="date" class="text-sm text-[var(--text-secondary)]"></div>
+            </div>
+             <!-- Gemini Chat Window -->
+            <div id="ai" class="window flex flex-col gap-3 h-full">
+                <h2 class="text-2xl font-bold text-center flex-shrink-0 gradient-text">Gemini Chat</h2>
+                <div id="chat-messages" class="flex-grow min-h-0 w-full p-1 pr-2 space-y-3 overflow-y-auto"></div>
+                <form id="chat-form" class="flex gap-2 flex-shrink-0">
+                    <input type="text" id="chat-input" placeholder="Ask anything..." class="flex-grow bg-[var(--bg-deep-space)] border-2 border-[var(--bg-card)] rounded-full px-4 py-2 text-sm text-[var(--text-primary)] placeholder-[var(--text-secondary)] focus:ring-0 transition" disabled>
+                    <button type="submit" id="chat-submit" class="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-[var(--gradient-start)] to-[var(--gradient-end)] rounded-full flex items-center justify-center text-white disabled:opacity-50 disabled:cursor-not-allowed transition-transform hover:scale-105 shadow-lg shadow-[var(--border-glow)]" disabled>
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M3.105 3.105a.75.75 0 011.06 0L16.75 14.69V10.5a.75.75 0 011.5 0v5.25a.75.75 0 01-.75.75H12a.75.75 0 010-1.5h4.19L3.105 4.165a.75.75 0 010-1.06z" clip-rule="evenodd" fill-rule="evenodd"></path></svg>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Navigation Bar -->
+        <nav class="absolute bottom-4 w-full max-w-[280px] h-14 bg-[var(--bg-card)] rounded-full flex justify-around items-center z-20 shadow-lg shadow-black/30">
+            <div class="nav-indicator absolute top-0 left-0 h-full w-1/5 rounded-full z-0 pointer-events-none"></div>
+            <button class="nav-button active relative z-10 flex-1 h-full" data-tab="home" aria-label="Home" aria-current="page"><svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 m-auto transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></button>
+            <button class="nav-button relative z-10 flex-1 h-full" data-tab="music" aria-label="Music"><svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 m-auto transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></button>
+            <button class="nav-button relative z-10 flex-1 h-full" data-tab="gallery" aria-label="Gallery"><svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 m-auto transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg></button>
+            <button class="nav-button relative z-10 flex-1 h-full" data-tab="clock" aria-label="Clock"><svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 m-auto transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></button>
+            <button class="nav-button relative z-10 flex-1 h-full" data-tab="ai" aria-label="Gemini Chat"><svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 m-auto transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg></button>
+        </nav>
+    </main>
+
+    <!-- Gallery Modal -->
+    <div id="gallery-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 opacity-0 pointer-events-none" onclick="this.classList.add('opacity-0', 'pointer-events-none')">
+        <img id="modal-img" src="" alt="Enlarged gallery view" class="rounded-lg shadow-2xl">
+    </div>
+
+    <!-- API Key Modal -->
+    <div id="api-key-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="content-card w-full max-w-sm p-6 rounded-2xl flex flex-col gap-4 mx-4">
+            <h3 class="text-xl font-bold gradient-text text-center">Enter API Key</h3>
+            <p class="text-sm text-center text-[var(--text-secondary)]">To use Gemini Chat, please provide your Google AI API Key. It's stored only for this session.</p>
+            <div>
+                <input type="password" id="api-key-input" placeholder="Enter your Gemini API Key" class="w-full bg-[var(--bg-deep-space)] border-2 border-[var(--bg-card)] rounded-lg px-4 py-2 text-sm text-[var(--text-primary)] placeholder-[var(--text-secondary)] focus:ring-0 transition">
+                <p id="api-key-error" class="text-red-400 text-xs mt-2 text-center hidden">Invalid API Key. Please try again.</p>
+            </div>
+            <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" class="text-xs text-center text-[var(--gradient-end)] hover:underline">Get your API Key from Google AI Studio</a>
+            <div class="flex gap-3 mt-2">
+                <button id="api-key-close" class="flex-1 py-2 rounded-lg bg-[var(--bg-deep-space)] text-[var(--text-secondary)] hover:text-white transition-colors">Cancel</button>
+                <button id="api-key-save" class="flex-1 py-2 rounded-lg bg-gradient-to-r from-[var(--gradient-start)] to-[var(--gradient-end)] text-white font-semibold hover:opacity-90 transition-opacity">Save & Start</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { GoogleGenAI } from "@google/genai";
+
+        const PortfolioApp = {
+            state: {
+                activeTab: 'home',
+                currentTrackIndex: 0,
+                isPlaying: false,
+                clockInterval: null,
+                chat: null,
+                audioContext: null,
+            },
+
+            elements: {},
+
+            constants: {
+                tracks: [
+                    { url: "https://audio.jukehost.co.uk/3SwFzuOJdwkrBopTFgOzkDOT5FDN6ITH", title: "Fakrak Ya Nasiny", artist: "Mohamed Foad" },
+                    { url: "https://audio.jukehost.co.uk/6IQhCPy39Jv5Uxj9WI4fFMeUuJMWWR2D", title: "Khalik Ganbi", artist: "Haitham Shaker" },
+                    { url: "https://audio.jukehost.co.uk/gHFak76ZMfll7B4AxEeDbJjPRWgXvhc8", title: "Alb ElAsheq Dalelo", artist: "George Wasouf" },
+                    { url: "https://audio.jukehost.co.uk/NuLgFpCxa1HTsUQUUVhWtBDQJ76xsQwz", title: "Seket Leih", artist: "Ramy Sabry" },
+                    { url: "https://audio.jukehost.co.uk/LTTXfGln1F0s2pQpHLgb0JapbBOxUpGn", title: "Khosara", artist: "Mohamed Foad" },
+                    { url: "https://audio.jukehost.co.uk/bbabQwnKnYhXlaRD8alUDCzGEhyu9Rwm", title: "Khadny 7aneen", artist: "George Wasouf" },
+                    { url: "https://audio.jukehost.co.uk/jciF6sfSouobTpBl2Krqc3UaZfMX3oeJ", title: "Enty Nesity Nafsek", artist: "Tamer Hosny" },
+                    { url: "https://audio.jukehost.co.uk/FhU9VQWsajSdhBd1mXmWq5kXnw1IaFLr", title: "Kol youm", artist: "Tamer Ashour" },
+                    { url: "https://audio.jukehost.co.uk/nR6XjZwYTEh3Y5tzwS3NwKZrazhE0qGz", title: "Rabak Lama Yered", artist: "Mohamed Mounir" },
+                    { url: "https://audio.jukehost.co.uk/kwvKuE1GOiFiyJB9r2qgbSdCEwNYicoY", title: "Shed Eldafaer", artist: "Hanan Madi" },
+                    { url: "https://audio.jukehost.co.uk/lrUXO0jmrJRZANKo0Gx9XEQ0PFuQxKN5", title: "Yalli Bitghib Aleiya", artist: "Haitham Shaker" },
+                    { url: "https://audio.jukehost.co.uk/eQbGikyF1Aog1gTZILSPznXQ3rLXymGw", title: "ElSabri Tayib", artist: "George Wasouf" },
+                    { url: "https://audio.jukehost.co.uk/l2Mk2abKCcRGWpSoxSlcxBL80RAjYvMe", title: "Fagaa Eftarana", artist: "Tamer Hosny" },
+                    { url: "https://audio.jukehost.co.uk/HN649ig7AsLZ1vaS9mdsGPl8q0uI8z7m", title: "Lw Batlna Nehlm", artist: "Mohamed Mounir" },
+                    { url: "https://audio.jukehost.co.uk/f9oiefTzRGZvp6iyMJKGbxLe3ZFCv390", title: "Sed El-Habayeb", artist: "Shadia" },
+                    { url: "https://audio.jukehost.co.uk/c77yqDnvZV6lAmIPQPanmSgqVpnlnDyv", title: "Saber W.Radi", artist: "George Wasouf" },
+                    { url: "https://audio.jukehost.co.uk/16F3ncIKS16sa5AciCMrGmuJa9doyvDX", title: "Zkryat", artist: "George Wasouf" },
+                ],
+                images: [
+                    "https://i.ibb.co/pXfwCcv/2d79b46de2deb3744fd330d815b76751.jpg", "https://i.ibb.co/Jyq80hX/bfa64e7da2612eb344663aa3fbcf2f59.png",
+                    "https://i.ibb.co/dDVSRPD/ss.png", "https://xatimg.com/image/rWDHtSw2pqG2.jpg",
+                ]
+            },
+            
+            initAudioContext() {
+                if (this.state.audioContext) return;
+                try {
+                    this.state.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    if (this.state.audioContext.state === 'suspended') this.state.audioContext.resume();
+                } catch (e) { console.error("Web Audio API is not supported.", e); }
+            },
+
+            playSound(type) {
+                if (!this.state.audioContext) return;
+                const context = this.state.audioContext;
+                const osc = context.createOscillator();
+                const gain = context.createGain();
+                osc.connect(gain); gain.connect(context.destination);
+                const now = context.currentTime;
+                gain.gain.setValueAtTime(0, now);
+                switch(type) {
+                    case 'click':
+                        osc.type = 'sine'; osc.frequency.setValueAtTime(523.25, now);
+                        gain.gain.linearRampToValueAtTime(0.3, now + 0.01).exponentialRampToValueAtTime(0.0001, now + 0.1);
+                        break;
+                    case 'hover':
+                        osc.type = 'triangle'; osc.frequency.setValueAtTime(800, now);
+                        gain.gain.linearRampToValueAtTime(0.08, now + 0.01).exponentialRampToValueAtTime(0.0001, now + 0.1);
+                        break;
+                    case 'transition':
+                         osc.type = 'sine'; osc.frequency.setValueAtTime(200, now); osc.frequency.exponentialRampToValueAtTime(800, now + 0.2);
+                         gain.gain.linearRampToValueAtTime(0.2, now + 0.01).exponentialRampToValueAtTime(0.0001, now + 0.2);
+                        break;
+                    case 'send':
+                        osc.type = 'triangle'; osc.frequency.setValueAtTime(600, now); osc.frequency.exponentialRampToValueAtTime(1200, now + 0.1);
+                        gain.gain.linearRampToValueAtTime(0.2, now + 0.01).exponentialRampToValueAtTime(0.0001, now + 0.15);
+                        break;
+                }
+                osc.start(now); osc.stop(now + 0.2);
+            },
+
+            init() {
+                this.cacheDOMElements();
+                this.bindEvents();
+                this.renderPlaylist();
+                this.loadTrack(this.state.currentTrackIndex);
+                this.startClock();
+                this.renderGallery();
+                this.initCosmicBackground();
+                this.updateNavIndicator(true);
+            },
+
+            cacheDOMElements() {
+                const query = (selector) => document.querySelector(selector);
+                const queryAll = (selector) => document.querySelectorAll(selector);
+                this.elements = {
+                    navButtons: queryAll('.nav-button'), navIndicator: query('.nav-indicator'), windows: queryAll('.window'),
+                    timeEl: query('#time'), dateEl: query('#date'),
+                    galleryGrid: query('#gallery-grid'), galleryModal: query('#gallery-modal'), modalImg: query('#modal-img'),
+                    audioPlayer: query('#audio-player'), playPauseBtn: query('#play-pause-btn'), playIcon: query('#play-icon'),
+                    pauseIcon: query('#pause-icon'), nextBtn: query('#next-btn'), prevBtn: query('#prev-btn'),
+                    progressBar: query('#progress-bar'), progressBarContainer: query('#progress-bar-container'),
+                    trackTitleEl: query('#track-title'), trackArtistEl: query('#track-artist'), playlistEl: query('#playlist'),
+                    chatForm: query('#chat-form'), chatInput: query('#chat-input'), chatSubmit: query('#chat-submit'),
+                    chatMessages: query('#chat-messages'), cosmicBg: query('#cosmic-background'),
+                    apiKeyModal: query('#api-key-modal'), apiKeyInput: query('#api-key-input'),
+                    apiKeySave: query('#api-key-save'), apiKeyClose: query('#api-key-close'), apiKeyError: query('#api-key-error'),
+                };
+            },
+
+            bindEvents() {
+                document.body.addEventListener('click', () => this.initAudioContext(), { once: true });
+                
+                this.elements.navButtons.forEach(button => {
+                    button.addEventListener('click', () => { this.playSound('click'); this.switchTab(button.dataset.tab); });
+                    button.addEventListener('mouseenter', () => this.playSound('hover'));
+                });
+
+                this.elements.playPauseBtn.addEventListener('click', () => { this.playSound('click'); this.togglePlayPause(); });
+                this.elements.nextBtn.addEventListener('click', () => { this.playSound('click'); this.playNextTrack(); });
+                this.elements.prevBtn.addEventListener('click', () => { this.playSound('click'); this.playPrevTrack(); });
+                
+                this.elements.audioPlayer.addEventListener('timeupdate', () => this.updateProgress());
+                this.elements.audioPlayer.addEventListener('ended', () => this.playNextTrack());
+                this.elements.audioPlayer.addEventListener('pause', () => this.updatePlayPauseIcon(false));
+                this.elements.audioPlayer.addEventListener('play', () => this.updatePlayPauseIcon(true));
+
+                this.elements.progressBarContainer.addEventListener('click', (e) => this.seek(e));
+                this.elements.chatForm.addEventListener('submit', (e) => this.handleChatSubmit(e));
+                
+                this.elements.playlistEl.addEventListener('click', (e) => {
+                    const item = e.target.closest('.playlist-item');
+                    if (item) {
+                        this.playSound('click');
+                        const index = parseInt(item.dataset.index, 10);
+                        this.state.currentTrackIndex = index;
+                        this.loadTrack(index);
+                        this.playTrack();
+                    }
+                });
+                
+                this.elements.galleryGrid.addEventListener('click', (e) => {
+                    const item = e.target.closest('.gallery-item');
+                    if (item) {
+                        this.playSound('click');
+                        const img = item.querySelector('img');
+                        if (img) {
+                             this.elements.modalImg.src = img.src;
+                             this.elements.galleryModal.classList.remove('opacity-0', 'pointer-events-none');
+                        }
+                    }
+                });
+
+                this.elements.apiKeySave.addEventListener('click', () => this.handleApiKeySave());
+                this.elements.apiKeyClose.addEventListener('click', () => this.showApiKeyModal(false));
+            },
+            
+            showApiKeyModal(show) {
+                this.elements.apiKeyError.classList.add('hidden');
+                if (show) {
+                    this.elements.apiKeyModal.classList.remove('opacity-0', 'pointer-events-none');
+                } else {
+                    this.elements.apiKeyModal.classList.add('opacity-0', 'pointer-events-none');
+                }
+            },
+
+            async handleApiKeySave() {
+                const apiKey = this.elements.apiKeyInput.value.trim();
+                if (!apiKey) {
+                    this.elements.apiKeyError.textContent = "API Key cannot be empty.";
+                    this.elements.apiKeyError.classList.remove('hidden');
+                    return;
+                }
+                await this.initAi(apiKey);
+            },
+
+            async checkAndInitAi() {
+                if (this.state.chat) return;
+                const apiKey = sessionStorage.getItem('geminiApiKey');
+                if (apiKey) {
+                    await this.initAi(apiKey);
+                } else {
+                    this.showApiKeyModal(true);
+                }
+            },
+
+            async initAi(apiKey) {
+                this.elements.apiKeySave.textContent = "Verifying...";
+                this.elements.apiKeySave.disabled = true;
+                try {
+                    const ai = new GoogleGenAI({ apiKey });
+                    // Make a simple, low-cost call to verify the key
+                    await ai.models.generateContent({ model: "gemini-2.5-flash", contents: "hello" });
+                    
+                    this.state.chat = ai.chats.create({ model: 'gemini-2.5-flash' });
+                    sessionStorage.setItem('geminiApiKey', apiKey);
+                    this.elements.chatMessages.innerHTML = '';
+                    this.appendChatMessage('Welcome to Gemini Chat! How can I help?', 'gemini');
+                    this.elements.chatSubmit.disabled = false;
+                    this.elements.chatInput.disabled = false;
+                    this.showApiKeyModal(false);
+                } catch (error) {
+                    console.error("Gemini AI initialization failed:", error);
+                    sessionStorage.removeItem('geminiApiKey');
+                    this.elements.apiKeyError.textContent = "Invalid API Key. Please check and try again.";
+                    this.elements.apiKeyError.classList.remove('hidden');
+                } finally {
+                    this.elements.apiKeySave.textContent = "Save & Start";
+                    this.elements.apiKeySave.disabled = false;
+                }
+            },
+
+            initCosmicBackground() {
+                const count = 50;
+                for (let i = 0; i < count; i++) {
+                    const dust = document.createElement('div');
+                    dust.className = 'dust';
+                    dust.style.top = `${Math.random() * 100}%`;
+                    dust.style.left = `${Math.random() * 100}%`;
+                    dust.style.animationDelay = `${Math.random() * 20}s`;
+                    dust.style.animationDuration = `${10 + Math.random() * 20}s`;
+                    dust.style.opacity = Math.random();
+                    this.elements.cosmicBg.appendChild(dust);
+                }
+            },
+            
+            switchTab(tab) {
+                if (tab === this.state.activeTab) return;
+                
+                if (tab === 'ai') {
+                    this.checkAndInitAi();
+                }
+
+                this.playSound('transition');
+
+                const currentWindow = document.getElementById(this.state.activeTab);
+                const newWindow = document.getElementById(tab);
+                
+                this.elements.navButtons.forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.tab === tab);
+                    if(btn.dataset.tab === tab) btn.setAttribute('aria-current', 'page');
+                    else btn.removeAttribute('aria-current');
+                });
+                
+                if (currentWindow) currentWindow.classList.remove('active');
+                if (newWindow) newWindow.classList.add('active');
+                
+                this.state.activeTab = tab;
+                this.updateNavIndicator();
+            },
+
+            updateNavIndicator(immediate = false) {
+                const activeButton = document.querySelector('.nav-button.active');
+                if (activeButton) {
+                    if (immediate) this.elements.navIndicator.style.transition = 'none';
+                    this.elements.navIndicator.style.transform = `translateX(${activeButton.offsetLeft}px)`;
+                    if (immediate) {
+                        this.elements.navIndicator.offsetHeight; 
+                        this.elements.navIndicator.style.transition = '';
+                    }
+                }
+            },
+
+            startClock() {
+                this.updateClock();
+                this.state.clockInterval = setInterval(() => this.updateClock(), 1000);
+            },
+            updateClock() {
+                const now = new Date();
+                this.elements.timeEl.textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+                this.elements.dateEl.textContent = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            },
+
+            renderGallery() {
+                this.constants.images.forEach(src => {
+                    const item = document.createElement('div');
+                    item.className = 'gallery-item overflow-hidden rounded-lg cursor-pointer transition-transform duration-300 aspect-square';
+                    item.innerHTML = `<img src="${src}" alt="Gallery image" loading="lazy" class="w-full h-full object-cover">`;
+                    this.elements.galleryGrid.appendChild(item);
+                });
+            },
+
+            loadTrack(index) {
+                const track = this.constants.tracks[index];
+                this.elements.audioPlayer.src = track.url;
+                this.elements.trackTitleEl.textContent = track.title;
+                this.elements.trackArtistEl.textContent = track.artist;
+                document.querySelectorAll('.playlist-item').forEach((item, i) => {
+                    item.classList.toggle('active', i === index);
+                    if (i === index) item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                });
+            },
+
+            togglePlayPause() { this.state.isPlaying ? this.pauseTrack() : this.playTrack(); },
+            
+            updatePlayPauseIcon(isPlaying) {
+                this.elements.playIcon.style.display = isPlaying ? 'none' : 'block';
+                this.elements.pauseIcon.style.display = isPlaying ? 'block' : 'none';
+                this.elements.playPauseBtn.setAttribute('aria-label', isPlaying ? 'Pause' : 'Play');
+            },
+
+            playTrack() {
+                this.state.isPlaying = true;
+                this.elements.audioPlayer.play().catch(e => console.error("Audio playback failed:", e));
+            },
+            pauseTrack() { this.state.isPlaying = false; this.elements.audioPlayer.pause(); },
+            
+            playNextTrack() {
+                this.state.currentTrackIndex = (this.state.currentTrackIndex + 1) % this.constants.tracks.length;
+                this.loadTrack(this.state.currentTrackIndex);
+                if (this.state.isPlaying) this.playTrack();
+            },
+
+            playPrevTrack() {
+                this.state.currentTrackIndex = (this.state.currentTrackIndex - 1 + this.constants.tracks.length) % this.constants.tracks.length;
+                this.loadTrack(this.state.currentTrackIndex);
+                if (this.state.isPlaying) this.playTrack();
+            },
+
+            updateProgress() {
+                const { duration, currentTime } = this.elements.audioPlayer;
+                const progressPercent = (currentTime / duration) * 100;
+                this.elements.progressBar.style.width = `${progressPercent || 0}%`;
+            },
+            
+            seek(e) {
+                const { clientWidth } = this.elements.progressBarContainer;
+                const clickX = e.offsetX;
+                const { duration } = this.elements.audioPlayer;
+                if(duration) this.elements.audioPlayer.currentTime = (clickX / clientWidth) * duration;
+            },
+            
+            renderPlaylist() {
+                this.constants.tracks.forEach((track, index) => {
+                    const item = document.createElement('div');
+                    item.className = 'playlist-item p-3 rounded-lg cursor-pointer transition-colors text-left border-l-4 border-transparent';
+                    item.dataset.index = index;
+                    item.innerHTML = `<p class="font-semibold text-sm pointer-events-none">${track.title}</p><p class="text-xs text-[var(--text-secondary)] pointer-events-none">${track.artist}</p>`;
+                    this.elements.playlistEl.appendChild(item);
+                });
+            },
+            
+            async handleChatSubmit(e) {
+                e.preventDefault();
+                this.playSound('send');
+                const prompt = this.elements.chatInput.value.trim();
+                if (!prompt || !this.state.chat) return;
+
+                this.elements.chatInput.value = '';
+                this.elements.chatSubmit.disabled = true;
+                this.appendChatMessage(prompt, 'user');
+
+                const typingIndicator = this.appendChatMessage('', 'gemini', true);
+                
+                try {
+                    const result = await this.state.chat.sendMessage({ message: prompt });
+                    const text = result.text;
+                    typingIndicator.querySelector('div').textContent = text;
+                    typingIndicator.classList.remove('typing');
+                } catch (error) {
+                    console.error("Gemini AI error:", error);
+                    typingIndicator.querySelector('div').textContent = 'Sorry, an error occurred.';
+                    typingIndicator.classList.remove('typing');
+                    typingIndicator.classList.add('bg-red-500/20');
+                } finally {
+                    this.elements.chatSubmit.disabled = false;
+                    this.elements.chatInput.focus();
+                }
+            },
+            
+            appendChatMessage(text, sender, isTyping = false) {
+                const messageWrapper = document.createElement('div');
+                messageWrapper.className = `flex gap-2 ${sender === 'user' ? 'justify-end' : 'justify-start'}`;
+
+                const messageBubble = document.createElement('div');
+                let bubbleContent;
+
+                if (sender === 'user') {
+                    messageBubble.className = `max-w-xs md:max-w-sm rounded-2xl p-3 text-sm bg-gradient-to-br from-[var(--gradient-start)] to-[var(--gradient-end)] text-white rounded-br-lg`;
+                    messageBubble.textContent = text;
+                } else if (sender === 'system') {
+                    messageBubble.className = `max-w-xs md:max-w-sm rounded-2xl p-3 text-sm bg-yellow-500/20 text-yellow-300 w-full text-center`;
+                    messageBubble.textContent = text;
+                } else {
+                    messageBubble.className = 'max-w-xs md:max-w-sm rounded-2xl p-3 text-sm bg-[var(--bg-deep-space)] text-[var(--text-secondary)] rounded-bl-lg';
+                    bubbleContent = document.createElement('div');
+if (isTyping) {
+    bubbleContent.innerHTML = '<div class="typing-indicator"><span></span><span></span><span></span></div>';
+    messageWrapper.classList.add('typing');
+} else {
+    // Basic markdown for bold text
+    text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    bubbleContent.innerHTML = text;
+}
+                    messageBubble.appendChild(bubbleContent);
+                }
+                
+                messageWrapper.appendChild(messageBubble);
+                this.elements.chatMessages.appendChild(messageWrapper);
+                this.elements.chatMessages.scrollTop = this.elements.chatMessages.scrollHeight;
+                return messageWrapper;
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => PortfolioApp.init());
+    </script>
+</body>
+</html>
