@@ -1,495 +1,549 @@
-
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pola Cartoon OS</title>
+    <title>Pola | SOVEREIGN</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;700&display=swap" rel="stylesheet">
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Fredoka', 'sans-serif'],
-                    },
-                    colors: {
-                        'cartoon-blue': {
-                            100: '#E0F2FE',
-                            200: '#BAE6FD',
-                            300: '#7DD3FC',
-                            400: '#38BDF8',
-                            500: '#0EA5E9',
-                            600: '#0284C7',
-                            700: '#0369A1',
-                        },
-                        'cartoon-yellow': '#FACC15',
-                        'cartoon-dark': '#1E293B',
-                        'cartoon-light': '#F8FAFC',
-                    },
-                    boxShadow: {
-                        'cartoon': '5px 5px 0px 0px rgba(30, 41, 59, 1)',
-                        'cartoon-sm': '3px 3px 0px 0px rgba(30, 41, 59, 1)',
-                        'cartoon-inset': 'inset 3px 3px 0px 0px rgba(0, 0, 0, 0.2)',
-                    },
-                    transitionTimingFunction: {
-                        'cartoon': 'cubic-bezier(0.68, -0.55, 0.27, 1.55)',
-                    },
-                    keyframes: {
-                        'slide-in-from-right': { '0%': { transform: 'translateX(100%) scale(0.8)', opacity: '0' }, '100%': { transform: 'translateX(0) scale(1)', opacity: '1' } },
-                        'slide-out-to-left': { '0%': { transform: 'translateX(0) scale(1)', opacity: '1' }, '100%': { transform: 'translateX(-100%) scale(0.8)', opacity: '0' } },
-                        'slide-in-from-left': { '0%': { transform: 'translateX(-100%) scale(0.8)', opacity: '0' }, '100%': { transform: 'translateX(0) scale(1)', opacity: '1' } },
-                        'slide-out-to-right': { '0%': { transform: 'translateX(0) scale(1)', opacity: '1' }, '100%': { transform: 'translateX(100%) scale(0.8)', opacity: '0' } },
-                        'fade-in-scale-up': { '0%': { transform: 'scale(0.8)', opacity: '0' }, '100%': { transform: 'scale(1)', opacity: '1' } },
-                        'fade-out-scale-down': { '0%': { transform: 'scale(1)', opacity: '1' }, '100%': { transform: 'scale(0.8)', opacity: '0' } },
-                        'gradient-animation': { '0%': { 'background-position': '0% 50%' }, '50%': { 'background-position': '100% 50%' }, '100%': { 'background-position': '0% 50%' } },
-                        'bounce': { '0%, 100%': { transform: 'translateY(-25%)', animationTimingFunction: 'cubic-bezier(0.8, 0, 1, 1)' }, '50%': { transform: 'translateY(0)', animationTimingFunction: 'cubic-bezier(0, 0, 0.2, 1)' } }
-                    },
-                    animation: {
-                        'slide-in-from-right': 'slide-in-from-right 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards',
-                        'slide-out-to-left': 'slide-out-to-left 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards',
-                        'slide-in-from-left': 'slide-in-from-left 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards',
-                        'slide-out-to-right': 'slide-out-to-right 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards',
-                        'fade-in-scale-up': 'fade-in-scale-up 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards',
-                        'fade-out-scale-down': 'fade-out-scale-down 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards',
-                        'gradient': 'gradient-animation 15s ease infinite',
-                    },
-                }
-            }
-        }
-    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Righteous&display=swap" rel="stylesheet">
     <style>
-        body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
-        .custom-scrollbar::-webkit-scrollbar { width: 8px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: #BAE6FD; border-radius: 10px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #0EA5E9; border-radius: 10px; border: 2px solid #BAE6FD; }
-        .custom-scrollbar { scrollbar-width: thin; scrollbar-color: #0EA5E9 #BAE6FD; }
+      :root {
+        --sky-blue-bright: #00C6FF;
+        --sky-blue-deep: #0072FF;
+        
+        --accent-yellow: #FFD166;
+        --accent-red: #FF5F57;
+        --accent-green: #70C1B3;
+
+        --border-color: #0F172A; /* Off-black / Deep blue */
+        --text-color: #0F172A;
+        --text-color-light: #F8F9FA;
+        --text-muted: #475569; /* Slate gray */
+
+        --off-white: #F8F9FA;
+        --glass-bg: rgba(248, 249, 250, 0.5);
+        --glass-border: rgba(255, 255, 255, 0.2);
+      }
+      *, *::before, *::after {
+        box-sizing: border-box;
+      }
+      body {
+        font-family: 'Nunito', sans-serif;
+        background-color: var(--sky-blue-deep);
+        color: var(--text-color);
+        margin: 0;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+        overflow: hidden;
+      }
+
+      .background-gradient {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        background: linear-gradient(45deg, var(--sky-blue-bright), var(--sky-blue-deep));
+        background-size: 400% 400%;
+        animation: gradientBG 15s ease infinite;
+      }
+
+
+      @keyframes gradientBG {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+
+      .font-righteous {
+        font-family: 'Righteous', cursive;
+      }
+      #root {
+        height: 100vh;
+        width: 100vw;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 12px;
+      }
+      ::-webkit-scrollbar-track {
+        background: rgba(15, 23, 42, 0.1);
+        border-radius: 10px;
+      }
+      ::-webkit-scrollbar-thumb {
+        background-color: var(--accent-green);
+        border-radius: 10px;
+        border: 3px solid var(--off-white);
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background-color: #5aa89a;
+      }
+
+
+      /* Window & Content Animations */
+      @keyframes drop-in {
+        0% { transform: translateY(-100%) scale(0.9); opacity: 0; }
+        70% { transform: translateY(10px) scale(1.02); opacity: 1; }
+        100% { transform: translateY(0) scale(1); opacity: 1; }
+      }
+      @keyframes fall-out {
+        0% { transform: translateY(0) scale(1); opacity: 1; }
+        100% { transform: translateY(100%) scale(0.9); opacity: 0; }
+      }
+
+      .window {
+        position: relative;
+        background-color: var(--off-white);
+        border: 3px solid var(--border-color);
+        border-radius: 20px;
+        display: flex;
+        flex-direction: column;
+        width: 90vw;
+        max-width: 400px;
+        height: 85vh;
+        max-height: 600px;
+        overflow: hidden; /* Important for animations */
+        transition: width 0.3s ease, height 0.3s ease, max-height 0.3s ease;
+      }
+      
+      .window.drop-in { animation: drop-in 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+      .window.fall-out { animation: fall-out 0.3s ease-in forwards; }
+
+      .title-bar {
+        background-color: #f0f0f0;
+        border-bottom: 3px solid var(--border-color);
+        padding: 0.6rem 1.1rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-radius: 16px 16px 0 0;
+        flex-shrink: 0;
+      }
+      
+      .title-text {
+        font-weight: 700;
+        font-size: 1rem;
+      }
+      
+      .close-button {
+        width: 20px;
+        height: 20px;
+        background: var(--accent-red);
+        border: 2px solid var(--border-color);
+        border-radius: 50%;
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+      .close-button:hover { background: #E0443E; }
+      
+      .window-content {
+        padding: 1.25rem;
+        flex-grow: 1;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* Dock Styles */
+      .dock {
+        position: fixed;
+        bottom: 25px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: var(--glass-bg);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 2px solid var(--glass-border);
+        border-radius: 24px;
+        padding: 0.75rem;
+        display: flex;
+        gap: 0.75rem;
+        z-index: 10000;
+        transition: bottom 0.3s ease;
+      }
+      
+      .dock-item {
+        width: 60px;
+        height: 60px;
+        background-color: var(--off-white);
+        border: 3px solid var(--border-color);
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        position: relative;
+      }
+      .dock-item:hover { transform: translateY(-8px); }
+      .dock-item:active { transform: translateY(-4px) scale(0.95); }
+      .dock-item svg {
+        width: 36px;
+        height: 36px;
+      }
+      .dock-item.home-icon { color: var(--accent-red); }
+      .dock-item.music-icon { color: var(--accent-green); }
+      .dock-item.clock-icon { color: var(--accent-yellow); }
+
+      .dock-item.active {
+        background-color: var(--off-white);
+        transform: translateY(-8px) scale(1.1);
+      }
+      
+      /* Smart Responsiveness */
+      @media (max-width: 480px) {
+        .window {
+            width: 95vw;
+            height: 90vh;
+            max-height: 90vh;
+            border-radius: 24px;
+        }
+        .title-bar { border-radius: 20px 20px 0 0; }
+        .dock {
+            bottom: 15px;
+            padding: 0.6rem;
+            gap: 0.6rem;
+            border-radius: 20px;
+        }
+        .dock-item {
+            width: 55px;
+            height: 55px;
+            border-radius: 16px;
+        }
+        .window-content {
+          padding: 1.1rem;
+        }
+      }
+      
+      /* Landscape / Short Screen support */
+       @media (max-height: 650px) and (min-width: 481px) {
+         .window {
+           height: 90vh;
+           max-height: 500px;
+           width: 70vw;
+           max-width: 600px;
+         }
+         .dock {
+            bottom: 15px;
+         }
+       }
     </style>
-    
-    <!-- React & Babel for in-browser JSX transpilation -->
+  </head>
+  <body>
+    <div class="background-gradient"></div>
+    <div id="root"></div>
+
     <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-</head>
-<body class="bg-cartoon-blue-300 bg-gradient-to-br from-cartoon-blue-300 via-cartoon-blue-400 to-cartoon-blue-600 animate-gradient" style="background-size: 200% 200%;">
-    <div id="root"></div>
 
-    <script type="text/babel" data-presets="react">
-        const { useState, useCallback, useEffect, useRef, createContext, useContext } = React;
+    <script type="text/babel">
+      const { useState, useCallback, useRef, useEffect } = React;
 
-        // --- SERVICES (audioService.ts) ---
-        let audioContextInstance = null;
-        const getAudioContext = () => {
-          if (typeof window === 'undefined') return null;
-          if (!audioContextInstance) {
-            try {
-              audioContextInstance = new (window.AudioContext || window.webkitAudioContext)();
-            } catch (e) {
-              console.error("Web Audio API is not supported in this browser");
-              return null;
-            }
-          }
-          return audioContextInstance;
-        };
-        const playSound = (type) => {
-          const context = getAudioContext();
-          if (!context) return;
-          if (context.state === 'suspended') {
-            context.resume();
-          }
-          const oscillator = context.createOscillator();
-          const gainNode = context.createGain();
-          oscillator.connect(gainNode);
-          gainNode.connect(context.destination);
-          gainNode.gain.setValueAtTime(0, context.currentTime);
-          gainNode.gain.linearRampToValueAtTime(0.25, context.currentTime + 0.01);
-          switch (type) {
-            case 'open':
-              oscillator.type = 'sine';
-              oscillator.frequency.setValueAtTime(300, context.currentTime);
-              oscillator.frequency.exponentialRampToValueAtTime(600, context.currentTime + 0.15);
-              break;
-            case 'close':
-              oscillator.type = 'sine';
-              oscillator.frequency.setValueAtTime(600, context.currentTime);
-              oscillator.frequency.exponentialRampToValueAtTime(300, context.currentTime + 0.15);
-              break;
-            case 'click':
-              oscillator.type = 'triangle';
-              oscillator.frequency.setValueAtTime(800, context.currentTime);
-              break;
-          }
-          oscillator.start(context.currentTime);
-          gainNode.gain.exponentialRampToValueAtTime(0.00001, context.currentTime + 0.15);
-          oscillator.stop(context.currentTime + 0.15);
-        };
+      // --- COMPONENTS ---
+      
+      // components/Window.tsx
+      const Window = ({ children, title, onClose, animationClass }) => {
+        return (
+          <div className={`window ${animationClass}`}>
+            <div className="title-bar">
+              <span className="title-text">{title}</span>
+              <button className="close-button" onClick={onClose} aria-label="Close window"></button>
+            </div>
+            <div className="window-content">{children}</div>
+          </div>
+        );
+      };
 
-        // --- CONTEXT (AudioContext.tsx) ---
-        const AudioContext = createContext(null);
+      // components/Navigation.tsx
+      const HomeIcon = () => (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M4 9.5V20a1 1 0 0 0 1 1h4M8 21V14h8v7m4-11.5V20a1 1 0 0 1-1 1h-4" />
+          <path d="M2 10.5l10-8 10 8" />
+        </svg>
+      );
+      const MusicIcon = () => (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M9 18V5l12-2v13" />
+          <circle cx="6" cy="18" r="3" />
+          <circle cx="18" cy="16" r="3" />
+        </svg>
+      );
+      const ClockIcon = () => (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="10" />
+          <polyline points="12 6 12 12 16 14" />
+        </svg>
+      );
+      const Dock = ({ onIconClick, activeView }) => {
+        return (
+          <div className="dock">
+            <div className={`dock-item home-icon ${activeView === 'home' ? 'active' : ''}`} onClick={() => onIconClick('home')}><HomeIcon /></div>
+            <div className={`dock-item music-icon ${activeView === 'music' ? 'active' : ''}`} onClick={() => onIconClick('music')}><MusicIcon /></div>
+            <div className={`dock-item clock-icon ${activeView === 'clock' ? 'active' : ''}`} onClick={() => onIconClick('clock')}><ClockIcon /></div>
+          </div>
+        );
+      };
 
-        // --- ICONS (PlayerIcons.tsx) ---
-        const PlayIcon = ({ className }) => ( <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="currentColor" style={{ transform: 'translateX(2px)'}}> <path d="M8 5v14l11-7z" /> </svg> );
-        const PauseIcon = ({ className }) => ( <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="currentColor"> <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" /> </svg> );
-        const NextIcon = ({ className }) => ( <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="currentColor"> <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" /> </svg> );
-        const PrevIcon = ({ className }) => ( <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="currentColor"> <path d="M6 6h2v12H6V6zm3.5 6l8.5 6V6l-8.5 6z" /> </svg> );
+      // components/HomeContent.tsx
+      const HomeContent = () => {
+        return (
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', height: '100%', padding: '0 1rem' }}>
+            <div>
+              <h1 className="font-righteous" style={{ fontSize: 'clamp(2.8rem, 10vw, 3.5rem)', margin: '0', letterSpacing: '-2px', lineHeight: 1 }}>
+                <span style={{ color: 'var(--accent-red)' }}>POLA</span>
+                <span style={{ color: 'var(--accent-yellow)' }}> SOVEREIGN</span>
+              </h1>
+              <p className="font-righteous" style={{ fontSize: '1.1rem', color: 'var(--text-muted)', marginBottom: '1rem', marginTop: '0.5rem' }}>BY GRACE</p>
+              
+              <p className="font-righteous" style={{ fontSize: '1.2rem', color: 'var(--accent-green)', margin: '1rem 0 1.5rem 0' }}>
+                ❤ GOD IS LOVE ❤
+              </p>
+              
+              <div style={{ maxWidth: '300px', margin: '0 auto', fontSize: '0.9rem', color: 'var(--text-color)', lineHeight: 1.6 }}>
+                <p style={{ fontWeight: 'bold' }}>
+                    Dominion is not seized, but granted. Forged in faith, executed with authority.
+                </p>
+                <p style={{ fontStyle: 'italic', color: 'var(--text-muted)', marginTop: '1.5rem' }}>
+                    "I can do all things through Christ who gives me strength."
+                    <span style={{ fontWeight: 'bold', fontStyle: 'normal', display: 'block', marginTop: '0.5rem', color: 'var(--text-color)' }}>— Philippians 4:13</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        );
+      };
 
-        // --- ICONS (AppIcons.tsx) ---
-        const HomeIcon = () => ( <svg xmlns="http://www.w3.org/2000/svg" className="h-9 w-9 text-cartoon-dark" viewBox="0 0 20 20" fill="currentColor"> <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /> </svg> );
-        const MusicIcon = () => ( <svg xmlns="http://www.w3.org/2000/svg" className="h-9 w-9 text-cartoon-dark" viewBox="0 0 20 20" fill="currentColor"> <path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.114A4.369 4.369 0 005 14c-1.657 0-3 1.343-3 3s1.343 3 3 3 3-1.343 3-3V7.82l8-1.6v5.894A4.369 4.369 0 0015 12c-1.657 0-3 1.343-3 3s1.343 3 3 3 3-1.343 3-3V3z" /> </svg> );
-        const VotingIcon = () => ( <svg xmlns="http://www.w3.org/2000/svg" className="h-9 w-9 text-cartoon-dark" viewBox="0 0 20 20" fill="currentColor"> <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /> <path fillRule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clipRule="evenodd" /> </svg> );
-        
-        // --- APP COMPONENTS (apps/*.tsx) ---
-        const HomeApp = () => (
-            <div className="h-full w-full flex items-center justify-center text-cartoon-dark custom-scrollbar overflow-y-auto">
-                <div className="text-center flex flex-col items-center p-4">
-                    <h1 className="font-bold text-4xl sm:text-6xl md:text-7xl leading-none">SOVEREIGN<br /><span className="text-cartoon-blue-600">BY GRACE</span></h1>
-                    <p className="text-base text-slate-600 mt-4 max-w-sm md:max-w-md">Dominion is not seized, but granted. Forged in faith, executed with authority.</p>
-                    <div className="mt-6 text-left inline-block">
-                        <p className="pl-4 border-l-4 border-cartoon-yellow italic max-w-md text-slate-700">"I can do all things through Christ who gives me strength."<br />— Philippians 4:13</p>
-                    </div>
-                    <div className="flex gap-6 mt-8">
-                        <a href="https://github.com/bolae700" target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="text-slate-500 transition-colors duration-300 hover:text-cartoon-blue-600"><svg role="img" viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8"><title>GitHub</title><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297 24 5.67 18.627 0 12 0z" /></svg></a>
-                        <a href="https://www.youtube.com/@SoundSurge3" target="_blank" rel="noopener noreferrer" aria-label="YouTube" className="text-slate-500 transition-colors duration-300 hover:text-red-600"><svg role="img" viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8"><title>YouTube</title><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" /></svg></a>
-                    </div>
+      // components/Clock.tsx
+      const Clock = () => {
+        const [date, setDate] = useState(new Date());
+        useEffect(() => {
+          const timerId = setInterval(() => setDate(new Date()), 1000);
+          return () => clearInterval(timerId);
+        }, []);
+        const timeOptions = { hour: '2-digit', minute: '2-digit', hour12: true };
+        const dateOptions = { weekday: 'long', month: 'long', day: 'numeric' };
+        return (
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', textAlign: 'center' }}>
+             <div>
+                <div className="font-righteous" style={{ fontSize: 'clamp(3.5rem, 20vw, 5rem)', fontWeight: 900, color: 'var(--accent-red)', lineHeight: 1 }}>
+                    {date.toLocaleTimeString('en-US', timeOptions).replace(' ', '')}
+                </div>
+                <div className="font-righteous" style={{ fontSize: '1.2rem', color: 'var(--accent-green)', marginTop: '0.75rem', fontWeight: 700 }}>
+                    {date.toLocaleDateString('en-US', dateOptions)}
                 </div>
             </div>
+          </div>
         );
+      };
 
-        const Clock = React.memo(() => {
-            const [time, setTime] = useState(new Date());
-            useEffect(() => { const timerId = setInterval(() => setTime(new Date()), 1000); return () => clearInterval(timerId); }, []);
-            return ( <div className="text-center bg-cartoon-blue-100 p-4 rounded-lg border-2 border-cartoon-dark shadow-cartoon-sm w-full h-full flex flex-col justify-center"> <div className="font-bold text-5xl md:text-6xl text-cartoon-dark">{time.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false })}</div> <div className="text-sm text-slate-600 uppercase tracking-wider mt-1">{time.toLocaleDateString('en-US', { weekday: 'long', day: '2-digit', month: 'short' })}</div> </div> );
-        });
-
-        const MusicPlayer = () => {
-            const audioContext = useContext(AudioContext);
-            if (!audioContext) return null;
-            const { isPlaying, currentTrackIndex, tracks, audioRef, currentTrack, togglePlayPause, playNext, playPrev, handleTrackSelect } = audioContext;
-            const [progress, setProgress] = useState(0);
-            const [duration, setDuration] = useState(0);
-            const [currentTime, setCurrentTime] = useState(0);
-            const progressContainerRef = useRef(null);
-            const canvasRef = useRef(null);
-            const audioContextVisualizerRef = useRef(null);
-            const analyserRef = useRef(null);
-            const sourceRef = useRef(null);
-            const animationFrameRef = useRef(null);
-            const isSeeking = useRef(false);
-
-            useEffect(() => {
-                const audio = audioRef.current;
-                const updateProgress = () => { if (audio && !isSeeking.current) { setProgress((audio.currentTime / audio.duration) * 100 || 0); setCurrentTime(audio.currentTime); } };
-                const handleMetadata = () => { if (audio) setDuration(audio.duration); };
-                if (audio) { audio.addEventListener('timeupdate', updateProgress); audio.addEventListener('loadedmetadata', handleMetadata); }
-                return () => { if (audio) { audio.removeEventListener('timeupdate', updateProgress); audio.removeEventListener('loadedmetadata', handleMetadata); } };
-            }, [audioRef]);
-
-            useEffect(() => {
-                const audio = audioRef.current;
-                if (!audio) return;
-                const setupVisualizer = () => {
-                    if (!audioContextVisualizerRef.current) {
-                        try {
-                            const Ctx = window.AudioContext || window.webkitAudioContext;
-                            audioContextVisualizerRef.current = new Ctx();
-                            analyserRef.current = audioContextVisualizerRef.current.createAnalyser();
-                            sourceRef.current = audioContextVisualizerRef.current.createMediaElementSource(audio);
-                            sourceRef.current.connect(analyserRef.current);
-                            analyserRef.current.connect(audioContextVisualizerRef.current.destination);
-                            analyserRef.current.fftSize = 64;
-                        } catch(e) { console.error("Web Audio API is not supported", e); return; }
-                    }
-                    const canvas = canvasRef.current;
-                    const ctx = canvas?.getContext('2d');
-                    if (!analyserRef.current || !canvas || !ctx) return;
-                    const bufferLength = analyserRef.current.frequencyBinCount;
-                    const dataArray = new Uint8Array(bufferLength);
-                    const draw = () => {
-                        animationFrameRef.current = requestAnimationFrame(draw);
-                        if(!analyserRef.current) return;
-                        analyserRef.current.getByteFrequencyData(dataArray);
-                        ctx.clearRect(0, 0, canvas.width, canvas.height);
-                        const barWidth = (canvas.width / bufferLength) * 1.5;
-                        let x = 0;
-                        for (let i = 0; i < bufferLength; i++) { const barHeight = dataArray[i] / 2.5; ctx.fillStyle = '#FACC15'; ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight); x += barWidth + 2; }
-                    };
-                    draw();
-                };
-                const handlePlay = () => { if(audioContextVisualizerRef.current?.state === 'suspended') { audioContextVisualizerRef.current.resume(); } if(!sourceRef.current) { setupVisualizer(); } };
-                audio.addEventListener('play', handlePlay);
-                return () => { audio.removeEventListener('play', handlePlay); if (animationFrameRef.current) { cancelAnimationFrame(animationFrameRef.current); } };
-            }, [audioRef]);
-
-            const seek = useCallback((e) => {
-                if (progressContainerRef.current && audioRef.current?.duration) {
-                    const rect = progressContainerRef.current.getBoundingClientRect();
-                    const clickX = e.clientX - rect.left;
-                    const percentage = Math.max(0, Math.min(1, clickX / rect.width));
-                    audioRef.current.currentTime = percentage * audioRef.current.duration;
-                    setProgress(percentage * 100);
-                    setCurrentTime(percentage * audioRef.current.duration);
-                }
-            }, [audioRef]);
-
-            const handleSeekMouseDown = useCallback((e) => {
-                isSeeking.current = true;
-                seek(e.nativeEvent);
-                const handleMouseMove = (ev) => { if (isSeeking.current) seek(ev); };
-                const handleMouseUp = () => { isSeeking.current = false; window.removeEventListener('mousemove', handleMouseMove); window.removeEventListener('mouseup', handleMouseUp); };
-                window.addEventListener('mousemove', handleMouseMove);
-                window.addEventListener('mouseup', handleMouseUp);
-            }, [seek]);
-
-            if (!currentTrack) return <div>Loading...</div>;
-            const formatTime = (seconds) => { if (isNaN(seconds)) return '00:00'; const minutes = Math.floor(seconds / 60); const secs = Math.floor(seconds % 60); return `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`; };
-            const NowPlayingIcon = () => ( <div className="w-5 h-5 flex items-end justify-between"> <span className="w-1 h-full bg-cartoon-dark animate-bounce" style={{animationDelay: '-0.3s'}}></span> <span className="w-1 h-2/3 bg-cartoon-dark animate-bounce" style={{animationDelay: '-0.15s'}}></span> <span className="w-1 h-full bg-cartoon-dark animate-bounce"></span> </div> );
-            
-            return (
-                <div className="bg-cartoon-blue-100 p-2 rounded-lg border-2 border-cartoon-dark shadow-cartoon-sm h-full flex flex-col md:flex-row text-cartoon-dark gap-2 md:gap-4">
-                    <div className="flex-shrink-0 md:w-64 flex md:flex-col items-center justify-start gap-4 p-2">
-                        <img src={currentTrack.art} alt="Album Art" className="w-24 h-24 md:w-full md:h-auto md:aspect-square object-cover rounded-md shadow-cartoon-sm border-2 border-cartoon-dark" />
-                        <div className="flex-grow text-left md:text-center w-full min-w-0">
-                            <h3 className="font-bold text-lg md:text-xl truncate">{currentTrack.title}</h3>
-                            <p className="text-md text-slate-600">{currentTrack.artist}</p>
-                            <canvas ref={canvasRef} width="200" height="40" className="w-full h-10 my-1 hidden md:block"></canvas>
-                        </div>
-                    </div>
-                    <div className="flex-grow flex flex-col min-h-0">
-                        <div className="flex-shrink-0 flex flex-col items-center justify-center p-2">
-                            <div className="flex items-center justify-center gap-4 w-full">
-                                <button onClick={playPrev} className="p-2 text-cartoon-dark transition hover:scale-110 active:scale-95"><PrevIcon className="w-8 h-8" /></button>
-                                <button onClick={togglePlayPause} className="w-16 h-16 bg-cartoon-yellow rounded-full flex items-center justify-center text-cartoon-dark transition hover:scale-110 active:scale-95 border-2 border-cartoon-dark">{isPlaying ? <PauseIcon className="w-8 h-8" /> : <PlayIcon className="w-8 h-8" />}</button>
-                                <button onClick={playNext} className="p-2 text-cartoon-dark transition hover:scale-110 active:scale-95"><NextIcon className="w-8 h-8" /></button>
-                            </div>
-                            <div className="w-full px-2 mt-2">
-                                <div ref={progressContainerRef} onMouseDown={handleSeekMouseDown} className="w-full my-1 cursor-pointer group">
-                                    <div className="h-3 bg-cartoon-blue-200 rounded-full border-2 border-cartoon-dark"><div className="h-full bg-cartoon-yellow rounded-full" style={{ width: `${progress}%` }}></div></div>
-                                </div>
-                                <div className="flex justify-between text-xs font-medium text-slate-500"><span>{formatTime(currentTime)}</span><span>{formatTime(duration)}</span></div>
-                            </div>
-                        </div>
-                        <div className="flex-grow w-full flex flex-col bg-cartoon-blue-200/50 rounded-lg border-2 border-cartoon-dark/50 min-h-0">
-                            <h3 className="text-lg font-bold p-2 text-center flex-shrink-0 border-b-2 border-cartoon-dark/50">Playlist</h3>
-                            <ul className="flex-grow overflow-y-auto custom-scrollbar p-2 space-y-1">
-                                {tracks.map((track, index) => (
-                                <li key={index} onClick={() => handleTrackSelect(index)} className={`flex items-center gap-3 p-2 cursor-pointer rounded-md transition-colors ${index === currentTrackIndex ? 'bg-cartoon-yellow shadow-cartoon-sm border-cartoon-dark border-2' : 'hover:bg-cartoon-blue-200'}`}>
-                                    <div className="flex-shrink-0 w-5 h-5 flex items-center justify-center">{index === currentTrackIndex ? <NowPlayingIcon /> : <span className="text-sm font-bold text-slate-500">{index + 1}</span>}</div>
-                                    <div className='min-w-0 flex-grow'><p className={`font-bold truncate ${index === currentTrackIndex ? 'text-cartoon-dark' : ''}`}>{track.title}</p><p className="text-sm text-slate-600 truncate">{track.artist}</p></div>
-                                </li>
-                                ))}
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            );
-        };
-        const MediaApp = () => (
-            <div className="h-full w-full flex flex-col md:grid md:grid-cols-3 gap-2 md:gap-4 p-2">
-                <div className="md:col-span-1 flex-shrink-0 md:h-full"><Clock /></div>
-                <div className="md:col-span-2 flex-grow min-h-0"><MusicPlayer /></div>
+      // components/AudioPlayer.tsx
+      const PlayIcon = () => <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M8 5v14l11-7z"></path></svg>;
+      const PauseIcon = () => <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"></path></svg>;
+      const PrevIcon = () => <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"></path></svg>;
+      const NextIcon = () => <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"></path></svg>;
+      const AudioPlayer = ({ tracks, currentTrackIndex, isPlaying, progress, onTogglePlay, onNext, onPrev, onSelectTrack }) => {
+        const currentTrack = tracks[currentTrackIndex];
+        return (
+          <div style={{ display: 'flex', flexDirection: 'column', height: '100%', color: 'var(--text-color)' }}>
+            <div style={{ textAlign: 'center', paddingBottom: '1rem', flexShrink: 0, borderBottom: '3px solid #f0f0f0' }}>
+                <h2 className="font-righteous" style={{ fontSize: '1.1rem', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap', margin: 0, color: 'var(--text-color)' }}>
+                  {currentTrack.title}
+                </h2>
+                <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', margin: '0.25rem 0 0' }}>
+                  {currentTrack.artist}
+                </p>
             </div>
-        );
-
-        const VotingApp = () => {
-            const initialPolls = [
-                { id: 1, type: 'stars', question: "ما تقييمك العام للتصميم؟", totalVotes: 0, totalScore: 0, userVote: null },
-                { id: 2, type: 'single-choice', question: "ما هو أكثر قسم أعجبك في الموقع؟", totalVotes: 0, userVote: null, options: [{ id: 'home', text: 'صفحة "عني"', votes: 0 }, { id: 'media', text: 'مشغل الموسيقى', votes: 0 }, { id: 'voting', text: 'نظام التصويت', votes: 0 }] },
-                { id: 3, type: 'multiple-choice', question: "ما هي الجوانب التي يمكن تحسينها؟", totalVotes: 0, userVote: [], options: [{ id: 'colors', text: 'تناسق الألوان', votes: 0 }, { id: 'animations', text: 'الحركة والانتقالات', votes: 0 }, { id: 'content', text: 'المحتوى الكتابي', votes: 0 }, { id: 'speed', text: 'سرعة الموقع', votes: 0 }] },
-                { id: 4, type: 'stars', question: "ما مدى سهولة استخدام الواجهة؟", totalVotes: 0, totalScore: 0, userVote: null },
-                { id: 5, type: 'single-choice', question: "هل ستعود لزيارة الموقع مرة أخرى؟", totalVotes: 0, userVote: null, options: [{ id: 'yes', text: 'نعم، بالتأكيد', votes: 0 }, { id: 'no', text: 'لا أعتقد', votes: 0 }, { id: 'maybe', text: 'ربما', votes: 0 }] },
-                { id: 6, type: 'multiple-choice', question: "ما هي التقنيات التي تعتقد أنني استخدمتها؟", totalVotes: 0, userVote: [], options: [{ id: 'react', text: 'React', votes: 0 }, { id: 'tailwind', text: 'Tailwind CSS', votes: 0 }, { id: 'typescript', text: 'TypeScript', votes: 0 }, { id: 'gemini', text: 'Gemini API', votes: 0 }] },
-            ];
-            
-            const getInitialState = () => JSON.parse(JSON.stringify(initialPolls)); // Always start fresh
-
-            const [polls, setPolls] = useState(getInitialState);
-
-            const handleVote = useCallback((pollId, value) => {
-                playSound('click');
-                setPolls(currentPolls =>
-                    currentPolls.map(p => {
-                        if (p.id !== pollId) return p;
-                        const poll = p;
-                        switch (poll.type) {
-                            case 'stars': {
-                                const rating = value;
-                                const newTotalScore = poll.totalScore - (poll.userVote || 0) + rating;
-                                const newTotalVotes = poll.userVote ? poll.totalVotes : poll.totalVotes + 1;
-                                return { ...poll, totalScore: newTotalScore, totalVotes: newTotalVotes, userVote: rating };
-                            }
-                            case 'single-choice': {
-                                if (poll.userVote) return poll;
-                                const optionId = value;
-                                const newTotalVotes = poll.totalVotes + 1;
-                                const newOptions = poll.options.map(opt => opt.id === optionId ? { ...opt, votes: opt.votes + 1 } : opt);
-                                return { ...poll, options: newOptions, totalVotes: newTotalVotes, userVote: optionId };
-                            }
-                            case 'multiple-choice': {
-                                const optionId = value;
-                                if(optionId === '') { // Submit or change vote
-                                     if(poll.userVote.length > 0 && !poll.options.some(o => o.votes > 0)){ // Submit
-                                        const newTotalVotes = poll.totalVotes + poll.userVote.length;
-                                        const newOptions = poll.options.map(opt => poll.userVote.includes(opt.id) ? { ...opt, votes: opt.votes + 1 } : opt);
-                                        return { ...poll, options: newOptions, totalVotes: newTotalVotes };
-                                     } else { // Change vote
-                                        const newTotalVotes = poll.totalVotes - poll.userVote.length;
-                                        const newOptions = poll.options.map(opt => poll.userVote.includes(opt.id) ? { ...opt, votes: Math.max(0, opt.votes - 1) } : opt);
-                                        return {...poll, userVote: [], options: newOptions, totalVotes: newTotalVotes };
-                                     }
-                                }
-                                const newUserVote = poll.userVote.includes(optionId) ? poll.userVote.filter(id => id !== optionId) : [...poll.userVote, optionId];
-                                return { ...poll, userVote: newUserVote };
-                            }
-                            default: return poll;
-                        }
-                    })
-                );
-            }, []);
-            
-            const StarIcon = ({ filled, onClick, onMouseEnter, onMouseLeave }) => ( <svg onClick={onClick} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} className={`w-7 h-7 cursor-pointer transition-transform duration-150 ease-cartoon ${filled ? 'text-cartoon-yellow' : 'text-slate-300'} hover:scale-125`} viewBox="0 0 20 20" fill="currentColor"> <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /> </svg> );
-            const PollResultBar = ({ percentage, text, votes }) => ( <div><div className="flex justify-between items-center mb-1 text-sm font-medium"><span className="text-cartoon-dark">{text}</span><span className="text-slate-500">{votes} votes ({percentage.toFixed(0)}%)</span></div><div className="w-full bg-cartoon-blue-200 rounded-full h-4 border-2 border-cartoon-dark"><div className="bg-cartoon-yellow h-full rounded-full transition-all duration-500" style={{ width: `${percentage}%` }}></div></div></div> );
-
-            const StarPollDisplay = React.memo(({ poll, onVote }) => {
-                const [hoverRating, setHoverRating] = useState(0);
-                const hasVoted = poll.userVote !== null;
-                const averageRating = poll.totalVotes > 0 ? (poll.totalScore / poll.totalVotes) : 0;
-                return ( <div> <div className="flex items-center gap-4 mt-2"> <div className="flex gap-1"> {[1, 2, 3, 4, 5].map((star) => ( <StarIcon key={star} filled={(hoverRating || poll.userVote || 0) >= star} onClick={() => onVote(star)} onMouseEnter={() => setHoverRating(star)} onMouseLeave={() => setHoverRating(0)} /> ))} </div> {hasVoted && ( <div className="text-sm font-medium text-slate-600"> <span className="font-bold text-cartoon-dark">{averageRating.toFixed(1)}/5</span> <span className="ml-2">({poll.totalVotes} votes)</span> </div> )} </div> {hasVoted && <div className="mt-3"><PollResultBar percentage={(averageRating / 5) * 100} text="Average Rating" votes={poll.totalVotes} /></div>} </div> );
-            });
-            const SingleChoicePollDisplay = React.memo(({ poll, onVote }) => {
-                const hasVoted = poll.userVote !== null;
-                return ( <div className="mt-3 space-y-3"> {!hasVoted ? ( poll.options.map(option => ( <label key={option.id} className="flex items-center gap-3 p-3 cursor-pointer rounded-lg border-2 border-cartoon-dark bg-cartoon-blue-100 hover:bg-cartoon-blue-200 transition-colors"> <input type="radio" name={`poll-${poll.id}`} value={option.id} onChange={() => onVote(option.id)} className="hidden" /> <div className="w-5 h-5 rounded-full border-2 border-cartoon-dark flex items-center justify-center flex-shrink-0"><div className={`w-3 h-3 rounded-full bg-cartoon-yellow transition-transform ${poll.userVote === option.id ? 'scale-100' : 'scale-0'}`}></div></div> <span className="font-medium text-cartoon-dark">{option.text}</span> </label> )) ) : ( <div className="space-y-3"> {poll.options.map(option => ( <PollResultBar key={option.id} text={option.text} votes={option.votes} percentage={poll.totalVotes > 0 ? (option.votes / poll.totalVotes) * 100 : 0} /> ))} </div> )} </div> );
-            });
-            const MultipleChoicePollDisplay = React.memo(({ poll, onVote }) => {
-                const hasVoted = poll.userVote.length > 0 && poll.options.some(o => o.votes > 0);
-                const isSubmitting = poll.userVote.length > 0 && !poll.options.some(o => o.votes > 0);
-                return ( <div className="mt-3 space-y-3"> {!hasVoted ? ( poll.options.map(option => ( <label key={option.id} className="flex items-center gap-3 p-3 cursor-pointer rounded-lg border-2 border-cartoon-dark bg-cartoon-blue-100 hover:bg-cartoon-blue-200 transition-colors"> <input type="checkbox" checked={poll.userVote.includes(option.id)} onChange={() => onVote(option.id)} className="hidden" /> <div className="w-5 h-5 rounded-md border-2 border-cartoon-dark flex items-center justify-center flex-shrink-0">{poll.userVote.includes(option.id) && <div className="w-3 h-3 rounded-sm bg-cartoon-yellow"></div>}</div> <span className="font-medium text-cartoon-dark">{option.text}</span> </label> )) ) : ( <div className="space-y-3"> {poll.options.map(option => ( <PollResultBar key={option.id} text={option.text} votes={option.votes} percentage={poll.totalVotes > 0 ? (option.votes / poll.totalVotes) * 100 : 0} /> ))} <button onClick={() => onVote('')} className="text-sm text-cartoon-blue-600 hover:underline mt-2">Change my vote</button> </div> )} {isSubmitting && <button onClick={() => onVote('')} className="w-full mt-3 p-2 bg-cartoon-yellow rounded-lg border-2 border-cartoon-dark shadow-cartoon-sm font-bold hover:bg-yellow-300 transition-colors">Submit Vote</button>} </div> );
-            });
-            const MemoizedPoll = React.memo(({ poll, onVote }) => ( <div className="bg-cartoon-light p-4 rounded-lg border-2 border-cartoon-dark shadow-cartoon-sm"> <p className="font-bold text-lg text-cartoon-dark text-right">{poll.question}</p> {poll.type === 'stars' && <StarPollDisplay poll={poll} onVote={(rating) => onVote(poll.id, rating)} />} {poll.type === 'single-choice' && <SingleChoicePollDisplay poll={poll} onVote={(optionId) => onVote(poll.id, optionId)} />} {poll.type === 'multiple-choice' && <MultipleChoicePollDisplay poll={poll} onVote={(optionId) => onVote(poll.id, optionId)} />} </div> ));
-
-            return (
-                <div className="h-full w-full flex flex-col p-2 bg-cartoon-blue-200/50">
-                    <h2 className="text-2xl font-bold text-center text-cartoon-dark p-2 flex-shrink-0">Polls & Feedback</h2>
-                    <div className="flex-grow overflow-y-auto custom-scrollbar space-y-4 p-2">
-                        {polls.map(poll => <MemoizedPoll key={poll.id} poll={poll} onVote={handleVote} />)}
-                    </div>
+            <div style={{ padding: '1rem 0', flexShrink: 0 }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1.5rem' }}>
+                  <button onClick={onPrev} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: '0', transform: 'scale(1.2)', transition: 'color 0.2s ease' }} onMouseOver={e => e.currentTarget.style.color='var(--accent-red)'} onMouseOut={e => e.currentTarget.style.color='var(--text-muted)'} aria-label="Previous track"><PrevIcon/></button>
+                  <button onClick={onTogglePlay} style={{ width: '56px', height: '56px', borderRadius: '50%', background: 'var(--accent-yellow)', color: 'var(--border-color)', border: '3px solid var(--border-color)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)' }} onMouseOver={e => e.currentTarget.style.transform='scale(1.1)'} onMouseOut={e => e.currentTarget.style.transform='scale(1)'} aria-label={isPlaying ? 'Pause' : 'Play'}>
+                    {isPlaying ? <PauseIcon /> : <PlayIcon />}
+                  </button>
+                  <button onClick={onNext} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: '0', transform: 'scale(1.2)', transition: 'color 0.2s ease' }} onMouseOver={e => e.currentTarget.style.color='var(--accent-red)'} onMouseOut={e => e.currentTarget.style.color='var(--text-muted)'} aria-label="Next track"><NextIcon/></button>
                 </div>
-            );
-        };
-        
-        // --- SHELL COMPONENTS (Dock.tsx, AppFrame.tsx) ---
-        const AppFrame = ({ title, children, onClose, animationClass }) => (
-            <div className={`absolute inset-0 flex items-center justify-center p-4 md:p-8 ${animationClass}`}>
-                <div className="w-full h-full max-w-5xl max-h-[85vh] md:max-h-[80vh] flex flex-col bg-cartoon-light border-4 border-cartoon-dark rounded-xl shadow-cartoon">
-                    <header className="bg-cartoon-blue-500 text-cartoon-light font-bold p-2 flex items-center justify-between border-b-4 border-cartoon-dark rounded-t-md flex-shrink-0">
-                        <span className="pl-2">{title}</span>
-                        <button onClick={onClose} className="w-7 h-7 bg-red-500 rounded-full border-2 border-cartoon-dark flex items-center justify-center text-sm font-bold text-cartoon-dark hover:bg-red-400 active:shadow-cartoon-inset transform hover:scale-110 transition-transform" aria-label="Close window">&#x2715;</button>
-                    </header>
-                    <main className="flex-grow p-1 md:p-2 overflow-hidden bg-white rounded-b-md">{children}</main>
+                 <div style={{ width: '100%', backgroundColor: '#e0e0e0', borderRadius: '99px', height: '8px', marginTop: '1.5rem', overflow: 'hidden', border: '2px solid #e0e0e0' }}>
+                    <div style={{ backgroundColor: 'var(--accent-green)', height: '100%', borderRadius: '99px', width: `${progress}%`, transition: 'width 0.1s linear' }}></div>
                 </div>
             </div>
+            <div style={{ flexGrow: 1, overflowY: 'auto', paddingTop: '0.5rem', paddingRight: '0.5rem' }}>
+              {tracks.map((track, index) => (
+                <div key={index} onClick={() => onSelectTrack(index)} style={{
+                  padding: '0.6rem 0.75rem',
+                  cursor: 'pointer',
+                  borderRadius: '12px',
+                  backgroundColor: index === currentTrackIndex ? 'var(--accent-red)' : 'transparent',
+                  marginBottom: '0.25rem',
+                  transition: 'background-color 0.2s ease',
+                  border: '3px solid',
+                  borderColor: index === currentTrackIndex ? 'var(--border-color)' : 'transparent',
+                }}>
+                  <div style={{ fontWeight: 'bold', fontSize: '0.9rem', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap', color: index === currentTrackIndex ? 'var(--off-white)' : 'var(--text-color)' }}>{track.title}</div>
+                  <div style={{ fontSize: '0.8rem', color: index === currentTrackIndex ? 'var(--off-white)' : 'var(--text-muted)', opacity: index === currentTrackIndex ? 0.8 : 1 }}>{track.artist}</div>
+                </div>
+              ))}
+            </div>
+          </div>
         );
-        const Dock = ({ apps, onAppClick, activeAppId }) => {
-            const iconMap = { home: <HomeIcon />, media: <MusicIcon />, voting: <VotingIcon />, };
-            const DockIcon = ({ app, onClick, isActive }) => {
-                const activeClasses = 'shadow-cartoon -translate-y-2';
-                const inactiveClasses = 'shadow-cartoon-sm group-hover:shadow-cartoon group-hover:-translate-y-2';
-                return (
-                    <div className="group flex flex-col items-center gap-2 relative">
-                        <button onClick={onClick} className={`w-16 h-16 bg-cartoon-light rounded-2xl transition-all duration-200 ease-cartoon flex items-center justify-center active:shadow-cartoon-inset active:translate-y-0 active:scale-90 active:duration-100 ${isActive ? activeClasses : inactiveClasses}`} aria-label={`Open ${app.name}`}>
-                            {iconMap[app.id]}
-                        </button>
-                        <span className="absolute -top-8 hidden group-hover:block bg-cartoon-dark text-cartoon-light text-xs font-medium px-2 py-1 rounded-md shadow-md transition-opacity duration-200 z-10">{app.name}</span>
-                    </div>
-                );
-            };
-            return (
-                <footer className="relative w-full flex-shrink-0 flex items-center justify-center py-4 z-50">
-                    <div className="flex items-center justify-center gap-4 p-3 bg-white/50 backdrop-blur-md rounded-2xl border-2 border-white/70 shadow-cartoon">
-                        {apps.map(app => <DockIcon key={app.id} app={app} onClick={() => onAppClick(app.id)} isActive={app.id === activeAppId} />)}
-                    </div>
-                </footer>
-            );
-        };
-        
-        // --- ROOT COMPONENT (App.tsx) ---
-        function App() {
-            const artCollection = [ "https://i.ibb.co/pXfwCcv/2d79b46de2deb3744fd330d815b76751.jpg", "https://i.ibb.co/yqgZ7XW/a1032381223-10.jpg", "https://i.ibb.co/hZ2vN2M/art.jpg", "https://i.ibb.co/Wc2zV9N/ab67616d0000b273a0c4f8b4b7a7f8c0c1b7b7a.jpg", "https://i.ibb.co/bzzZJzD/R-1123933-1490793669-9524-jpeg.jpg" ];
-            const tracksData = [
-                { url: "https://audio.jukehost.co.uk/3SwFzuOJdwkrBopTFgOzkDOT5FDN6ITH", title: "Fakrak Ya Nasiny", artist: "Mohamed Foad" }, { url: "https://audio.jukehost.co.uk/6IQhCPy39Jv5Uxj9WI4fFMeUuJMWWR2D", title: "Khalik Ganbi", artist: "Haitham Shaker" }, { url: "https://audio.jukehost.co.uk/gHFak76ZMfll7B4AxEeDbJjPRWgXvhc8", title: "Alb ElAsheq Dalelo", artist: "George Wasouf" }, { url: "https://audio.jukehost.co.uk/NuLgFpCxa1HTsUQUUVhWtBDQJ76xsQwz", title: "Seket Leih", artist: "Ramy Sabry" }, { url: "https://audio.jukehost.co.uk/LTTXfGln1F0s2pQpHLgb0JapbBOxUpGn", title: "Khosara", artist: "Mohamed Foad" }, { url: "https://audio.jukehost.co.uk/bbabQwnKnYhXlaRD8alUDCzGEhyu9Rwm", title: "Khadny 7aneen", artist: "George Wasouf" }, { url: "https://audio.jukehost.co.uk/jciF6sfSouobTpBl2Krqc3UaZfMX3oeJ", title: "Enty Nesity Nafsek", artist: "Tamer Hosny" }, { url: "https://audio.jukehost.co.uk/FhU9VQWsajSdhBd1mXmWq5kXnw1IaFLr", title: "Kol youm", artist: "Tamer Ashour" }, { url: "https://audio.jukehost.co.uk/nR6XjZwYTEh3Y5tzwS3NwKZrazhE0qGz", title: "Rabak Lama Yered", artist: "Mohamed Mounir" }, { url: "https://audio.jukehost.co.uk/kwvKuE1GOiFiyJB9r2qgbSdCEwNYicoY", title: "Shed Eldafaer", artist: "Hanan Madi" }, { url: "https://audio.jukehost.co.uk/lrUXO0jmrJRZANKo0Gx9XEQ0PFuQxKN5", title: "Yalli Bitghib Aleiya", artist: "Haitham Shaker" }, { url: "https://audio.jukehost.co.uk/eQbGikyF1Aog1gTZILSPznXQ3rLXymGw", title: "ElSabri Tayib", artist: "George Wasouf" }, { url: "https://audio.jukehost.co.uk/l2Mk2abKCcRGWpSoxSlcxBL80RAjYvMe", title: "Fagaa Eftarana", artist: "Tamer Hosny" }, { url: "https://audio.jukehost.co.uk/HN649ig7AsLZ1vaS9mdsGPl8q0uI8z7m", title: "Lw Batlna Nehlm", artist: "Mohamed Mounir" }, { url: "https://audio.jukehost.co.uk/f9oiefTzRGZvp6iyMJKGbxLe3ZFCv390", title: "Sed El-Habayeb", artist: "Shadia" }, { url: "https://audio.jukehost.co.uk/c77yqDnvZV6lAmIPQPanmSgqVpnlnDyv", title: "Saber W.Radi", artist: "George Wasouf" }, { url: "https://audio.jukehost.co.uk/16F3ncIKS16sa5AciCMrGmuJa9doyvDX", title: "Zkryat", artist: "George Wasouf" },
-            ];
-            const tracks = tracksData.map((track, index) => ({ ...track, art: artCollection[index % artCollection.length] }));
-            const APPS = [ { id: 'home', name: 'About Me', component: <HomeApp /> }, { id: 'media', name: 'Music', component: <MediaApp /> }, { id: 'voting', name: 'Polls', component: <VotingApp /> }, ];
-            const homeApp = APPS.find(app => app.id === 'home');
-            
-            const [activeApp, setActiveApp] = useState(homeApp || null);
-            const [outgoingApp, setOutgoingApp] = useState(null);
-            const [animation, setAnimation] = useState({ in: 'animate-fade-in-scale-up', out: '' });
-            const animationTimeout = useRef(null);
-            
-            const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
-            const [isPlaying, setIsPlaying] = useState(false);
-            const audioRef = useRef(null);
-            const currentTrack = tracks[currentTrackIndex];
+      };
 
-            const playNext = useCallback(() => { setCurrentTrackIndex((prev) => (prev + 1) % tracks.length); setIsPlaying(true); }, [tracks.length]);
-            
-            useEffect(() => { const audio = audioRef.current; if (!audio) return; const handleEnded = () => playNext(); audio.addEventListener('ended', handleEnded); return () => { audio.removeEventListener('ended', handleEnded); }; }, [playNext]);
-            useEffect(() => { const audio = audioRef.current; if (audio) { if (audio.src !== currentTrack.url) { audio.src = currentTrack.url; } if (isPlaying) { audio.play().catch(e => console.error("Audio playback failed:", e)); } else { audio.pause(); } } }, [currentTrackIndex, currentTrack.url, isPlaying]);
-            useEffect(() => { return () => { if (animationTimeout.current) { clearTimeout(animationTimeout.current); } }; }, []);
 
-            const togglePlayPause = useCallback(() => { playSound('click'); setIsPlaying(prev => !prev); }, []);
-            const playPrev = useCallback(() => { playSound('click'); setCurrentTrackIndex((prev) => (prev - 1 + tracks.length) % tracks.length); setIsPlaying(true); }, [tracks.length]);
-            const handleTrackSelect = useCallback((index) => { playSound('click'); setCurrentTrackIndex(index); setIsPlaying(true); }, []);
-            
-            const handleAppClick = useCallback((appId) => {
-                const newApp = APPS.find(a => a.id === appId);
-                if (!newApp || activeApp?.id === newApp.id) return;
-                playSound('open');
-                if (animationTimeout.current) clearTimeout(animationTimeout.current);
-                const oldIndex = activeApp ? APPS.findIndex(a => a.id === activeApp.id) : -1;
-                const newIndex = APPS.findIndex(a => a.id === appId);
-                let inClass = 'animate-fade-in-scale-up', outClass = 'animate-fade-out-scale-down';
-                if (activeApp) { inClass = newIndex > oldIndex ? 'animate-slide-in-from-right' : 'animate-slide-in-from-left'; outClass = newIndex > oldIndex ? 'animate-slide-out-to-left' : 'animate-slide-out-to-right'; }
-                setAnimation({ in: inClass, out: outClass });
-                setOutgoingApp(activeApp);
-                setActiveApp(newApp);
-                animationTimeout.current = window.setTimeout(() => setOutgoingApp(null), 500);
-            }, [activeApp]);
+      // --- MAIN APP ---
+      const tracksData = [
+          { url: "https://audio.jukehost.co.uk/3SwFzuOJdwkrBopTFgOzkDOT5FDN6ITH", title: "Fakrak Ya Nasiny", artist: "Mohamed Foad" }, { url: "https://audio.jukehost.co.uk/6IQhCPy39Jv5Uxj9WI4fFMeUuJMWWR2D", title: "Khalik Ganbi", artist: "Haitham Shaker" }, { url: "https://audio.jukehost.co.uk/gHFak76ZMfll7B4AxEeDbJjPRWgXvhc8", title: "Alb ElAsheq Dalelo", artist: "George Wasouf" }, { url: "https://audio.jukehost.co.uk/NuLgFpCxa1HTsUQUUVhWtBDQJ76xsQwz", title: "Seket Leih", artist: "Ramy Sabry" }, { url: "https://audio.jukehost.co.uk/LTTXfGln1F0s2pQpHLgb0JapbBOxUpGn", title: "Khosara", artist: "Mohamed Foad" }, { url: "https://audio.jukehost.co.uk/bbabQwnKnYhXlaRD8alUDCzGEhyu9Rwm", title: "Khadny 7aneen", artist: "George Wasouf" }, { url: "https://audio.jukehost.co.uk/jciF6sfSouobTpBl2Krqc3UaZfMX3oeJ", title: "Enty Nesity Nafsek", artist: "Tamer Hosny" }, { url: "https://audio.jukehost.co.uk/FhU9VQWsajSdhBd1mXmWq5kXnw1IaFLr", title: "Kol youm", artist: "Tamer Ashour" }, { url: "https://audio.jukehost.co.uk/nR6XjZwYTEh3Y5tzwS3NwKZrazhE0qGz", title: "Rabak Lama Yered", artist: "Mohamed Mounir" }, { url: "https://audio.jukehost.co.uk/kwvKuE1GOiFiyJB9r2qgbSdCEwNYicoY", title: "Shed Eldafaer", artist: "Hanan Madi" }, { url: "https://audio.jukehost.co.uk/lrUXO0jmrJRZANKo0Gx9XEQ0PFuQxKN5", title: "Yalli Bitghib Aleiya", artist: "Haitham Shaker" }, { url: "https://audio.jukehost.co.uk/eQbGikyF1Aog1gTZILSPznXQ3rLXymGw", title: "ElSabri Tayib", artist: "George Wasouf" }, { url: "https://audio.jukehost.co.uk/l2Mk2abKCcRGWpSoxSlcxBL80RAjYvMe", title: "Fagaa Eftarana", artist: "Tamer Hosny" }, { url: "https://audio.jukehost.co.uk/HN64P9ig7AsLZ1vaS9mdsGPl8q0uI8z7m", title: "Lw Batlna Nehlm", artist: "Mohamed Mounir" }, { url: "https://audio.jukehost.co.uk/f9oiefTzRGZvp6iyMJKGbxLe3ZFCv390", title: "Sed El-Habayeb", artist: "Shadia" }, { url: "https://audio.jukehost.co.uk/c77yqDnvZV6lAmIPQPanmSgqVpnlnDyv", title: "Saber W.Radi", artist: "George Wasouf" }, { url: "https://audio.jukehost.co.uk/16F3ncIKS16sa5AciCMrGmuJa9doyvDX", title: "Zkryat", artist: "George Wasouf" },
+      ];
+      const viewTitles = { home: 'Pola SOVEREIGN', music: 'Music Player', clock: 'Clock & Date' };
+      
+      let audioCtx = null;
+      const playSound = (type) => {
+        if (!audioCtx) {
+          try {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          } catch (e) {
+            console.error("Web Audio API is not supported in this browser");
+            return;
+          }
+        }
+        const oscillator = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        if (type === 'open') {
+          oscillator.type = 'triangle';
+          oscillator.frequency.setValueAtTime(880, audioCtx.currentTime);
+          gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.3);
+        } else {
+          oscillator.type = 'sine';
+          oscillator.frequency.setValueAtTime(660, audioCtx.currentTime);
+          gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.2);
+        }
+        oscillator.start();
+        oscillator.stop(audioCtx.currentTime + 0.3);
+      };
+      
+      const App = () => {
+          const [activeView, setActiveView] = useState('home');
+          const [animationClass, setAnimationClass] = useState('drop-in');
+          const audioRef = useRef(null);
+          const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
+          const [isPlaying, setIsPlaying] = useState(false);
+          const [progress, setProgress] = useState(0);
+          const currentTrack = tracksData[currentTrackIndex];
 
-            const handleClose = useCallback(() => {
-                if (!activeApp) return;
-                playSound('close');
-                if (animationTimeout.current) clearTimeout(animationTimeout.current);
-                setAnimation({ in: '', out: 'animate-fade-out-scale-down' });
-                setOutgoingApp(activeApp);
-                setActiveApp(null);
-                animationTimeout.current = window.setTimeout(() => setOutgoingApp(null), 500);
-            }, [activeApp]);
+          useEffect(() => {
+              if (audioRef.current) {
+                  audioRef.current.src = currentTrack.url;
+                  audioRef.current.load();
+                  if (isPlaying) {
+                      audioRef.current.play().catch(e => console.error("Playback failed:", e));
+                  }
+              }
+          }, [currentTrackIndex]);
 
-            return (
-                <AudioContext.Provider value={{ isPlaying, currentTrackIndex, tracks, audioRef, togglePlayPause, playNext, playPrev, handleTrackSelect, currentTrack, }}>
-                    <div className="w-screen h-screen overflow-hidden font-sans relative flex flex-col">
-                        <audio ref={audioRef} preload="metadata" crossOrigin="anonymous"></audio>
-                        <main id="desktop" className="w-full flex-grow flex items-center justify-center relative overflow-hidden">
-                            {activeApp && <AppFrame key={activeApp.id} title={activeApp.name} onClose={handleClose} animationClass={animation.in}>{activeApp.component}</AppFrame>}
-                            {outgoingApp && <AppFrame key={`${outgoingApp.id}-outgoing`} title={outgoingApp.name} onClose={() => {}} animationClass={animation.out}>{outgoingApp.component}</AppFrame>}
-                        </main>
-                        <Dock apps={APPS} onAppClick={handleAppClick} activeAppId={activeApp?.id || null} />
-                    </div>
-                </AudioContext.Provider>
-            );
-        };
-        
-        // --- RENDER APP ---
-        const rootElement = document.getElementById('root');
-        const root = ReactDOM.createRoot(rootElement);
-        root.render(<App />);
+          useEffect(() => {
+              const audio = audioRef.current;
+              if (!audio) return;
+              const updateProgress = () => setProgress(audio.duration ? (audio.currentTime / audio.duration) * 100 : 0);
+              const onEnded = () => setCurrentTrackIndex(prev => (prev + 1) % tracksData.length);
+              const onPlay = () => setIsPlaying(true);
+              const onPause = () => setIsPlaying(false);
+              audio.addEventListener('timeupdate', updateProgress);
+              audio.addEventListener('ended', onEnded);
+              audio.addEventListener('play', onPlay);
+              audio.addEventListener('pause', onPause);
+              return () => {
+                  audio.removeEventListener('timeupdate', updateProgress);
+                  audio.removeEventListener('ended', onEnded);
+                  audio.removeEventListener('play', onPlay);
+                  audio.removeEventListener('pause', onPause);
+              };
+          }, [currentTrackIndex]);
+
+          const handleTogglePlay = () => audioRef.current?.paused ? audioRef.current?.play() : audioRef.current?.pause();
+          const handleNext = () => setCurrentTrackIndex(prev => (prev + 1) % tracksData.length);
+          const handlePrev = () => setCurrentTrackIndex(prev => (prev - 1 + tracksData.length) % tracksData.length);
+          const handleSelectTrack = (index) => setCurrentTrackIndex(index);
+
+          const closeWindow = useCallback(() => {
+              if (activeView) {
+                  playSound('close');
+                  setAnimationClass('fall-out');
+                  setTimeout(() => setActiveView(null), 300);
+              }
+          }, [activeView]);
+
+          const openWindow = useCallback((id) => {
+              if (activeView === id) {
+                  closeWindow();
+              } else {
+                  playSound('open');
+                  if (activeView) {
+                      setAnimationClass('fall-out');
+                      setTimeout(() => {
+                          setActiveView(id);
+                          setAnimationClass('drop-in');
+                      }, 300);
+                  } else {
+                      setActiveView(id);
+                      setAnimationClass('drop-in');
+                  }
+              }
+          }, [activeView, closeWindow]);
+
+          const renderContent = () => {
+              if (!activeView) return null;
+              switch (activeView) {
+                  case 'home': return <HomeContent />;
+                  case 'clock': return <Clock />;
+                  case 'music': return (
+                      <AudioPlayer
+                          tracks={tracksData}
+                          currentTrackIndex={currentTrackIndex}
+                          isPlaying={isPlaying}
+                          progress={progress}
+                          onTogglePlay={handleTogglePlay}
+                          onNext={handleNext}
+                          onPrev={handlePrev}
+                          onSelectTrack={handleSelectTrack}
+                      />
+                  );
+                  default: return null;
+              }
+          };
+
+          return (
+              <>
+                  <audio ref={audioRef} src={currentTrack.url} preload="metadata" />
+                  {activeView && (
+                      <Window
+                          key={activeView}
+                          title={viewTitles[activeView]}
+                          onClose={closeWindow}
+                          animationClass={animationClass}
+                      >
+                          {renderContent()}
+                      </Window>
+                  )}
+                  <Dock onIconClick={openWindow} activeView={activeView} />
+              </>
+          );
+      };
+
+      // --- RENDER APP ---
+      const rootElement = document.getElementById('root');
+      const root = ReactDOM.createRoot(rootElement);
+      root.render(<App />);
 
     </script>
-</body>
+  </body>
 </html>
