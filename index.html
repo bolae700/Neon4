@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -356,31 +357,20 @@
           setError(null);
           setWeather(null);
           
-          navigator.geolocation.getCurrentPosition(
-              (position) => {
-                  const { latitude, longitude } = position.coords;
-                  fetch(`https://wttr.in/${latitude},${longitude}?format=j1`)
-                      .then(res => { 
-                          if (!res.ok) throw new Error('Failed to fetch weather data.');
-                          return res.json(); 
-                      })
-                      .then(data => { 
-                          if (isMounted.current) setWeather(data); 
-                      })
-                      .catch(err => { 
-                          if (isMounted.current) setError(err.message); 
-                      })
-                      .finally(() => { 
-                          if (isMounted.current) setLoading(false); 
-                      });
-              },
-              (err) => {
-                if (isMounted.current) {
-                  setError('Geolocation permission denied. Please allow location access to see the weather.');
-                  setLoading(false);
-                }
-              }
-          );
+          fetch(`https://wttr.in/?format=j1`)
+              .then(res => { 
+                  if (!res.ok) throw new Error('Failed to fetch weather data. The service might be temporarily unavailable.');
+                  return res.json(); 
+              })
+              .then(data => { 
+                  if (isMounted.current) setWeather(data); 
+              })
+              .catch(err => { 
+                  if (isMounted.current) setError(err.message); 
+              })
+              .finally(() => { 
+                  if (isMounted.current) setLoading(false); 
+              });
         }, []);
 
         useEffect(() => {
@@ -407,7 +397,7 @@
         };
         
         const renderContent = () => {
-            if (loading) return <div className="flex flex-col items-center justify-center text-center"><div className="w-16 h-16 border-4 border-dashed rounded-full animate-spin border-accent-green mb-4"></div><p className="text-xl font-bold text-brand-muted">Getting location & weather...</p></div>;
+            if (loading) return <div className="flex flex-col items-center justify-center text-center"><div className="w-16 h-16 border-4 border-dashed rounded-full animate-spin border-accent-green mb-4"></div><p className="text-xl font-bold text-brand-muted">Fetching weather...</p></div>;
             if (error) return <div className="text-center text-accent-red"><p className="font-bold text-lg">Oops!</p><p>{error}</p> <button onClick={fetchWeather} className="mt-4 bg-accent-yellow text-brand-border font-bold py-2 px-4 rounded-lg border-2 border-brand-border shadow-sharp transition-transform hover:scale-105">Try Again</button></div>;
             
             const current = weather?.current_condition?.[0];
