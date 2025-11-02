@@ -1,329 +1,330 @@
+
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pola | SOVEREIGN</title>
+    <title>Pola Sovereign OS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Righteous&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              nunito: ['Nunito', 'sans-serif'],
+              righteous: ['Righteous', 'cursive'],
+            },
+            colors: {
+              'sky-bright': '#00C6FF',
+              'sky-deep': '#0072FF',
+              'accent-yellow': '#FFD166',
+              'accent-red': '#FF5F57',
+              'accent-green': '#70C1B3',
+              'brand-border': '#0F172A',
+              'brand-text': '#0F172A',
+              'brand-text-light': '#F8F9FA',
+              'brand-muted': '#475569',
+              'brand-off-white': '#F8F9FA',
+            },
+            boxShadow: {
+              'sharp': '6px 6px 0 0 #0F172A',
+            },
+            keyframes: {
+              movePattern: {
+                '0%': { backgroundPosition: '0 0' },
+                '100%': { backgroundPosition: '-100px 100px' },
+              },
+              'drop-in': {
+                '0%': { transform: 'translateY(-110%) scale(0.9)', opacity: '0' },
+                '100%': { transform: 'translateY(0) scale(1)', opacity: '1' },
+              },
+              'fall-out': {
+                '0%': { transform: 'translateY(0) scale(1)', opacity: '1' },
+                '100%': { transform: 'translateY(110%) scale(0.9)', opacity: '0' },
+              },
+              'pulse-slow': {
+                '0%, 100%': { transform: 'scale(1)' },
+                '50%': { transform: 'scale(1.05)' },
+              }
+            },
+            animation: {
+              movePattern: 'movePattern 20s linear infinite',
+              'drop-in': 'drop-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards',
+              'fall-out': 'fall-out 0.3s ease-in forwards',
+              'pulse-slow': 'pulse-slow 3s ease-in-out infinite',
+            }
+          },
+        },
+      }
+    </script>
     <style>
-      :root {
-        --sky-blue-bright: #00C6FF;
-        --sky-blue-deep: #0072FF;
-        
-        --accent-yellow: #FFD166;
-        --accent-red: #FF5F57;
-        --accent-green: #70C1B3;
-
-        --border-color: #0F172A; /* Off-black / Deep blue */
-        --text-color: #0F172A;
-        --text-color-light: #F8F9FA;
-        --text-muted: #475569; /* Slate gray */
-
-        --off-white: #F8F9FA;
-        --glass-bg: rgba(248, 249, 250, 0.5);
-        --glass-border: rgba(255, 255, 255, 0.2);
-      }
-      *, *::before, *::after {
-        box-sizing: border-box;
-      }
-      body {
-        font-family: 'Nunito', sans-serif;
-        background-color: var(--sky-blue-deep);
-        color: var(--text-color);
+      html, body {
         margin: 0;
-        user-select: none;
-        -webkit-tap-highlight-color: transparent;
+        padding: 0;
         overflow: hidden;
-      }
-
-      .background-gradient {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: -1;
-        background: linear-gradient(45deg, var(--sky-blue-bright), var(--sky-blue-deep));
-        background-size: 400% 400%;
-        animation: gradientBG 15s ease infinite;
-      }
-
-
-      @keyframes gradientBG {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
-      }
-
-      .font-righteous {
-        font-family: 'Righteous', cursive;
       }
       #root {
         height: 100vh;
         width: 100vw;
-        position: relative;
         display: flex;
         align-items: center;
         justify-content: center;
-      }
-
-      /* Custom Scrollbar */
-      ::-webkit-scrollbar {
-        width: 12px;
-      }
-      ::-webkit-scrollbar-track {
-        background: rgba(15, 23, 42, 0.1);
-        border-radius: 10px;
-      }
-      ::-webkit-scrollbar-thumb {
-        background-color: var(--accent-green);
-        border-radius: 10px;
-        border: 3px solid var(--off-white);
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background-color: #5aa89a;
-      }
-
-
-      /* Window & Content Animations */
-      @keyframes drop-in {
-        0% { transform: translateY(-100%) scale(0.9); opacity: 0; }
-        70% { transform: translateY(10px) scale(1.02); opacity: 1; }
-        100% { transform: translateY(0) scale(1); opacity: 1; }
-      }
-      @keyframes fall-out {
-        0% { transform: translateY(0) scale(1); opacity: 1; }
-        100% { transform: translateY(100%) scale(0.9); opacity: 0; }
-      }
-
-      .window {
         position: relative;
-        background-color: var(--off-white);
-        border: 3px solid var(--border-color);
-        border-radius: 20px;
-        display: flex;
-        flex-direction: column;
-        width: 90vw;
-        max-width: 400px;
-        height: 85vh;
-        max-height: 600px;
-        overflow: hidden; /* Important for animations */
-        transition: width 0.3s ease, height 0.3s ease, max-height 0.3s ease;
+        box-sizing: border-box;
       }
-      
-      .window.drop-in { animation: drop-in 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-      .window.fall-out { animation: fall-out 0.3s ease-in forwards; }
-
-      .title-bar {
-        background-color: #f0f0f0;
-        border-bottom: 3px solid var(--border-color);
-        padding: 0.6rem 1.1rem;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        border-radius: 16px 16px 0 0;
-        flex-shrink: 0;
-      }
-      
-      .title-text {
-        font-weight: 700;
-        font-size: 1rem;
-      }
-      
-      .close-button {
-        width: 20px;
-        height: 20px;
-        background: var(--accent-red);
-        border: 2px solid var(--border-color);
-        border-radius: 50%;
-        cursor: pointer;
-        transition: background-color 0.2s;
-      }
-      .close-button:hover { background: #E0443E; }
-      
-      .window-content {
-        padding: 1.25rem;
-        flex-grow: 1;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
+      body {
+        --sky-deep: #0072FF;
+        --pattern-color: rgba(255, 255, 255, 0.07);
+        background-color: var(--sky-deep);
+        background-image: 
+          linear-gradient(45deg, var(--pattern-color) 25%, transparent 25%), 
+          linear-gradient(-45deg, var(--pattern-color) 25%, transparent 25%),
+          linear-gradient(45deg, transparent 75%, var(--pattern-color) 75%),
+          linear-gradient(-45deg, transparent 75%, var(--pattern-color) 75%);
+        background-size: 20px 20px;
+        background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
       }
 
-      /* Dock Styles */
-      .dock {
-        position: fixed;
-        bottom: 25px;
-        left: 50%;
-        transform: translateX(-50%);
-        background-color: var(--glass-bg);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        border: 2px solid var(--glass-border);
-        border-radius: 24px;
-        padding: 0.75rem;
-        display: flex;
-        gap: 0.75rem;
-        z-index: 10000;
-        transition: bottom 0.3s ease;
-      }
-      
-      .dock-item {
-        width: 60px;
-        height: 60px;
-        background-color: var(--off-white);
-        border: 3px solid var(--border-color);
-        border-radius: 18px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        position: relative;
-      }
-      .dock-item:hover { transform: translateY(-8px); }
-      .dock-item:active { transform: translateY(-4px) scale(0.95); }
-      .dock-item svg {
-        width: 36px;
-        height: 36px;
-      }
-      .dock-item.home-icon { color: var(--accent-red); }
-      .dock-item.music-icon { color: var(--accent-green); }
-      .dock-item.clock-icon { color: var(--accent-yellow); }
-
-      .dock-item.active {
-        background-color: var(--off-white);
-        transform: translateY(-8px) scale(1.1);
-      }
-      
-      /* Smart Responsiveness */
-      @media (max-width: 480px) {
-        .window {
-            width: 95vw;
-            height: 90vh;
-            max-height: 90vh;
-            border-radius: 24px;
-        }
-        .title-bar { border-radius: 20px 20px 0 0; }
-        .dock {
-            bottom: 15px;
-            padding: 0.6rem;
-            gap: 0.6rem;
-            border-radius: 20px;
-        }
-        .dock-item {
-            width: 55px;
-            height: 55px;
-            border-radius: 16px;
-        }
-        .window-content {
-          padding: 1.1rem;
-        }
-      }
-      
-      /* Landscape / Short Screen support */
-       @media (max-height: 650px) and (min-width: 481px) {
-         .window {
-           height: 90vh;
-           max-height: 500px;
-           width: 70vw;
-           max-width: 600px;
-         }
-         .dock {
-            bottom: 15px;
-         }
-       }
+      ::-webkit-scrollbar { width: 12px; }
+      ::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.1); border-radius: 10px; }
+      ::-webkit-scrollbar-thumb { background-color: #70C1B3; border-radius: 10px; border: 3px solid #F8F9FA; }
+      ::-webkit-scrollbar-thumb:hover { background-color: #5aa89a; }
     </style>
-  </head>
-  <body>
-    <div class="background-gradient"></div>
+</head>
+<body class="font-nunito antialiased animate-movePattern">
     <div id="root"></div>
 
     <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
+    
     <script type="text/babel">
-      const { useState, useCallback, useRef, useEffect } = React;
+      const { useState, useCallback, useRef, useEffect, Fragment } = React;
+
+      // --- CONSTANTS ---
+       const tracksData = [
+          { url: "https://audio.jukehost.co.uk/3SwFzuOJdwkrBopTFgOzkDOT5FDN6ITH", title: "Fakrak Ya Nasiny", artist: "Mohamed Foad" },
+          { url: "https://audio.jukehost.co.uk/6IQhCPy39Jv5Uxj9WI4fFMeUuJMWWR2D", title: "Khalik Ganbi", artist: "Haitham Shaker" },
+          { url: "https://audio.jukehost.co.uk/gHFak76ZMfll7B4AxEeDbJjPRWgXvhc8", title: "Alb ElAsheq Dalelo", artist: "George Wasouf" },
+          { url: "https://audio.jukehost.co.uk/NuLgFpCxa1HTsUQUUVhWtBDQJ76xsQwz", title: "Seket Leih", artist: "Ramy Sabry" },
+          { url: "https://audio.jukehost.co.uk/LTTXfGln1F0s2pQpHLgb0JapbBOxUpGn", title: "Khosara", artist: "Mohamed Foad" },
+          { url: "https://audio.jukehost.co.uk/bbabQwnKnYhXlaRD8alUDCzGEhyu9Rwm", title: "Khadny 7aneen", artist: "George Wasouf" },
+          { url: "https://audio.jukehost.co.uk/jciF6sfSouobTpBl2Krqc3UaZfMX3oeJ", title: "Enty Nesity Nafsek", artist: "Tamer Hosny" },
+          { url: "https://audio.jukehost.co.uk/FhU9VQWsajSdhBd1mXmWq5kXnw1IaFLr", title: "Kol youm", artist: "Tamer Ashour" },
+          { url: "https://audio.jukehost.co.uk/nR6XjZwYTEh3Y5tzwS3NwKZrazhE0qGz", title: "Rabak Lama Yered", artist: "Mohamed Mounir" },
+          { url: "https://audio.jukehost.co.uk/kwvKuE1GOiFiyJB9r2qgbSdCEwNYicoY", title: "Shed Eldafaer", artist: "Hanan Madi" },
+          { url: "https://audio.jukehost.co.uk/lrUXO0jmrJRZANKo0Gx9XEQ0PFuQxKN5", title: "Yalli Bitghib Aleiya", artist: "Haitham Shaker" },
+          { url: "https://audio.jukehost.co.uk/eQbGikyF1Aog1gTZILSPznXQ3rLXymGw", title: "ElSabri Tayib", artist: "George Wasouf" },
+          { url: "https://audio.jukehost.co.uk/l2Mk2abKCcRGWpSoxSlcxBL80RAjYvMe", title: "Fagaa Eftarana", artist: "Tamer Hosny" },
+          { url: "https://audio.jukehost.co.uk/HN649ig7AsLZ1vaS9mdsGPl8q0uI8z7m", title: "Lw Batlna Nehlm", artist: "Mohamed Mounir" },
+          { url: "https://audio.jukehost.co.uk/f9oiefTzRGZvp6iyMJKGbxLe3ZFCv390", title: "Sed El-Habayeb", artist: "Shadia" },
+          { url: "https://audio.jukehost.co.uk/c77yqDnvZV6lAmIPQPanmSgqVpnlnDyv", title: "Saber W.Radi", artist: "George Wasouf" },
+          { url: "https://audio.jukehost.co.uk/16F3ncIKS16sa5AciCMrGmuJa9doyvDX", title: "Zkryat", artist: "George Wasouf" },
+      ];
+      const viewTitles = { home: 'Pola SOVEREIGN', music: 'Music Player', clock: 'Clock & Date', weather: 'Weather Forecast' };
+      
+      // --- ICONS ---
+      const HomeIcon = ({ className }) => (<svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M4 9.5V20a1 1 0 0 0 1 1h4M8 21V14h8v7m4-11.5V20a1 1 0 0 1-1 1h-4" /><path d="M2 10.5l10-8 10 8" /></svg>);
+      const MusicIcon = ({ className }) => (<svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18V5l12-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="18" cy="16" r="3" /></svg>);
+      const ClockIcon = ({ className }) => (<svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>);
+      const WeatherIcon = ({ className }) => (<svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>);
+      const PlayIcon = () => <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6"><path d="M8 5v14l11-7z"></path></svg>;
+      const PauseIcon = () => <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"></path></svg>;
+      const PrevIcon = () => <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"></path></svg>;
+      const NextIcon = () => <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"></path></svg>;
+
+      // --- WEATHER ICONS ---
+      const SunnyIcon = ({ className }) => (<svg className={className} viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="3"><circle cx="32" cy="32" r="10" fill="#FFD166"/><path d="M32 2v6M32 56v6M2 32h6M56 32h6M8.7 8.7l4.2 4.2M51.1 51.1l-4.2-4.2M8.7 55.3l4.2-4.2M51.1 12.9l-4.2 4.2" strokeLinecap="round"/></svg>);
+      const CloudyIcon = ({ className }) => (<svg className={className} viewBox="0 0 64 64" stroke="currentColor" strokeWidth="3"><path d="M46.7 42.5h-29a8 8 0 010-16h.3a12 12 0 0123.4-6 10 10 0 019.3 14v.2a8 8 0 01-4 7.8z" fill="#F8F9FA"/></svg>);
+      const RainyIcon = ({ className }) => (<svg className={className} viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="3"><path d="M46.7 42.5h-29a8 8 0 010-16h.3a12 12 0 0123.4-6 10 10 0 019.3 14v.2a8 8 0 01-4 7.8z" fill="#F8F9FA"/><path d="M24 50l-2 4M32 50l-2 4M40 50l-2 4" stroke="#00C6FF" strokeLinecap="round"/></svg>);
+      const PartlyCloudyIcon = ({ className }) => (<svg className={className} viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="3"><circle cx="26" cy="26" r="10" fill="#FFD166"/><path d="M46.7 42.5h-29a8 8 0 010-16h.3a12 12 0 0123.4-6 10 10 0 019.3 14v.2a8 8 0 01-4 7.8z" fill="#F8F9FA"/></svg>);
+      const StormyIcon = ({ className }) => (<svg className={className} viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="3"><path d="M46.7 42.5h-29a8 8 0 010-16h.3a12 12 0 0123.4-6 10 10 0 019.3 14v.2a8 8 0 01-4 7.8z" fill="#9CA3AF"/><path d="M34 44l-6 8h8l-4 8" stroke="#FFD166" strokeLinecap="round" strokeLinejoin="round"/></svg>);
+      const SnowyIcon = ({ className }) => (<svg className={className} viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="3"><path d="M46.7 42.5h-29a8 8 0 010-16h.3a12 12 0 0123.4-6 10 10 0 019.3 14v.2a8 8 0 01-4 7.8z" fill="#F8F9FA"/><path d="M26 52l4 4m-4-4l-4 4m4-4l0-6m0 10l0-6M42 52l4 4m-4-4l-4 4m4-4l0-6m0 10l0-6" stroke="#00C6FF" strokeLinecap="round"/></svg>);
+      const FogIcon = ({ className }) => (<svg className={className} viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="3"><path d="M46.7 42.5h-29a8 8 0 010-16h.3a12 12 0 0123.4-6 10 10 0 019.3 14v.2a8 8 0 01-4 7.8z" fill="#F8F9FA"/><path d="M12 52h40M16 58h32" strokeLinecap="round"/></svg>);
+      const DefaultWeatherIcon = ({ className }) => PartlyCloudyIcon({ className });
+
+      // --- HOOKS ---
+      const useAudioPlayer = (tracks) => {
+        const audioRef = useRef(null);
+        const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
+        const [isPlaying, setIsPlaying] = useState(false);
+        const [progress, setProgress] = useState(0);
+        const [error, setError] = useState(null);
+        const attemptedTracksRef = useRef(new Set());
+        const isSkippingRef = useRef(false);
+
+        const playNextTrack = useCallback(() => {
+            attemptedTracksRef.current.add(currentTrackIndex);
+            if (attemptedTracksRef.current.size >= tracks.length) {
+                setError("Error: All tracks seem to be unavailable.");
+                setIsPlaying(false);
+                isSkippingRef.current = false;
+                return;
+            }
+            setCurrentTrackIndex(prev => (prev + 1) % tracks.length);
+        }, [currentTrackIndex, tracks.length]);
+
+        const handleAudioError = useCallback(() => {
+            if (isSkippingRef.current) return;
+            
+            console.warn(`Failed to load track: ${tracks[currentTrackIndex].title}`);
+            setError(`Skipping: "${tracks[currentTrackIndex].title}"`);
+            isSkippingRef.current = true;
+            
+            setTimeout(() => {
+                isSkippingRef.current = false;
+                playNextTrack();
+            }, 1000);
+        }, [currentTrackIndex, tracks, playNextTrack]);
+        
+        const resetPlaybackState = useCallback(() => {
+            attemptedTracksRef.current.clear();
+            setError(null);
+        }, []);
+
+        useEffect(() => {
+          const audio = audioRef.current;
+          if (!audio) return;
+          
+          audio.src = tracks[currentTrackIndex].url;
+          audio.load();
+          if (isPlaying) {
+            audio.play().catch(() => {});
+          }
+        }, [currentTrackIndex, isPlaying, tracks]);
+
+        useEffect(() => {
+          const audio = audioRef.current;
+          if (!audio) return;
+          const updateProgress = () => setProgress(audio.duration ? (audio.currentTime / audio.duration) * 100 : 0);
+          const onEnded = () => {
+              resetPlaybackState();
+              playNextTrack();
+          };
+          const onPlay = () => {
+              resetPlaybackState();
+              setIsPlaying(true);
+          };
+          const onPause = () => setIsPlaying(false);
+          
+          audio.addEventListener('timeupdate', updateProgress);
+          audio.addEventListener('ended', onEnded);
+          audio.addEventListener('play', onPlay);
+          audio.addEventListener('pause', onPause);
+          audio.addEventListener('error', handleAudioError);
+          
+          return () => {
+            audio.removeEventListener('timeupdate', updateProgress);
+            audio.removeEventListener('ended', onEnded);
+            audio.removeEventListener('play', onPlay);
+            audio.removeEventListener('pause', onPause);
+            audio.removeEventListener('error', handleAudioError);
+          };
+        }, [currentTrackIndex, tracks.length, handleAudioError, playNextTrack, resetPlaybackState]);
+        
+        const onTogglePlay = () => {
+            resetPlaybackState();
+            if (audioRef.current?.paused) {
+                audioRef.current?.play().catch(() => {});
+            } else {
+                audioRef.current?.pause();
+            }
+        };
+
+        const onNext = () => {
+          resetPlaybackState();
+          playNextTrack();
+        };
+
+        const onPrev = () => {
+          resetPlaybackState();
+          setCurrentTrackIndex(prev => (prev - 1 + tracks.length) % tracks.length);
+        };
+
+        const onSelectTrack = (index) => {
+          resetPlaybackState();
+          if(index !== currentTrackIndex) {
+            setCurrentTrackIndex(index);
+          } else {
+            onTogglePlay();
+          }
+        };
+
+        return { audioRef, currentTrackIndex, isPlaying, progress, error, onTogglePlay, onNext, onPrev, onSelectTrack };
+      };
 
       // --- COMPONENTS ---
-      
-      // components/Window.tsx
-      const Window = ({ children, title, onClose, animationClass }) => {
-        return (
-          <div className={`window ${animationClass}`}>
-            <div className="title-bar">
-              <span className="title-text">{title}</span>
-              <button className="close-button" onClick={onClose} aria-label="Close window"></button>
+      const Window = ({ children, title, onClose, animationClass, className = '' }) => (
+        <div className={`relative bg-brand-off-white border-4 border-brand-border rounded-2xl flex flex-col w-[90vw] h-[85vh] overflow-hidden shadow-sharp transition-all duration-300 ${animationClass} ${className}`}>
+            <div className="bg-gray-200 border-b-4 border-brand-border px-4 py-2 flex items-center justify-between rounded-t-xl flex-shrink-0">
+              <span className="font-bold text-base text-brand-text">{title}</span>
+              <button className="w-5 h-5 bg-accent-red border-2 border-brand-border rounded-full cursor-pointer hover:bg-red-700" onClick={onClose} aria-label="Close window"></button>
             </div>
-            <div className="window-content">{children}</div>
-          </div>
-        );
-      };
+            <div className="p-5 flex-grow overflow-hidden flex flex-col">{children}</div>
+        </div>
+      );
 
-      // components/Navigation.tsx
-      const HomeIcon = () => (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M4 9.5V20a1 1 0 0 0 1 1h4M8 21V14h8v7m4-11.5V20a1 1 0 0 1-1 1h-4" />
-          <path d="M2 10.5l10-8 10 8" />
-        </svg>
-      );
-      const MusicIcon = () => (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M9 18V5l12-2v13" />
-          <circle cx="6" cy="18" r="3" />
-          <circle cx="18" cy="16" r="3" />
-        </svg>
-      );
-      const ClockIcon = () => (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="12" cy="12" r="10" />
-          <polyline points="12 6 12 12 16 14" />
-        </svg>
-      );
       const Dock = ({ onIconClick, activeView }) => {
+        const dockItems = [
+          { id: 'home', icon: HomeIcon, color: 'text-accent-red' },
+          { id: 'music', icon: MusicIcon, color: 'text-accent-green' },
+          { id: 'clock', icon: ClockIcon, color: 'text-accent-yellow' },
+          { id: 'weather', icon: WeatherIcon, color: 'text-sky-bright' },
+        ];
+
         return (
-          <div className="dock">
-            <div className={`dock-item home-icon ${activeView === 'home' ? 'active' : ''}`} onClick={() => onIconClick('home')}><HomeIcon /></div>
-            <div className={`dock-item music-icon ${activeView === 'music' ? 'active' : ''}`} onClick={() => onIconClick('music')}><MusicIcon /></div>
-            <div className={`dock-item clock-icon ${activeView === 'clock' ? 'active' : ''}`} onClick={() => onIconClick('clock')}><ClockIcon /></div>
+          <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-white/40 backdrop-blur-md border-2 border-white/20 rounded-2xl p-3 flex gap-3 z-50">
+            {dockItems.map(item => {
+              const Icon = item.icon;
+              return (
+                <div key={item.id} onClick={() => onIconClick(item.id)} className={`w-16 h-16 bg-brand-off-white border-4 border-brand-border rounded-xl flex items-center justify-center cursor-pointer transition-all duration-200 ease-in-out shadow-sharp hover:-translate-y-2 ${activeView === item.id ? '-translate-y-2' : ''}`}>
+                  <Icon className={`w-9 h-9 ${item.color}`} />
+                </div>
+              );
+            })}
           </div>
         );
       };
 
-      // components/HomeContent.tsx
-      const HomeContent = () => {
-        return (
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', height: '100%', padding: '0 1rem' }}>
-            <div>
-              <h1 className="font-righteous" style={{ fontSize: 'clamp(2.8rem, 10vw, 3.5rem)', margin: '0', letterSpacing: '-2px', lineHeight: 1 }}>
-                <span style={{ color: 'var(--accent-red)' }}>POLA</span>
-                <span style={{ color: 'var(--accent-yellow)' }}> SOVEREIGN</span>
-              </h1>
-              <p className="font-righteous" style={{ fontSize: '1.1rem', color: 'var(--text-muted)', marginBottom: '1rem', marginTop: '0.5rem' }}>BY GRACE</p>
-              
-              <p className="font-righteous" style={{ fontSize: '1.2rem', color: 'var(--accent-green)', margin: '1rem 0 1.5rem 0' }}>
-                ❤ GOD IS LOVE ❤
-              </p>
-              
-              <div style={{ maxWidth: '300px', margin: '0 auto', fontSize: '0.9rem', color: 'var(--text-color)', lineHeight: 1.6 }}>
-                <p style={{ fontWeight: 'bold' }}>
-                    Dominion is not seized, but granted. Forged in faith, executed with authority.
-                </p>
-                <p style={{ fontStyle: 'italic', color: 'var(--text-muted)', marginTop: '1.5rem' }}>
-                    "I can do all things through Christ who gives me strength."
-                    <span style={{ fontWeight: 'bold', fontStyle: 'normal', display: 'block', marginTop: '0.5rem', color: 'var(--text-color)' }}>— Philippians 4:13</span>
-                </p>
-              </div>
+      const HomeContent = () => (
+        <div className="flex flex-col items-center justify-around text-center h-full p-4 py-8 overflow-y-auto">
+          <div className="flex flex-col items-center gap-4">
+            <div className="p-1.5 bg-accent-yellow rounded-full transition-transform duration-300 ease-in-out hover:scale-110 hover:-rotate-6">
+                <img 
+                  src="https://xatimg.com/image/xHLWxrdb6TqD.png" 
+                  alt="Pola Sovereign" 
+                  className="w-32 h-32 md:w-36 md:h-36 object-cover rounded-full border-4 border-brand-off-white"
+                />
             </div>
+            <div className="flex flex-col">
+              <h1 className="font-righteous text-3xl md:text-4xl leading-none tracking-tighter">
+                <span className="text-accent-red">POLA</span>
+                <span className="text-accent-yellow"> SOVEREIGN</span>
+              </h1>
+              <p className="font-righteous text-base md:text-lg text-brand-muted">BY GRACE</p>
+            </div>
+            <p className="font-righteous text-lg md:text-xl text-accent-green">
+              ❤ GOD IS LOVE ❤
+            </p>
           </div>
-        );
-      };
 
-      // components/Clock.tsx
-      const Clock = () => {
+          <div className="max-w-xs text-sm text-brand-text leading-relaxed mt-8">
+            <p className="font-bold">
+                Dominion is not seized, but granted. Forged in faith, executed with authority.
+            </p>
+            <p className="italic text-brand-muted mt-4">
+                "I can do all things through Christ who gives me strength."
+                <span className="font-bold not-italic block mt-1 text-brand-text">— Philippians 4:13</span>
+            </p>
+          </div>
+        </div>
+      );
+
+
+      const ClockContent = () => {
         const [date, setDate] = useState(new Date());
         useEffect(() => {
           const timerId = setInterval(() => setDate(new Date()), 1000);
@@ -331,63 +332,140 @@
         }, []);
         const timeOptions = { hour: '2-digit', minute: '2-digit', hour12: true };
         const dateOptions = { weekday: 'long', month: 'long', day: 'numeric' };
+        
         return (
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', textAlign: 'center' }}>
-             <div>
-                <div className="font-righteous" style={{ fontSize: 'clamp(3.5rem, 20vw, 5rem)', fontWeight: 900, color: 'var(--accent-red)', lineHeight: 1 }}>
-                    {date.toLocaleTimeString('en-US', timeOptions).replace(' ', '')}
-                </div>
-                <div className="font-righteous" style={{ fontSize: '1.2rem', color: 'var(--accent-green)', marginTop: '0.75rem', fontWeight: 700 }}>
-                    {date.toLocaleDateString('en-US', dateOptions)}
-                </div>
-            </div>
+          <div className="flex flex-col items-center justify-center h-full text-center">
+             <div className="font-righteous text-6xl sm:text-7xl md:text-8xl font-black text-accent-red leading-none">
+                 {date.toLocaleTimeString('en-US', timeOptions).replace(' ', '')}
+             </div>
+             <div className="font-righteous text-lg sm:text-xl text-accent-green mt-3 font-bold">
+                 {date.toLocaleDateString('en-US', dateOptions)}
+             </div>
           </div>
         );
       };
+      
+      const WeatherContent = () => {
+        const [weather, setWeather] = useState(null);
+        const [loading, setLoading] = useState(false);
+        const [error, setError] = useState(null);
+        const isMounted = useRef(true);
 
-      // components/AudioPlayer.tsx
-      const PlayIcon = () => <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M8 5v14l11-7z"></path></svg>;
-      const PauseIcon = () => <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"></path></svg>;
-      const PrevIcon = () => <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"></path></svg>;
-      const NextIcon = () => <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"></path></svg>;
-      const AudioPlayer = ({ tracks, currentTrackIndex, isPlaying, progress, onTogglePlay, onNext, onPrev, onSelectTrack }) => {
+        useEffect(() => {
+          isMounted.current = true;
+          return () => { isMounted.current = false; };
+        }, []);
+        
+        const fetchWeather = () => {
+          setLoading(true);
+          setError(null);
+          setWeather(null);
+          navigator.geolocation.getCurrentPosition(
+              (position) => {
+                  const { latitude, longitude } = position.coords;
+                  fetch(`https://wttr.in/${latitude},${longitude}?format=j1`)
+                      .then(res => { if (!res.ok) throw new Error('Failed to fetch weather data.'); return res.json(); })
+                      .then(data => { if (isMounted.current) setWeather(data); })
+                      .catch(err => { if (isMounted.current) setError(err.message); })
+                      .finally(() => { if (isMounted.current) setLoading(false); });
+              },
+              (err) => {
+                if (isMounted.current) {
+                  setError('Geolocation permission denied. Cannot fetch weather.');
+                  setLoading(false);
+                }
+              }
+          );
+        };
+
+        const getWeatherIconComponent = (code) => {
+          const codeNum = parseInt(code, 10);
+          if (codeNum === 113) return SunnyIcon;
+          if (codeNum === 116) return PartlyCloudyIcon;
+          if (codeNum >= 119 && codeNum <= 122) return CloudyIcon;
+          if (codeNum >= 176 && codeNum <= 185) return RainyIcon;
+          if (codeNum >= 263 && codeNum <= 308) return RainyIcon;
+          if (codeNum >= 323 && codeNum <= 338) return SnowyIcon;
+          if (codeNum === 200) return StormyIcon;
+          if (codeNum === 143 || codeNum === 248 || codeNum === 260) return FogIcon;
+          return DefaultWeatherIcon;
+        };
+        
+        const renderContent = () => {
+            if (!weather && !loading && !error) {
+              return (
+                <div className="flex flex-col items-center justify-center h-full gap-6">
+                  <DefaultWeatherIcon className="w-40 h-40 text-brand-text opacity-70" />
+                  <button onClick={fetchWeather} className="bg-sky-bright text-brand-text-light font-bold py-3 px-6 rounded-lg border-4 border-brand-border shadow-sharp transition-transform hover:scale-105">
+                    Check Weather
+                  </button>
+                </div>
+              );
+            }
+            if (loading) return <div className="text-xl font-bold">Fetching weather...</div>;
+            if (error) return <div className="text-center text-accent-red"><p className="font-bold text-lg">Error</p><p>{error}</p> <button onClick={fetchWeather} className="mt-4 bg-accent-yellow text-brand-border font-bold py-2 px-4 rounded-lg border-2 border-brand-border">Try Again</button></div>;
+            
+            const current = weather?.current_condition?.[0];
+            const area = weather?.nearest_area?.[0];
+            if (!current || !area) return <div className="text-center text-accent-red"><p>Incomplete weather data received.</p><button onClick={fetchWeather}>Try Again</button></div>;
+            
+            const IconComponent = getWeatherIconComponent(current.weatherCode);
+            return (
+              <div className="w-full h-full flex items-center justify-center">
+                <div className="bg-white/50 backdrop-blur-sm p-6 rounded-2xl border-4 border-brand-border/20 w-full max-w-sm text-center flex flex-col items-center justify-center gap-4 font-righteous">
+                    <div className="w-28 h-28 animate-pulse-slow">
+                        <IconComponent className="w-full h-full text-brand-text" />
+                    </div>
+                    <div>
+                        <p className="text-5xl font-black text-accent-red">{current.temp_C}°C</p>
+                        <p className="text-xl text-brand-muted">{current.weatherDesc[0].value}</p>
+                    </div>
+                    <div>
+                        <p className="text-2xl font-bold text-brand-muted">{area.areaName[0].value}, {area.country[0].value}</p>
+                        <p className="text-lg text-accent-green">Feels like {current.FeelsLikeC}°C</p>
+                    </div>
+                    <div className="text-base text-brand-text">
+                        <p>Wind: {current.windspeedKmph} km/h</p>
+                        <p>Humidity: {current.humidity}%</p>
+                    </div>
+                </div>
+              </div>
+            );
+        };
+        
+        return <div className="h-full flex items-center justify-center">{renderContent()}</div>;
+      };
+
+      const MusicPlayer = ({ tracks, currentTrackIndex, isPlaying, progress, error, onTogglePlay, onNext, onPrev, onSelectTrack }) => {
         const currentTrack = tracks[currentTrackIndex];
         return (
-          <div style={{ display: 'flex', flexDirection: 'column', height: '100%', color: 'var(--text-color)' }}>
-            <div style={{ textAlign: 'center', paddingBottom: '1rem', flexShrink: 0, borderBottom: '3px solid #f0f0f0' }}>
-                <h2 className="font-righteous" style={{ fontSize: '1.1rem', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap', margin: 0, color: 'var(--text-color)' }}>
-                  {currentTrack.title}
-                </h2>
-                <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', margin: '0.25rem 0 0' }}>
-                  {currentTrack.artist}
-                </p>
+          <div className="flex flex-col h-full text-brand-text">
+            <div className="text-center pb-4 flex-shrink-0 border-b-4 border-gray-100">
+                <h2 className="font-righteous text-lg truncate" title={currentTrack.title}>{currentTrack.title}</h2>
+                <p className="text-sm text-brand-muted">{currentTrack.artist}</p>
+                {error && <p className="text-xs text-accent-red mt-1 font-bold">{error}</p>}
             </div>
-            <div style={{ padding: '1rem 0', flexShrink: 0 }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1.5rem' }}>
-                  <button onClick={onPrev} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: '0', transform: 'scale(1.2)', transition: 'color 0.2s ease' }} onMouseOver={e => e.currentTarget.style.color='var(--accent-red)'} onMouseOut={e => e.currentTarget.style.color='var(--text-muted)'} aria-label="Previous track"><PrevIcon/></button>
-                  <button onClick={onTogglePlay} style={{ width: '56px', height: '56px', borderRadius: '50%', background: 'var(--accent-yellow)', color: 'var(--border-color)', border: '3px solid var(--border-color)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)' }} onMouseOver={e => e.currentTarget.style.transform='scale(1.1)'} onMouseOut={e => e.currentTarget.style.transform='scale(1)'} aria-label={isPlaying ? 'Pause' : 'Play'}>
+            <div className="py-4 flex-shrink-0">
+                <div className="flex items-center justify-center gap-6">
+                  <button onClick={onPrev} className="text-brand-muted hover:text-accent-red transition-colors" aria-label="Previous track"><PrevIcon/></button>
+                  <button onClick={onTogglePlay} className="w-14 h-14 rounded-full bg-accent-yellow text-brand-border border-4 border-brand-border flex items-center justify-center transition-transform hover:scale-110" aria-label={isPlaying ? 'Pause' : 'Play'}>
                     {isPlaying ? <PauseIcon /> : <PlayIcon />}
                   </button>
-                  <button onClick={onNext} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: '0', transform: 'scale(1.2)', transition: 'color 0.2s ease' }} onMouseOver={e => e.currentTarget.style.color='var(--accent-red)'} onMouseOut={e => e.currentTarget.style.color='var(--text-muted)'} aria-label="Next track"><NextIcon/></button>
+                  <button onClick={onNext} className="text-brand-muted hover:text-accent-red transition-colors" aria-label="Next track"><NextIcon/></button>
                 </div>
-                 <div style={{ width: '100%', backgroundColor: '#e0e0e0', borderRadius: '99px', height: '8px', marginTop: '1.5rem', overflow: 'hidden', border: '2px solid #e0e0e0' }}>
-                    <div style={{ backgroundColor: 'var(--accent-green)', height: '100%', borderRadius: '99px', width: `${progress}%`, transition: 'width 0.1s linear' }}></div>
+                 <div className="w-full bg-gray-200 rounded-full h-2 mt-6 overflow-hidden border-2 border-gray-200">
+                    <div className="bg-accent-green h-full rounded-full" style={{ width: `${progress}%`, transition: 'width 0.1s linear' }}></div>
                 </div>
             </div>
-            <div style={{ flexGrow: 1, overflowY: 'auto', paddingTop: '0.5rem', paddingRight: '0.5rem' }}>
+            <div className="flex-grow overflow-y-auto pr-2">
               {tracks.map((track, index) => (
-                <div key={index} onClick={() => onSelectTrack(index)} style={{
-                  padding: '0.6rem 0.75rem',
-                  cursor: 'pointer',
-                  borderRadius: '12px',
-                  backgroundColor: index === currentTrackIndex ? 'var(--accent-red)' : 'transparent',
-                  marginBottom: '0.25rem',
-                  transition: 'background-color 0.2s ease',
-                  border: '3px solid',
-                  borderColor: index === currentTrackIndex ? 'var(--border-color)' : 'transparent',
-                }}>
-                  <div style={{ fontWeight: 'bold', fontSize: '0.9rem', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap', color: index === currentTrackIndex ? 'var(--off-white)' : 'var(--text-color)' }}>{track.title}</div>
-                  <div style={{ fontSize: '0.8rem', color: index === currentTrackIndex ? 'var(--off-white)' : 'var(--text-muted)', opacity: index === currentTrackIndex ? 0.8 : 1 }}>{track.artist}</div>
+                <div 
+                  key={index} 
+                  onClick={() => onSelectTrack(index)}
+                  className={`p-2 cursor-pointer rounded-lg mb-1 transition-all duration-200 border-4 ${index === currentTrackIndex ? 'bg-accent-red border-brand-border' : 'border-transparent hover:translate-x-2'}`}
+                >
+                  <div className={`font-bold text-sm truncate ${index === currentTrackIndex ? 'text-brand-off-white' : 'text-brand-text'}`}>{track.title}</div>
+                  <div className={`text-xs ${index === currentTrackIndex ? 'text-brand-off-white/80' : 'text-brand-muted'}`}>{track.artist}</div>
                 </div>
               ))}
             </div>
@@ -395,92 +473,48 @@
         );
       };
 
-
       // --- MAIN APP ---
-      const tracksData = [
-          { url: "https://audio.jukehost.co.uk/3SwFzuOJdwkrBopTFgOzkDOT5FDN6ITH", title: "Fakrak Ya Nasiny", artist: "Mohamed Foad" }, { url: "https://audio.jukehost.co.uk/6IQhCPy39Jv5Uxj9WI4fFMeUuJMWWR2D", title: "Khalik Ganbi", artist: "Haitham Shaker" }, { url: "https://audio.jukehost.co.uk/gHFak76ZMfll7B4AxEeDbJjPRWgXvhc8", title: "Alb ElAsheq Dalelo", artist: "George Wasouf" }, { url: "https://audio.jukehost.co.uk/NuLgFpCxa1HTsUQUUVhWtBDQJ76xsQwz", title: "Seket Leih", artist: "Ramy Sabry" }, { url: "https://audio.jukehost.co.uk/LTTXfGln1F0s2pQpHLgb0JapbBOxUpGn", title: "Khosara", artist: "Mohamed Foad" }, { url: "https://audio.jukehost.co.uk/bbabQwnKnYhXlaRD8alUDCzGEhyu9Rwm", title: "Khadny 7aneen", artist: "George Wasouf" }, { url: "https://audio.jukehost.co.uk/jciF6sfSouobTpBl2Krqc3UaZfMX3oeJ", title: "Enty Nesity Nafsek", artist: "Tamer Hosny" }, { url: "https://audio.jukehost.co.uk/FhU9VQWsajSdhBd1mXmWq5kXnw1IaFLr", title: "Kol youm", artist: "Tamer Ashour" }, { url: "https://audio.jukehost.co.uk/nR6XjZwYTEh3Y5tzwS3NwKZrazhE0qGz", title: "Rabak Lama Yered", artist: "Mohamed Mounir" }, { url: "https://audio.jukehost.co.uk/kwvKuE1GOiFiyJB9r2qgbSdCEwNYicoY", title: "Shed Eldafaer", artist: "Hanan Madi" }, { url: "https://audio.jukehost.co.uk/lrUXO0jmrJRZANKo0Gx9XEQ0PFuQxKN5", title: "Yalli Bitghib Aleiya", artist: "Haitham Shaker" }, { url: "https://audio.jukehost.co.uk/eQbGikyF1Aog1gTZILSPznXQ3rLXymGw", title: "ElSabri Tayib", artist: "George Wasouf" }, { url: "https://audio.jukehost.co.uk/l2Mk2abKCcRGWpSoxSlcxBL80RAjYvMe", title: "Fagaa Eftarana", artist: "Tamer Hosny" }, { url: "https://audio.jukehost.co.uk/HN64P9ig7AsLZ1vaS9mdsGPl8q0uI8z7m", title: "Lw Batlna Nehlm", artist: "Mohamed Mounir" }, { url: "https://audio.jukehost.co.uk/f9oiefTzRGZvp6iyMJKGbxLe3ZFCv390", title: "Sed El-Habayeb", artist: "Shadia" }, { url: "https://audio.jukehost.co.uk/c77yqDnvZV6lAmIPQPanmSgqVpnlnDyv", title: "Saber W.Radi", artist: "George Wasouf" }, { url: "https://audio.jukehost.co.uk/16F3ncIKS16sa5AciCMrGmuJa9doyvDX", title: "Zkryat", artist: "George Wasouf" },
-      ];
-      const viewTitles = { home: 'Pola SOVEREIGN', music: 'Music Player', clock: 'Clock & Date' };
-      
-      let audioCtx = null;
-      const playSound = (type) => {
-        if (!audioCtx) {
-          try {
-            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-          } catch (e) {
-            console.error("Web Audio API is not supported in this browser");
-            return;
-          }
-        }
-        const oscillator = audioCtx.createOscillator();
-        const gainNode = audioCtx.createGain();
-        oscillator.connect(gainNode);
-        gainNode.connect(audioCtx.destination);
-        if (type === 'open') {
-          oscillator.type = 'triangle';
-          oscillator.frequency.setValueAtTime(880, audioCtx.currentTime);
-          gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
-          gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.3);
-        } else {
-          oscillator.type = 'sine';
-          oscillator.frequency.setValueAtTime(660, audioCtx.currentTime);
-          gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
-          gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.2);
-        }
-        oscillator.start();
-        oscillator.stop(audioCtx.currentTime + 0.3);
-      };
-      
       const App = () => {
           const [activeView, setActiveView] = useState('home');
-          const [animationClass, setAnimationClass] = useState('drop-in');
-          const audioRef = useRef(null);
-          const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
-          const [isPlaying, setIsPlaying] = useState(false);
-          const [progress, setProgress] = useState(0);
-          const currentTrack = tracksData[currentTrackIndex];
-
-          useEffect(() => {
-              if (audioRef.current) {
-                  audioRef.current.src = currentTrack.url;
-                  audioRef.current.load();
-                  if (isPlaying) {
-                      audioRef.current.play().catch(e => console.error("Playback failed:", e));
-                  }
-              }
-          }, [currentTrackIndex]);
-
-          useEffect(() => {
-              const audio = audioRef.current;
-              if (!audio) return;
-              const updateProgress = () => setProgress(audio.duration ? (audio.currentTime / audio.duration) * 100 : 0);
-              const onEnded = () => setCurrentTrackIndex(prev => (prev + 1) % tracksData.length);
-              const onPlay = () => setIsPlaying(true);
-              const onPause = () => setIsPlaying(false);
-              audio.addEventListener('timeupdate', updateProgress);
-              audio.addEventListener('ended', onEnded);
-              audio.addEventListener('play', onPlay);
-              audio.addEventListener('pause', onPause);
-              return () => {
-                  audio.removeEventListener('timeupdate', updateProgress);
-                  audio.removeEventListener('ended', onEnded);
-                  audio.removeEventListener('play', onPlay);
-                  audio.removeEventListener('pause', onPause);
-              };
-          }, [currentTrackIndex]);
-
-          const handleTogglePlay = () => audioRef.current?.paused ? audioRef.current?.play() : audioRef.current?.pause();
-          const handleNext = () => setCurrentTrackIndex(prev => (prev + 1) % tracksData.length);
-          const handlePrev = () => setCurrentTrackIndex(prev => (prev - 1 + tracksData.length) % tracksData.length);
-          const handleSelectTrack = (index) => setCurrentTrackIndex(index);
+          const [animationClass, setAnimationClass] = useState('animate-drop-in');
+          const { audioRef, ...audioPlayerProps } = useAudioPlayer(tracksData);
+          
+          let audioCtx = useRef(null);
+          const playSound = useCallback((type) => {
+            if (!audioCtx.current) {
+              try { audioCtx.current = new (window.AudioContext || window.webkitAudioContext)(); } 
+              catch (e) { console.error("Web Audio API is not supported"); return; }
+            }
+            if (audioCtx.current.state === 'suspended') audioCtx.current.resume();
+            
+            const oscillator = audioCtx.current.createOscillator();
+            const gainNode = audioCtx.current.createGain();
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.current.destination);
+            
+            if (type === 'open') {
+              oscillator.type = 'triangle';
+              oscillator.frequency.setValueAtTime(880, audioCtx.current.currentTime);
+              gainNode.gain.setValueAtTime(0.08, audioCtx.current.currentTime);
+              gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.current.currentTime + 0.3);
+            } else { // 'close'
+              oscillator.type = 'sine';
+              oscillator.frequency.setValueAtTime(660, audioCtx.current.currentTime);
+              gainNode.gain.setValueAtTime(0.08, audioCtx.current.currentTime);
+              gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.current.currentTime + 0.2);
+            }
+            
+            oscillator.start();
+            oscillator.stop(audioCtx.current.currentTime + 0.3);
+          }, []);
 
           const closeWindow = useCallback(() => {
               if (activeView) {
                   playSound('close');
-                  setAnimationClass('fall-out');
+                  setAnimationClass('animate-fall-out');
                   setTimeout(() => setActiveView(null), 300);
               }
-          }, [activeView]);
+          }, [activeView, playSound]);
 
           const openWindow = useCallback((id) => {
               if (activeView === id) {
@@ -488,62 +522,66 @@
               } else {
                   playSound('open');
                   if (activeView) {
-                      setAnimationClass('fall-out');
+                      setAnimationClass('animate-fall-out');
                       setTimeout(() => {
                           setActiveView(id);
-                          setAnimationClass('drop-in');
+                          setAnimationClass('animate-drop-in');
                       }, 300);
                   } else {
                       setActiveView(id);
-                      setAnimationClass('drop-in');
+                      setAnimationClass('animate-drop-in');
                   }
               }
-          }, [activeView, closeWindow]);
+          }, [activeView, closeWindow, playSound]);
 
           const renderContent = () => {
               if (!activeView) return null;
               switch (activeView) {
                   case 'home': return <HomeContent />;
-                  case 'clock': return <Clock />;
-                  case 'music': return (
-                      <AudioPlayer
-                          tracks={tracksData}
-                          currentTrackIndex={currentTrackIndex}
-                          isPlaying={isPlaying}
-                          progress={progress}
-                          onTogglePlay={handleTogglePlay}
-                          onNext={handleNext}
-                          onPrev={handlePrev}
-                          onSelectTrack={handleSelectTrack}
-                      />
-                  );
+                  case 'clock': return <ClockContent />;
+                  case 'weather': return <WeatherContent />;
+                  case 'music': return <MusicPlayer tracks={tracksData} {...audioPlayerProps} />;
                   default: return null;
               }
           };
 
+          const windowClass = activeView === 'home' ? 'max-w-sm max-h-[680px]' : 'max-w-md max-h-[600px]';
+
           return (
-              <>
-                  <audio ref={audioRef} src={currentTrack.url} preload="metadata" />
+              <Fragment>
+                  <audio ref={audioRef} />
                   {activeView && (
                       <Window
                           key={activeView}
                           title={viewTitles[activeView]}
                           onClose={closeWindow}
                           animationClass={animationClass}
+                          className={windowClass}
                       >
                           {renderContent()}
                       </Window>
                   )}
                   <Dock onIconClick={openWindow} activeView={activeView} />
-              </>
+              </Fragment>
           );
       };
 
       // --- RENDER APP ---
-      const rootElement = document.getElementById('root');
-      const root = ReactDOM.createRoot(rootElement);
-      root.render(<App />);
-
+      window.onload = () => {
+        try {
+          const rootElement = document.getElementById('root');
+          const root = ReactDOM.createRoot(rootElement);
+          root.render(<App />);
+        } catch (error) {
+          console.error("Failed to render React app:", error);
+          document.getElementById('root').innerHTML = `
+            <div style="background-color: #FF5F57; color: #0F172A; padding: 2rem; border-radius: 1rem; border: 4px solid #0F172A; font-family: monospace;">
+              <h1 style="font-size: 1.5rem; font-weight: bold;">Oops! Application Failed to Load.</h1>
+              <p>There was a critical error. Please check the console for details.</p>
+            </div>
+          `;
+        }
+      };
     </script>
-  </body>
+</body>
 </html>
