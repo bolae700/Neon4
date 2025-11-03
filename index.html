@@ -31,6 +31,7 @@
             },
             boxShadow: {
               'sharp': '6px 6px 0 0 #0F172A',
+              'glow-sky': '0px 0px 20px 0px rgba(0, 198, 255, 0.7)',
             },
             keyframes: {
               movePattern: {
@@ -48,6 +49,10 @@
               'pulse-slow': {
                 '0%, 100%': { transform: 'scale(1)' },
                 '50%': { transform: 'scale(1.05)' },
+              },
+              'float': {
+                '0%, 100%': { transform: 'translateY(0px)' },
+                '50%': { transform: 'translateY(-12px)' },
               }
             },
             animation: {
@@ -55,6 +60,7 @@
               'drop-in': 'drop-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards',
               'fall-out': 'fall-out 0.3s ease-in forwards',
               'pulse-slow': 'pulse-slow 3s ease-in-out infinite',
+              'float': 'float 6s ease-in-out infinite',
             }
           },
         },
@@ -138,9 +144,11 @@
 
       // --- WEATHER ICONS ---
       const SunnyIcon = ({ className }) => (<svg className={className} viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="3"><circle cx="32" cy="32" r="10" fill="#FFD166"/><path d="M32 2v6M32 56v6M2 32h6M56 32h6M8.7 8.7l4.2 4.2M51.1 51.1l-4.2-4.2M8.7 55.3l4.2-4.2M51.1 12.9l-4.2 4.2" strokeLinecap="round"/></svg>);
+      const ClearNightIcon = ({ className }) => (<svg className={className} viewBox="0 0 64 64" fill="#F8F9FA" stroke="currentColor" strokeWidth="3"><path d="M42.2 45.8A16 16 0 1129.5 18a12 12 0 0017.3 17.3 16.2 16.2 0 01-4.6 10.5z"/></svg>);
       const CloudyIcon = ({ className }) => (<svg className={className} viewBox="0 0 64 64" stroke="currentColor" strokeWidth="3"><path d="M46.7 42.5h-29a8 8 0 010-16h.3a12 12 0 0123.4-6 10 10 0 019.3 14v.2a8 8 0 01-4 7.8z" fill="#F8F9FA"/></svg>);
       const RainyIcon = ({ className }) => (<svg className={className} viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="3"><path d="M46.7 42.5h-29a8 8 0 010-16h.3a12 12 0 0123.4-6 10 10 0 019.3 14v.2a8 8 0 01-4 7.8z" fill="#F8F9FA"/><path d="M24 50l-2 4M32 50l-2 4M40 50l-2 4" stroke="#00C6FF" strokeLinecap="round"/></svg>);
       const PartlyCloudyIcon = ({ className }) => (<svg className={className} viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="3"><circle cx="26" cy="26" r="10" fill="#FFD166"/><path d="M46.7 42.5h-29a8 8 0 010-16h.3a12 12 0 0123.4-6 10 10 0 019.3 14v.2a8 8 0 01-4 7.8z" fill="#F8F9FA"/></svg>);
+      const PartlyCloudyNightIcon = ({ className }) => (<svg className={className} viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="3"><path d="M38.2 43.8A12.1 12.1 0 1128 20.3a9 9 0 0014 14 12 12 0 01-3.8 9.5z" fill="#F8F9FA"/><path d="M46.7 42.5h-29a8 8 0 010-16h.3a12 12 0 0123.4-6 10 10 0 019.3 14v.2a8 8 0 01-4 7.8z" fill="#F8F9FA"/></svg>);
       const StormyIcon = ({ className }) => (<svg className={className} viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="3"><path d="M46.7 42.5h-29a8 8 0 010-16h.3a12 12 0 0123.4-6 10 10 0 019.3 14v.2a8 8 0 01-4 7.8z" fill="#9CA3AF"/><path d="M34 44l-6 8h8l-4 8" stroke="#FFD166" strokeLinecap="round" strokeLinejoin="round"/></svg>);
       const SnowyIcon = ({ className }) => (<svg className={className} viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="3"><path d="M46.7 42.5h-29a8 8 0 010-16h.3a12 12 0 0123.4-6 10 10 0 019.3 14v.2a8 8 0 01-4 7.8z" fill="#F8F9FA"/><path d="M26 52l4 4m-4-4l-4 4m4-4l0-6m0 10l0-6M42 52l4 4m-4-4l-4 4m4-4l0-6m0 10l0-6" stroke="#00C6FF" strokeLinecap="round"/></svg>);
       const FogIcon = ({ className }) => (<svg className={className} viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="3"><path d="M46.7 42.5h-29a8 8 0 010-16h.3a12 12 0 0123.4-6 10 10 0 019.3 14v.2a8 8 0 01-4 7.8z" fill="#F8F9FA"/><path d="M12 52h40M16 58h32" strokeLinecap="round"/></svg>);
@@ -148,112 +156,126 @@
 
       // --- HOOKS ---
       const useAudioPlayer = (tracks) => {
-        const audioRef = useRef(null);
-        const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
-        const [isPlaying, setIsPlaying] = useState(false);
-        const [progress, setProgress] = useState(0);
-        const [error, setError] = useState(null);
-        const attemptedTracksRef = useRef(new Set());
-        const isSkippingRef = useRef(false);
+          const audioRef = useRef(null);
+          const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
+          const [isPlaying, setIsPlaying] = useState(false);
+          const [progress, setProgress] = useState(0);
+          const [error, setError] = useState(null);
+          const attemptedTracksRef = useRef(new Set());
+          const isSkippingRef = useRef(false);
 
-        const playNextTrack = useCallback(() => {
-            attemptedTracksRef.current.add(currentTrackIndex);
-            if (attemptedTracksRef.current.size >= tracks.length) {
-                setError("Error: All tracks seem to be unavailable.");
-                setIsPlaying(false);
-                isSkippingRef.current = false;
-                return;
-            }
-            setCurrentTrackIndex(prev => (prev + 1) % tracks.length);
-        }, [currentTrackIndex, tracks.length]);
-
-        const handleAudioError = useCallback(() => {
-            if (isSkippingRef.current) return;
-            
-            console.warn(`Failed to load track: ${tracks[currentTrackIndex].title}`);
-            setError(`Skipping: "${tracks[currentTrackIndex].title}"`);
-            isSkippingRef.current = true;
-            
-            setTimeout(() => {
-                isSkippingRef.current = false;
-                playNextTrack();
-            }, 1000);
-        }, [currentTrackIndex, tracks, playNextTrack]);
-        
-        const resetPlaybackState = useCallback(() => {
-            attemptedTracksRef.current.clear();
-            setError(null);
-        }, []);
-
-        useEffect(() => {
-          const audio = audioRef.current;
-          if (!audio) return;
+          const playNextTrack = useCallback(() => {
+              attemptedTracksRef.current.add(currentTrackIndex);
+              if (attemptedTracksRef.current.size >= tracks.length) {
+                  setError("Error: All tracks seem to be unavailable.");
+                  setIsPlaying(false);
+                  isSkippingRef.current = false;
+                  return;
+              }
+              setCurrentTrackIndex(prev => (prev + 1) % tracks.length);
+          }, [currentTrackIndex, tracks.length]);
           
-          audio.src = tracks[currentTrackIndex].url;
-          audio.load();
-          if (isPlaying) {
-            audio.play().catch(() => {});
-          }
-        }, [currentTrackIndex, isPlaying, tracks]);
+          const handleAudioError = useCallback(() => {
+              if (isSkippingRef.current) return;
+              
+              console.warn(`Failed to load track: ${tracks[currentTrackIndex].title}`);
+              setError(`Skipping: "${tracks[currentTrackIndex].title}"`);
+              isSkippingRef.current = true;
+              
+              setTimeout(() => {
+                  isSkippingRef.current = false;
+                  playNextTrack();
+              }, 1000);
+          }, [currentTrackIndex, tracks, playNextTrack]);
 
-        useEffect(() => {
-          const audio = audioRef.current;
-          if (!audio) return;
-          const updateProgress = () => setProgress(audio.duration ? (audio.currentTime / audio.duration) * 100 : 0);
-          const onEnded = () => {
+          const resetPlaybackState = useCallback(() => {
+              attemptedTracksRef.current.clear();
+              setError(null);
+          }, []);
+
+          useEffect(() => {
+              const audio = audioRef.current;
+              if (!audio) return;
+              
+              audio.src = tracks[currentTrackIndex].url;
+              audio.load();
+              
+              if (isPlaying) {
+                  const playPromise = audio.play();
+                  if (playPromise !== undefined) {
+                      playPromise.catch(e => {
+                          console.warn("Autoplay after track change failed.", e);
+                          setIsPlaying(false);
+                      });
+                  }
+              }
+          // eslint-disable-next-line react-hooks/exhaustive-deps
+          }, [currentTrackIndex]);
+
+          useEffect(() => {
+              const audio = audioRef.current;
+              if (!audio) return;
+              const updateProgress = () => setProgress(audio.duration ? (audio.currentTime / audio.duration) * 100 : 0);
+              const onEnded = () => {
+                  resetPlaybackState();
+                  playNextTrack();
+              };
+              const onPlay = () => {
+                  resetPlaybackState();
+                  setIsPlaying(true);
+              };
+              const onPause = () => setIsPlaying(false);
+              
+              audio.addEventListener('timeupdate', updateProgress);
+              audio.addEventListener('ended', onEnded);
+              audio.addEventListener('play', onPlay);
+              audio.addEventListener('pause', onPause);
+              audio.addEventListener('error', handleAudioError);
+              
+              return () => {
+                  audio.removeEventListener('timeupdate', updateProgress);
+                  audio.removeEventListener('ended', onEnded);
+                  audio.removeEventListener('play', onPlay);
+                  audio.removeEventListener('pause', onPause);
+                  audio.removeEventListener('error', handleAudioError);
+              };
+          }, [currentTrackIndex, tracks.length, handleAudioError, playNextTrack, resetPlaybackState]);
+          
+          const onTogglePlay = () => {
+              resetPlaybackState();
+              const audio = audioRef.current;
+              if (!audio) return;
+
+              if (audio.paused) {
+                  const playPromise = audio.play();
+                  if (playPromise !== undefined) {
+                      playPromise.catch(handleAudioError);
+                  }
+              } else {
+                  audio.pause();
+              }
+          };
+
+          const onNext = () => {
               resetPlaybackState();
               playNextTrack();
           };
-          const onPlay = () => {
+
+          const onPrev = () => {
               resetPlaybackState();
-              setIsPlaying(true);
+              setCurrentTrackIndex(prev => (prev - 1 + tracks.length) % tracks.length);
           };
-          const onPause = () => setIsPlaying(false);
-          
-          audio.addEventListener('timeupdate', updateProgress);
-          audio.addEventListener('ended', onEnded);
-          audio.addEventListener('play', onPlay);
-          audio.addEventListener('pause', onPause);
-          audio.addEventListener('error', handleAudioError);
-          
-          return () => {
-            audio.removeEventListener('timeupdate', updateProgress);
-            audio.removeEventListener('ended', onEnded);
-            audio.removeEventListener('play', onPlay);
-            audio.removeEventListener('pause', onPause);
-            audio.removeEventListener('error', handleAudioError);
+
+          const onSelectTrack = (index) => {
+              resetPlaybackState();
+              if(index !== currentTrackIndex) {
+                  setCurrentTrackIndex(index);
+              } else {
+                  onTogglePlay();
+              }
           };
-        }, [currentTrackIndex, tracks.length, handleAudioError, playNextTrack, resetPlaybackState]);
-        
-        const onTogglePlay = () => {
-            resetPlaybackState();
-            if (audioRef.current?.paused) {
-                audioRef.current?.play().catch(() => {});
-            } else {
-                audioRef.current?.pause();
-            }
-        };
 
-        const onNext = () => {
-          resetPlaybackState();
-          playNextTrack();
-        };
-
-        const onPrev = () => {
-          resetPlaybackState();
-          setCurrentTrackIndex(prev => (prev - 1 + tracks.length) % tracks.length);
-        };
-
-        const onSelectTrack = (index) => {
-          resetPlaybackState();
-          if(index !== currentTrackIndex) {
-            setCurrentTrackIndex(index);
-          } else {
-            onTogglePlay();
-          }
-        };
-
-        return { audioRef, currentTrackIndex, isPlaying, progress, error, onTogglePlay, onNext, onPrev, onSelectTrack };
+          return { audioRef, currentTrackIndex, isPlaying, progress, error, onTogglePlay, onNext, onPrev, onSelectTrack };
       };
 
       // --- COMPONENTS ---
@@ -261,7 +283,7 @@
         <div className={`relative bg-brand-off-white border-4 border-brand-border rounded-2xl flex flex-col w-[90vw] h-[85vh] overflow-hidden shadow-sharp transition-all duration-300 ${animationClass} ${className}`}>
             <div className="bg-gray-200 border-b-4 border-brand-border px-4 py-2 flex items-center justify-between rounded-t-xl flex-shrink-0">
               <span className="font-bold text-base text-brand-text">{title}</span>
-              <button className="w-5 h-5 bg-accent-red border-2 border-brand-border rounded-full cursor-pointer hover:bg-red-700" onClick={onClose} aria-label="Close window"></button>
+              <button className="w-5 h-5 bg-accent-red border-2 border-brand-border rounded-full cursor-pointer hover:bg-red-700 transition-colors" onClick={onClose} aria-label="Close window"></button>
             </div>
             <div className="p-5 flex-grow overflow-hidden flex flex-col">{children}</div>
         </div>
@@ -279,8 +301,9 @@
           <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-white/40 backdrop-blur-md border-2 border-white/20 rounded-2xl p-3 flex gap-3 z-50">
             {dockItems.map(item => {
               const Icon = item.icon;
+              const isActive = activeView === item.id;
               return (
-                <div key={item.id} onClick={() => onIconClick(item.id)} className={`w-16 h-16 bg-brand-off-white border-4 border-brand-border rounded-xl flex items-center justify-center cursor-pointer transition-all duration-200 ease-in-out shadow-sharp hover:-translate-y-2 ${activeView === item.id ? '-translate-y-2' : ''}`}>
+                <div key={item.id} onClick={() => onIconClick(item.id)} className={`w-16 h-16 bg-brand-off-white border-4 border-brand-border rounded-xl flex items-center justify-center cursor-pointer transition-all duration-200 ease-in-out shadow-sharp hover:-translate-y-2 ${isActive ? '-translate-y-2 shadow-glow-sky' : ''}`}>
                   <Icon className={`w-9 h-9 ${item.color}`} />
                 </div>
               );
@@ -291,7 +314,7 @@
 
       const HomeContent = () => (
         <div className="flex flex-col items-center justify-around text-center h-full p-4 py-8 overflow-y-auto">
-          <div className="flex flex-col items-center gap-4">
+          <div className="flex flex-col items-center gap-4 animate-float">
             <div className="p-1.5 bg-accent-yellow rounded-full transition-transform duration-300 ease-in-out hover:scale-110 hover:-rotate-6">
                 <img 
                   src="https://xatimg.com/image/xHLWxrdb6TqD.png" 
@@ -355,7 +378,6 @@
           if (!isMounted.current) return;
           setLoading(true);
           setError(null);
-          setWeather(null);
           
           fetch(`https://wttr.in/?format=j1`)
               .then(res => { 
@@ -376,35 +398,62 @@
         useEffect(() => {
           isMounted.current = true;
           fetchWeather();
-          
-          return () => { 
-            isMounted.current = false; 
-          };
+          return () => { isMounted.current = false; };
           // eslint-disable-next-line react-hooks/exhaustive-deps
         }, []);
 
-        const getWeatherIconComponent = (code) => {
+        const isNight = (weatherData) => {
+          if (!weatherData?.weather?.[0]?.astronomy?.[0]) return false;
+          const { sunrise, sunset } = weatherData.weather[0].astronomy[0];
+          const now = new Date();
+          const currentTimeInMinutes = now.getHours() * 60 + now.getMinutes();
+
+          const parseTime = (timeStr) => { // "06:30 AM"
+            const [time, modifier] = timeStr.split(' ');
+            let [hours, minutes] = time.split(':').map(Number);
+            if (modifier === 'PM' && hours < 12) hours += 12;
+            if (modifier === 'AM' && hours === 12) hours = 0; // Midnight case
+            return hours * 60 + minutes;
+          };
+          try {
+            const sunriseInMinutes = parseTime(sunrise);
+            const sunsetInMinutes = parseTime(sunset);
+            return currentTimeInMinutes < sunriseInMinutes || currentTimeInMinutes > sunsetInMinutes;
+          } catch(e) {
+            console.error("Could not parse sunrise/sunset times:", e);
+            return false;
+          }
+        };
+
+        const getWeatherIconComponent = (code, weatherData) => {
+          const night = isNight(weatherData);
           const codeNum = parseInt(code, 10);
+          
+          if (night) {
+            if (codeNum === 113) return ClearNightIcon;
+            if (codeNum === 116) return PartlyCloudyNightIcon;
+          }
+          
           if (codeNum === 113) return SunnyIcon;
           if (codeNum === 116) return PartlyCloudyIcon;
           if (codeNum >= 119 && codeNum <= 122) return CloudyIcon;
-          if (codeNum >= 176 && codeNum <= 185) return RainyIcon;
-          if (codeNum >= 263 && codeNum <= 308) return RainyIcon;
+          if ((codeNum >= 176 && codeNum <= 185) || (codeNum >= 263 && codeNum <= 308)) return RainyIcon;
           if (codeNum >= 323 && codeNum <= 338) return SnowyIcon;
           if (codeNum === 200) return StormyIcon;
           if (codeNum === 143 || codeNum === 248 || codeNum === 260) return FogIcon;
+          
           return DefaultWeatherIcon;
         };
         
         const renderContent = () => {
-            if (loading) return <div className="flex flex-col items-center justify-center text-center"><div className="w-16 h-16 border-4 border-dashed rounded-full animate-spin border-accent-green mb-4"></div><p className="text-xl font-bold text-brand-muted">Fetching weather...</p></div>;
+            if (loading) return <div className="flex flex-col items-center justify-center text-center"><div className="w-16 h-16 border-4 border-dashed rounded-full animate-spin border-accent-yellow mb-4"></div><p className="text-xl font-bold text-brand-muted">Fetching weather...</p></div>;
             if (error) return <div className="text-center text-accent-red"><p className="font-bold text-lg">Oops!</p><p>{error}</p> <button onClick={fetchWeather} className="mt-4 bg-accent-yellow text-brand-border font-bold py-2 px-4 rounded-lg border-2 border-brand-border shadow-sharp transition-transform hover:scale-105">Try Again</button></div>;
             
             const current = weather?.current_condition?.[0];
             const area = weather?.nearest_area?.[0];
             if (!weather || !current || !area) return <div className="text-center text-accent-red"><p>Incomplete weather data received.</p><button onClick={fetchWeather} className="mt-4 bg-accent-yellow text-brand-border font-bold py-2 px-4 rounded-lg border-2 border-brand-border shadow-sharp transition-transform hover:scale-105">Try Again</button></div>;
             
-            const IconComponent = getWeatherIconComponent(current.weatherCode);
+            const IconComponent = getWeatherIconComponent(current.weatherCode, weather);
             return (
               <div className="w-full h-full flex items-center justify-center">
                 <div className="bg-white/50 backdrop-blur-sm p-6 rounded-2xl border-4 border-brand-border/20 w-full max-w-sm text-center flex flex-col items-center justify-center gap-4 font-righteous">
@@ -449,7 +498,7 @@
                   <button onClick={onNext} className="text-brand-muted hover:text-accent-red transition-colors" aria-label="Next track"><NextIcon/></button>
                 </div>
                  <div className="w-full bg-gray-200 rounded-full h-2 mt-6 overflow-hidden border-2 border-gray-200">
-                    <div className="bg-accent-green h-full rounded-full" style={{ width: `${progress}%`, transition: 'width 0.1s linear' }}></div>
+                    <div className="bg-accent-green h-full rounded-full" style={{ width: `${progress}%`, transition: 'width 0.15s linear' }}></div>
                 </div>
             </div>
             <div className="flex-grow overflow-y-auto pr-2">
@@ -457,7 +506,7 @@
                 <div 
                   key={index} 
                   onClick={() => onSelectTrack(index)}
-                  className={`p-2 cursor-pointer rounded-lg mb-1 transition-all duration-200 border-4 ${index === currentTrackIndex ? 'bg-accent-red border-brand-border' : 'border-transparent hover:translate-x-2'}`}
+                  className={`p-2 cursor-pointer rounded-lg mb-1 transition-all duration-200 border-4 ${index === currentTrackIndex ? 'bg-accent-red border-brand-border' : 'border-transparent hover:bg-gray-100 hover:translate-x-2'}`}
                 >
                   <div className={`font-bold text-sm truncate ${index === currentTrackIndex ? 'text-brand-off-white' : 'text-brand-text'}`}>{track.title}</div>
                   <div className={`text-xs ${index === currentTrackIndex ? 'text-brand-off-white/80' : 'text-brand-muted'}`}>{track.artist}</div>
@@ -513,21 +562,20 @@
 
           const openWindow = useCallback((id) => {
               if (activeView === id) {
-                  closeWindow();
-              } else {
-                  playSound('open');
-                  if (activeView) {
-                      setAnimationClass('animate-fall-out');
-                      setTimeout(() => {
-                          setActiveView(id);
-                          setAnimationClass('animate-drop-in');
-                      }, 300);
-                  } else {
+                  return;
+              }
+              playSound('open');
+              if (activeView) {
+                  setAnimationClass('animate-fall-out');
+                  setTimeout(() => {
                       setActiveView(id);
                       setAnimationClass('animate-drop-in');
-                  }
+                  }, 300);
+              } else {
+                  setActiveView(id);
+                  setAnimationClass('animate-drop-in');
               }
-          }, [activeView, closeWindow, playSound]);
+          }, [activeView, playSound]);
 
           const renderContent = () => {
               if (!activeView) return null;
@@ -544,6 +592,7 @@
 
           return (
               <Fragment>
+                  <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-sky-bright to-sky-deep opacity-80"></div>
                   <audio ref={audioRef} />
                   {activeView && (
                       <Window
