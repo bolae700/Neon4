@@ -26,12 +26,13 @@
               'brand-border': '#0F172A',
               'brand-text': '#0F172A',
               'brand-text-light': '#F8F9FA',
-              'brand-muted': '#475569',
+              'brand-muted': '#94A3B8', // Lighter for better contrast on dark bg
               'brand-off-white': '#F8F9FA',
+              'brand-bg': '#1E293B', // Main background color
             },
             boxShadow: {
               'sharp': '6px 6px 0 0 #0F172A',
-              'glow-sky': '0px 0px 20px 0px rgba(0, 198, 255, 0.7)',
+              'glow-sky': '0px 0px 25px 3px rgba(0, 198, 255, 0.8)',
             },
             keyframes: {
               movePattern: {
@@ -47,20 +48,28 @@
                 '100%': { transform: 'translateY(110%) scale(0.9)', opacity: '0' },
               },
               'pulse-slow': {
-                '0%, 100%': { transform: 'scale(1)' },
-                '50%': { transform: 'scale(1.05)' },
+                '0%, 100%': { transform: 'scale(1)', opacity: '0.8' },
+                '50%': { transform: 'scale(1.05)', opacity: '1' },
               },
               'float': {
                 '0%, 100%': { transform: 'translateY(0px)' },
                 '50%': { transform: 'translateY(-12px)' },
+              },
+              'bg-glow': {
+                '0%': { transform: 'translate(100vw, -50vh) scale(1)', opacity: '0.3' },
+                '25%': { transform: 'translate(75vw, 50vh) scale(1.2)', opacity: '0.2' },
+                '50%': { transform: 'translate(0vw, 100vh) scale(1)', opacity: '0.3' },
+                '75%': { transform: 'translate(-50vw, 25vh) scale(1.2)', opacity: '0.2' },
+                '100%': { transform: 'translate(100vw, -50vh) scale(1)', opacity: '0.3' },
               }
             },
             animation: {
-              movePattern: 'movePattern 20s linear infinite',
+              movePattern: 'movePattern 15s linear infinite',
               'drop-in': 'drop-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards',
               'fall-out': 'fall-out 0.3s ease-in forwards',
               'pulse-slow': 'pulse-slow 3s ease-in-out infinite',
               'float': 'float 6s ease-in-out infinite',
+              'bg-glow': 'bg-glow 45s linear infinite',
             }
           },
         },
@@ -83,8 +92,8 @@
       }
       body {
         --sky-deep: #0072FF;
-        --pattern-color: rgba(255, 255, 255, 0.07);
-        background-color: var(--sky-deep);
+        --pattern-color: rgba(255, 255, 255, 0.05);
+        background-color: #1E293B; /* brand-bg */
         background-image: 
           linear-gradient(45deg, var(--pattern-color) 25%, transparent 25%), 
           linear-gradient(-45deg, var(--pattern-color) 25%, transparent 25%),
@@ -92,66 +101,81 @@
           linear-gradient(-45deg, transparent 75%, var(--pattern-color) 75%);
         background-size: 20px 20px;
         background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+        color: #F8F9FA;
+      }
+
+      body::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        background: radial-gradient(circle at center, transparent, #1E293B 70%);
+        z-index: -1;
+      }
+
+      .bg-glow-element {
+        position: fixed;
+        width: 100vh;
+        height: 100vh;
+        background: radial-gradient(circle, #0072FF, transparent 60%);
+        filter: blur(100px);
+        z-index: -2;
+        will-change: transform;
       }
 
       ::-webkit-scrollbar { width: 12px; }
-      ::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.1); border-radius: 10px; }
-      ::-webkit-scrollbar-thumb { background-color: #70C1B3; border-radius: 10px; border: 3px solid #F8F9FA; }
+      ::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.2); border-radius: 10px; }
+      ::-webkit-scrollbar-thumb { background-color: #70C1B3; border-radius: 10px; border: 3px solid transparent; }
       ::-webkit-scrollbar-thumb:hover { background-color: #5aa89a; }
     </style>
 </head>
 <body class="font-nunito antialiased animate-movePattern">
     <div id="root"></div>
+    <div class="bg-glow-element animate-bg-glow"></div>
 
     <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     
-    <script type="text/babel">
+    <script type="text/babel" data-type="module">
       const { useState, useCallback, useRef, useEffect, Fragment } = React;
 
       // --- CONSTANTS ---
        const tracksData = [
-          { url: "https://audio.jukehost.co.uk/3SwFzuOJdwkrBopTFgOzkDOT5FDN6ITH", title: "Fakrak Ya Nasiny", artist: "Mohamed Foad" },
-          { url: "https://audio.jukehost.co.uk/6IQhCPy39Jv5Uxj9WI4fFMeUuJMWWR2D", title: "Khalik Ganbi", artist: "Haitham Shaker" },
-          { url: "https://audio.jukehost.co.uk/gHFak76ZMfll7B4AxEeDbJjPRWgXvhc8", title: "Alb ElAsheq Dalelo", artist: "George Wasouf" },
-          { url: "https://audio.jukehost.co.uk/NuLgFpCxa1HTsUQUUVhWtBDQJ76xsQwz", title: "Seket Leih", artist: "Ramy Sabry" },
-          { url: "https://audio.jukehost.co.uk/LTTXfGln1F0s2pQpHLgb0JapbBOxUpGn", title: "Khosara", artist: "Mohamed Foad" },
-          { url: "https://audio.jukehost.co.uk/bbabQwnKnYhXlaRD8alUDCzGEhyu9Rwm", title: "Khadny 7aneen", artist: "George Wasouf" },
-          { url: "https://audio.jukehost.co.uk/jciF6sfSouobTpBl2Krqc3UaZfMX3oeJ", title: "Enty Nesity Nafsek", artist: "Tamer Hosny" },
-          { url: "https://audio.jukehost.co.uk/FhU9VQWsajSdhBd1mXmWq5kXnw1IaFLr", title: "Kol youm", artist: "Tamer Ashour" },
-          { url: "https://audio.jukehost.co.uk/nR6XjZwYTEh3Y5tzwS3NwKZrazhE0qGz", title: "Rabak Lama Yered", artist: "Mohamed Mounir" },
-          { url: "https://audio.jukehost.co.uk/kwvKuE1GOiFiyJB9r2qgbSdCEwNYicoY", title: "Shed Eldafaer", artist: "Hanan Madi" },
-          { url: "https://audio.jukehost.co.uk/lrUXO0jmrJRZANKo0Gx9XEQ0PFuQxKN5", title: "Yalli Bitghib Aleiya", artist: "Haitham Shaker" },
-          { url: "https://audio.jukehost.co.uk/eQbGikyF1Aog1gTZILSPznXQ3rLXymGw", title: "ElSabri Tayib", artist: "George Wasouf" },
-          { url: "https://audio.jukehost.co.uk/l2Mk2abKCcRGWpSoxSlcxBL80RAjYvMe", title: "Fagaa Eftarana", artist: "Tamer Hosny" },
-          { url: "https://audio.jukehost.co.uk/HN649ig7AsLZ1vaS9mdsGPl8q0uI8z7m", title: "Lw Batlna Nehlm", artist: "Mohamed Mounir" },
-          { url: "https://audio.jukehost.co.uk/f9oiefTzRGZvp6iyMJKGbxLe3ZFCv390", title: "Sed El-Habayeb", artist: "Shadia" },
-          { url: "https://audio.jukehost.co.uk/c77yqDnvZV6lAmIPQPanmSgqVpnlnDyv", title: "Saber W.Radi", artist: "George Wasouf" },
-          { url: "https://audio.jukehost.co.uk/16F3ncIKS16sa5AciCMrGmuJa9doyvDX", title: "Zkryat", artist: "George Wasouf" },
+          { url: "https://audio.jukehost.co.uk/ztGbM6nU1jGFif7kdo9pS3DIEcOgkuRw", title: "Holy Savior", artist: "SoundSurge" },
+          { url: "https://audio.jukehost.co.uk/ohe18ncftZviWmfGvdp7EGxTnmUXrSbL", title: "Shining Future", artist: "SoundSurge" },
+          { url: "https://audio.jukehost.co.uk/TUdyUcjx0FSA2SMx2X7J2cyFPYJFkkBa", title: "Fading Echo", artist: "SoundSurge" },
+          { url: "https://audio.jukehost.co.uk/WmpFI6ZFtDTnSEoUt2fS9V8PQuGS0i8E", title: "Virtual Angel", artist: "SoundSurge" },
+          { url: "https://audio.jukehost.co.uk/HrWMsAhD64LRNkzG2aQ9t2BUkoO6rTBm", title: "Electric Rush", artist: "SoundSurge" },
       ];
-      const viewTitles = { home: 'Pola SOVEREIGN', music: 'Music Player', clock: 'Clock & Date', weather: 'Weather Forecast' };
+      const viewTitles = { home: 'Pola SOVEREIGN', music: 'Music Player', clock: 'Clock & Date', weather: 'Weather Forecast', notes: 'Notepad' };
       
       // --- ICONS ---
       const HomeIcon = ({ className }) => (<svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M4 9.5V20a1 1 0 0 0 1 1h4M8 21V14h8v7m4-11.5V20a1 1 0 0 1-1 1h-4" /><path d="M2 10.5l10-8 10 8" /></svg>);
       const MusicIcon = ({ className }) => (<svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18V5l12-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="18" cy="16" r="3" /></svg>);
       const ClockIcon = ({ className }) => (<svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>);
       const WeatherIcon = ({ className }) => (<svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>);
-      const PlayIcon = () => <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6"><path d="M8 5v14l11-7z"></path></svg>;
-      const PauseIcon = () => <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"></path></svg>;
-      const PrevIcon = () => <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"></path></svg>;
-      const NextIcon = () => <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"></path></svg>;
+      const NotesIcon = ({ className }) => (<svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M13.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8.5L13.5 2z" /><polyline points="13 2 13 9 20 9" /></svg>);
+      const PlayIcon = () => <svg viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8"><path d="M8 5v14l11-7z"></path></svg>;
+      const PauseIcon = () => <svg viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"></path></svg>;
+      const PrevIcon = () => <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"></path></svg>;
+      const NextIcon = () => <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"></path></svg>;
+      const GithubIcon = ({ className }) => (<svg className={className} viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.168 6.839 9.492.5.092.682-.217.682-.482 0-.237-.009-.868-.014-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.031-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.203 2.398.1 2.651.64.7 1.03 1.595 1.03 2.688 0 3.848-2.338 4.695-4.566 4.942.359.308.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.001 10.001 0 0022 12c0-5.523-4.477-10-10-10z" /></svg>);
+      const YoutubeIcon = ({ className }) => (<svg className={className} viewBox="0 0 24 24" fill="currentColor"><path d="M21.582,6.186c-0.23-0.86-0.908-1.538-1.768-1.768C18.25,4,12,4,12,4S5.75,4,4.186,4.418 c-0.86,0.23-1.538,0.908-1.768,1.768C2,7.75,2,12,2,12s0,4.25,0.418,5.814c0.23,0.86,0.908,1.538,1.768,1.768 C5.75,20,12,20,12,20s6.25,0,7.814-0.418c0.861-0.23,1.538-0.908,1.768-1.768C22,16.25,22,12,22,12S22,7.75,21.582,6.186z M10,15.464V8.536L16,12L10,15.464z" /></svg>);
 
       // --- WEATHER ICONS ---
-      const SunnyIcon = ({ className }) => (<svg className={className} viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="3"><circle cx="32" cy="32" r="10" fill="#FFD166"/><path d="M32 2v6M32 56v6M2 32h6M56 32h6M8.7 8.7l4.2 4.2M51.1 51.1l-4.2-4.2M8.7 55.3l4.2-4.2M51.1 12.9l-4.2 4.2" strokeLinecap="round"/></svg>);
-      const ClearNightIcon = ({ className }) => (<svg className={className} viewBox="0 0 64 64" fill="#F8F9FA" stroke="currentColor" strokeWidth="3"><path d="M42.2 45.8A16 16 0 1129.5 18a12 12 0 0017.3 17.3 16.2 16.2 0 01-4.6 10.5z"/></svg>);
-      const CloudyIcon = ({ className }) => (<svg className={className} viewBox="0 0 64 64" stroke="currentColor" strokeWidth="3"><path d="M46.7 42.5h-29a8 8 0 010-16h.3a12 12 0 0123.4-6 10 10 0 019.3 14v.2a8 8 0 01-4 7.8z" fill="#F8F9FA"/></svg>);
-      const RainyIcon = ({ className }) => (<svg className={className} viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="3"><path d="M46.7 42.5h-29a8 8 0 010-16h.3a12 12 0 0123.4-6 10 10 0 019.3 14v.2a8 8 0 01-4 7.8z" fill="#F8F9FA"/><path d="M24 50l-2 4M32 50l-2 4M40 50l-2 4" stroke="#00C6FF" strokeLinecap="round"/></svg>);
-      const PartlyCloudyIcon = ({ className }) => (<svg className={className} viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="3"><circle cx="26" cy="26" r="10" fill="#FFD166"/><path d="M46.7 42.5h-29a8 8 0 010-16h.3a12 12 0 0123.4-6 10 10 0 019.3 14v.2a8 8 0 01-4 7.8z" fill="#F8F9FA"/></svg>);
-      const PartlyCloudyNightIcon = ({ className }) => (<svg className={className} viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="3"><path d="M38.2 43.8A12.1 12.1 0 1128 20.3a9 9 0 0014 14 12 12 0 01-3.8 9.5z" fill="#F8F9FA"/><path d="M46.7 42.5h-29a8 8 0 010-16h.3a12 12 0 0123.4-6 10 10 0 019.3 14v.2a8 8 0 01-4 7.8z" fill="#F8F9FA"/></svg>);
-      const StormyIcon = ({ className }) => (<svg className={className} viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="3"><path d="M46.7 42.5h-29a8 8 0 010-16h.3a12 12 0 0123.4-6 10 10 0 019.3 14v.2a8 8 0 01-4 7.8z" fill="#9CA3AF"/><path d="M34 44l-6 8h8l-4 8" stroke="#FFD166" strokeLinecap="round" strokeLinejoin="round"/></svg>);
-      const SnowyIcon = ({ className }) => (<svg className={className} viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="3"><path d="M46.7 42.5h-29a8 8 0 010-16h.3a12 12 0 0123.4-6 10 10 0 019.3 14v.2a8 8 0 01-4 7.8z" fill="#F8F9FA"/><path d="M26 52l4 4m-4-4l-4 4m4-4l0-6m0 10l0-6M42 52l4 4m-4-4l-4 4m4-4l0-6m0 10l0-6" stroke="#00C6FF" strokeLinecap="round"/></svg>);
-      const FogIcon = ({ className }) => (<svg className={className} viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="3"><path d="M46.7 42.5h-29a8 8 0 010-16h.3a12 12 0 0123.4-6 10 10 0 019.3 14v.2a8 8 0 01-4 7.8z" fill="#F8F9FA"/><path d="M12 52h40M16 58h32" strokeLinecap="round"/></svg>);
+      const SunnyIcon = ({ className }) => (<svg className={className} viewBox="0 0 64 64" fill="none" stroke="#FFD166" strokeWidth="3"><circle cx="32" cy="32" r="10"/><path d="M32 2v6M32 56v6M2 32h6M56 32h6M8.7 8.7l4.2 4.2M51.1 51.1l-4.2-4.2M8.7 55.3l4.2-4.2M51.1 12.9l-4.2 4.2" strokeLinecap="round"/></svg>);
+      const ClearNightIcon = ({ className }) => (<svg className={className} viewBox="0 0 64 64" fill="#F8F9FA" stroke="#F8F9FA" strokeWidth="3"><path d="M42.2 45.8A16 16 0 1129.5 18a12 12 0 0017.3 17.3 16.2 16.2 0 01-4.6 10.5z"/></svg>);
+      const CloudyIcon = ({ className }) => (<svg className={className} viewBox="0 0 64 64" stroke="#F8F9FA" strokeWidth="3" fill="#F8F9FA"><path d="M46.7 42.5h-29a8 8 0 010-16h.3a12 12 0 0123.4-6 10 10 0 019.3 14v.2a8 8 0 01-4 7.8z"/></svg>);
+      const RainyIcon = ({ className }) => (<svg className={className} viewBox="0 0 64 64" fill="none" strokeWidth="3"><path d="M46.7 42.5h-29a8 8 0 010-16h.3a12 12 0 0123.4-6 10 10 0 019.3 14v.2a8 8 0 01-4 7.8z" fill="#F8F9FA" stroke="#F8F9FA"/><path d="M24 50l-2 4M32 50l-2 4M40 50l-2 4" stroke="#00C6FF" strokeLinecap="round"/></svg>);
+      const PartlyCloudyIcon = ({ className }) => (<svg className={className} viewBox="0 0 64 64" fill="none" strokeWidth="3"><circle cx="26" cy="26" r="10" fill="#FFD166" stroke="#FFD166"/><path d="M46.7 42.5h-29a8 8 0 010-16h.3a12 12 0 0123.4-6 10 10 0 019.3 14v.2a8 8 0 01-4 7.8z" fill="#F8F9FA" stroke="#F8F9FA"/></svg>);
+      const PartlyCloudyNightIcon = ({ className }) => (<svg className={className} viewBox="0 0 64 64" fill="none" strokeWidth="3"><path d="M38.2 43.8A12.1 12.1 0 1128 20.3a9 9 0 0014 14 12 12 0 01-3.8 9.5z" fill="#F8F9FA" stroke="#F8F9FA"/><path d="M46.7 42.5h-29a8 8 0 010-16h.3a12 12 0 0123.4-6 10 10 0 019.3 14v.2a8 8 0 01-4 7.8z" fill="#F8F9FA" stroke="#F8F9FA"/></svg>);
+      const StormyIcon = ({ className }) => (<svg className={className} viewBox="0 0 64 64" fill="none" strokeWidth="3"><path d="M46.7 42.5h-29a8 8 0 010-16h.3a12 12 0 0123.4-6 10 10 0 019.3 14v.2a8 8 0 01-4 7.8z" fill="#9CA3AF" stroke="#9CA3AF"/><path d="M34 44l-6 8h8l-4 8" stroke="#FFD166" strokeLinecap="round" strokeLinejoin="round"/></svg>);
+      const SnowyIcon = ({ className }) => (<svg className={className} viewBox="0 0 64 64" fill="none" strokeWidth="3"><path d="M46.7 42.5h-29a8 8 0 010-16h.3a12 12 0 0123.4-6 10 10 0 019.3 14v.2a8 8 0 01-4 7.8z" fill="#F8F9FA" stroke="#F8F9FA"/><path d="M26 52l4 4m-4-4l-4 4m4-4l0-6m0 10l0-6M42 52l4 4m-4-4l-4 4m4-4l0-6m0 10l0-6" stroke="#00C6FF" strokeLinecap="round"/></svg>);
+      const FogIcon = ({ className }) => (<svg className={className} viewBox="0 0 64 64" fill="none" strokeWidth="3"><path d="M46.7 42.5h-29a8 8 0 010-16h.3a12 12 0 0123.4-6 10 10 0 019.3 14v.2a8 8 0 01-4 7.8z" fill="#F8F9FA" stroke="#F8F9FA"/><path d="M12 52h40M16 58h32" stroke="#F8F9FA" strokeLinecap="round"/></svg>);
       const DefaultWeatherIcon = ({ className }) => PartlyCloudyIcon({ className });
 
       // --- HOOKS ---
@@ -161,69 +185,38 @@
           const [isPlaying, setIsPlaying] = useState(false);
           const [progress, setProgress] = useState(0);
           const [error, setError] = useState(null);
-          const attemptedTracksRef = useRef(new Set());
-          const isSkippingRef = useRef(false);
 
           const playNextTrack = useCallback(() => {
-              attemptedTracksRef.current.add(currentTrackIndex);
-              if (attemptedTracksRef.current.size >= tracks.length) {
-                  setError("Error: All tracks seem to be unavailable.");
-                  setIsPlaying(false);
-                  isSkippingRef.current = false;
-                  return;
-              }
               setCurrentTrackIndex(prev => (prev + 1) % tracks.length);
-          }, [currentTrackIndex, tracks.length]);
+          }, [tracks.length]);
           
-          const handleAudioError = useCallback(() => {
-              if (isSkippingRef.current) return;
-              
-              console.warn(`Failed to load track: ${tracks[currentTrackIndex].title}`);
+          const handleAudioError = useCallback((e) => {
+              console.warn(`Failed to load track: ${tracks[currentTrackIndex].title}`, e);
               setError(`Skipping: "${tracks[currentTrackIndex].title}"`);
-              isSkippingRef.current = true;
-              
-              setTimeout(() => {
-                  isSkippingRef.current = false;
-                  playNextTrack();
-              }, 1000);
+              setTimeout(playNextTrack, 1000);
           }, [currentTrackIndex, tracks, playNextTrack]);
 
-          const resetPlaybackState = useCallback(() => {
-              attemptedTracksRef.current.clear();
-              setError(null);
-          }, []);
+          const resetError = () => setError(null);
 
           useEffect(() => {
               const audio = audioRef.current;
-              if (!audio) return;
+              if (!audio || !tracks[currentTrackIndex]) return;
               
               audio.src = tracks[currentTrackIndex].url;
               audio.load();
               
               if (isPlaying) {
-                  const playPromise = audio.play();
-                  if (playPromise !== undefined) {
-                      playPromise.catch(e => {
-                          console.warn("Autoplay after track change failed.", e);
-                          setIsPlaying(false);
-                      });
-                  }
+                  audio.play().catch(handleAudioError);
               }
           // eslint-disable-next-line react-hooks/exhaustive-deps
-          }, [currentTrackIndex]);
+          }, [currentTrackIndex, tracks]);
 
           useEffect(() => {
               const audio = audioRef.current;
               if (!audio) return;
               const updateProgress = () => setProgress(audio.duration ? (audio.currentTime / audio.duration) * 100 : 0);
-              const onEnded = () => {
-                  resetPlaybackState();
-                  playNextTrack();
-              };
-              const onPlay = () => {
-                  resetPlaybackState();
-                  setIsPlaying(true);
-              };
+              const onEnded = () => playNextTrack();
+              const onPlay = () => { resetError(); setIsPlaying(true); };
               const onPause = () => setIsPlaying(false);
               
               audio.addEventListener('timeupdate', updateProgress);
@@ -239,35 +232,21 @@
                   audio.removeEventListener('pause', onPause);
                   audio.removeEventListener('error', handleAudioError);
               };
-          }, [currentTrackIndex, tracks.length, handleAudioError, playNextTrack, resetPlaybackState]);
+          }, [handleAudioError, playNextTrack]);
           
           const onTogglePlay = () => {
-              resetPlaybackState();
               const audio = audioRef.current;
               if (!audio) return;
-
               if (audio.paused) {
-                  const playPromise = audio.play();
-                  if (playPromise !== undefined) {
-                      playPromise.catch(handleAudioError);
-                  }
+                  audio.play().catch(handleAudioError);
               } else {
                   audio.pause();
               }
           };
 
-          const onNext = () => {
-              resetPlaybackState();
-              playNextTrack();
-          };
-
-          const onPrev = () => {
-              resetPlaybackState();
-              setCurrentTrackIndex(prev => (prev - 1 + tracks.length) % tracks.length);
-          };
-
+          const onNext = () => playNextTrack();
+          const onPrev = () => setCurrentTrackIndex(prev => (prev - 1 + tracks.length) % tracks.length);
           const onSelectTrack = (index) => {
-              resetPlaybackState();
               if(index !== currentTrackIndex) {
                   setCurrentTrackIndex(index);
               } else {
@@ -280,12 +259,12 @@
 
       // --- COMPONENTS ---
       const Window = ({ children, title, onClose, animationClass, className = '' }) => (
-        <div className={`relative bg-brand-off-white border-4 border-brand-border rounded-2xl flex flex-col w-[90vw] h-[85vh] overflow-hidden shadow-sharp transition-all duration-300 ${animationClass} ${className}`}>
-            <div className="bg-gray-200 border-b-4 border-brand-border px-4 py-2 flex items-center justify-between rounded-t-xl flex-shrink-0">
-              <span className="font-bold text-base text-brand-text">{title}</span>
-              <button className="w-5 h-5 bg-accent-red border-2 border-brand-border rounded-full cursor-pointer hover:bg-red-700 transition-colors" onClick={onClose} aria-label="Close window"></button>
+        <div className={`relative bg-brand-bg/70 backdrop-blur-2xl border-2 border-white/10 rounded-2xl flex flex-col w-[90vw] h-[85vh] overflow-hidden shadow-2xl shadow-black/30 transition-all duration-300 ${animationClass} ${className}`}>
+            <div className="bg-black/20 border-b-2 border-white/10 px-6 py-3 flex items-center justify-between rounded-t-xl flex-shrink-0">
+              <span className="font-righteous text-lg text-brand-off-white tracking-wider">{title}</span>
+              <button className="w-6 h-6 bg-accent-red border-2 border-black/50 rounded-full cursor-pointer hover:scale-110 transition-transform" onClick={onClose} aria-label="Close window"></button>
             </div>
-            <div className="p-5 flex-grow overflow-hidden flex flex-col">{children}</div>
+            <div className="p-6 flex-grow overflow-hidden flex flex-col">{children}</div>
         </div>
       );
 
@@ -295,16 +274,17 @@
           { id: 'music', icon: MusicIcon, color: 'text-accent-green' },
           { id: 'clock', icon: ClockIcon, color: 'text-accent-yellow' },
           { id: 'weather', icon: WeatherIcon, color: 'text-sky-bright' },
+          { id: 'notes', icon: NotesIcon, color: 'text-brand-off-white' },
         ];
 
         return (
-          <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-white/40 backdrop-blur-md border-2 border-white/20 rounded-2xl p-3 flex gap-3 z-50">
+          <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-black/30 backdrop-blur-md border border-white/20 rounded-2xl p-3 flex gap-4 z-50">
             {dockItems.map(item => {
               const Icon = item.icon;
               const isActive = activeView === item.id;
               return (
-                <div key={item.id} onClick={() => onIconClick(item.id)} className={`w-16 h-16 bg-brand-off-white border-4 border-brand-border rounded-xl flex items-center justify-center cursor-pointer transition-all duration-200 ease-in-out shadow-sharp hover:-translate-y-2 ${isActive ? '-translate-y-2 shadow-glow-sky' : ''}`}>
-                  <Icon className={`w-9 h-9 ${item.color}`} />
+                <div key={item.id} onClick={() => onIconClick(item.id)} className={`w-16 h-16 bg-brand-bg/80 border-2 border-white/10 rounded-xl flex items-center justify-center cursor-pointer transition-all duration-300 ease-in-out shadow-lg shadow-black/30 hover:-translate-y-2 hover:shadow-glow-sky ${isActive ? '-translate-y-2 shadow-glow-sky' : ''}`}>
+                  <Icon className={`w-10 h-10 ${item.color} transition-colors`} />
                 </div>
               );
             })}
@@ -312,128 +292,92 @@
         );
       };
 
-      const HomeContent = () => (
-        <div className="flex flex-col items-center justify-around text-center h-full p-4 py-8 overflow-y-auto">
-          <div className="flex flex-col items-center gap-4 animate-float">
-            <div className="p-1.5 bg-accent-yellow rounded-full transition-transform duration-300 ease-in-out hover:scale-110 hover:-rotate-6">
-                <img 
-                  src="https://xatimg.com/image/xHLWxrdb6TqD.png" 
-                  alt="Pola Sovereign" 
-                  className="w-32 h-32 md:w-36 md:h-36 object-cover rounded-full border-4 border-brand-off-white"
-                />
-            </div>
-            <div className="flex flex-col">
-              <h1 className="font-righteous text-3xl md:text-4xl leading-none tracking-tighter">
-                <span className="text-accent-red">POLA</span>
-                <span className="text-accent-yellow"> SOVEREIGN</span>
-              </h1>
-              <p className="font-righteous text-base md:text-lg text-brand-muted">BY GRACE</p>
-            </div>
-            <p className="font-righteous text-lg md:text-xl text-accent-green">
-              ❤ GOD IS LOVE ❤
-            </p>
-          </div>
-
-          <div className="max-w-xs text-sm text-brand-text leading-relaxed mt-8">
-            <p className="font-bold">
-                Dominion is not seized, but granted. Forged in faith, executed with authority.
-            </p>
-            <p className="italic text-brand-muted mt-4">
-                "I can do all things through Christ who gives me strength."
-                <span className="font-bold not-italic block mt-1 text-brand-text">— Philippians 4:13</span>
-            </p>
-          </div>
-        </div>
-      );
-
-
-      const ClockContent = () => {
-        const [date, setDate] = useState(new Date());
-        useEffect(() => {
-          const timerId = setInterval(() => setDate(new Date()), 1000);
-          return () => clearInterval(timerId);
-        }, []);
+      const HomeContent = ({ date, weather }) => {
         const timeOptions = { hour: '2-digit', minute: '2-digit', hour12: true };
+        const currentTemp = weather?.current_condition?.[0]?.temp_C;
+        const weatherDesc = weather?.current_condition?.[0]?.weatherDesc[0]?.value;
+
+        return (
+            <div className="flex flex-col items-center justify-between text-center h-full py-6 px-4 overflow-y-auto">
+                <div className="w-full flex justify-between items-start">
+                    <div className="text-left">
+                        <p className="font-righteous text-5xl text-accent-red leading-none">{date.toLocaleTimeString('en-US', timeOptions).replace(' ', '')}</p>
+                    </div>
+                     <div className="text-right">
+                        {currentTemp && weatherDesc && (
+                            <Fragment>
+                                <p className="font-righteous text-5xl text-sky-deep leading-none">{currentTemp}°C</p>
+                                <p className="text-sm font-bold text-brand-muted">{weatherDesc}</p>
+                            </Fragment>
+                        )}
+                    </div>
+                </div>
+
+                <div className="flex flex-col items-center gap-4 animate-float -mt-8">
+                    <div className="p-2 bg-accent-yellow rounded-full transition-transform duration-300 ease-in-out hover:scale-110 hover:-rotate-6 shadow-lg">
+                        <img src="https://xatimg.com/image/xHLWxrdb6TqD.png" alt="Pola Sovereign" className="w-36 h-36 object-cover rounded-full border-4 border-brand-bg"/>
+                    </div>
+                    <div>
+                        <h1 className="font-righteous text-5xl leading-none tracking-tighter"><span className="text-accent-red">POLA</span><span className="text-accent-yellow"> SOVEREIGN</span></h1>
+                        <p className="font-righteous text-xl text-brand-muted tracking-widest">BY GRACE</p>
+                    </div>
+                </div>
+
+                <div className="flex flex-col items-center gap-6">
+                    <div className="max-w-md text-lg text-brand-off-white leading-relaxed">
+                        <p className="font-bold">Dominion is not seized, but granted.</p>
+                        <p className="italic text-brand-muted mt-1">"I can do all things through Christ who gives me strength."</p>
+                    </div>
+                    <div className="flex items-center justify-center bg-black/20 backdrop-blur-sm p-3 rounded-full gap-4 border border-white/10">
+                        <a href="https://github.com/bolae700" target="_blank" rel="noopener noreferrer" className="w-12 h-12 flex items-center justify-center rounded-full text-brand-muted hover:bg-white/10 hover:text-brand-off-white transition-all duration-300" aria-label="GitHub"><GithubIcon className="w-8 h-8" /></a>
+                        <a href="https://youtube.com/@SoundSurge3" target="_blank" rel="noopener noreferrer" className="w-12 h-12 flex items-center justify-center rounded-full text-brand-muted hover:bg-white/10 hover:text-brand-off-white transition-all duration-300" aria-label="YouTube"><YoutubeIcon className="w-9 h-9" /></a>
+                    </div>
+                </div>
+            </div>
+        );
+      };
+
+      const ClockContent = ({ date }) => {
+        const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
         const dateOptions = { weekday: 'long', month: 'long', day: 'numeric' };
         
         return (
-          <div className="flex flex-col items-center justify-center h-full text-center">
-             <div className="font-righteous text-6xl sm:text-7xl md:text-8xl font-black text-accent-red leading-none">
+          <div className="flex flex-col items-center justify-center h-full text-center p-4">
+             <div className="font-righteous text-7xl sm:text-8xl font-black text-accent-red leading-none tracking-tighter">
                  {date.toLocaleTimeString('en-US', timeOptions).replace(' ', '')}
              </div>
-             <div className="font-righteous text-lg sm:text-xl text-accent-green mt-3 font-bold">
+             <div className="font-righteous text-2xl sm:text-3xl text-accent-green mt-6 font-bold tracking-wider">
                  {date.toLocaleDateString('en-US', dateOptions)}
              </div>
           </div>
         );
       };
       
-      const WeatherContent = () => {
-        const [weather, setWeather] = useState(null);
-        const [loading, setLoading] = useState(true);
-        const [error, setError] = useState(null);
-        const isMounted = useRef(true);
-
-        const fetchWeather = useCallback(() => {
-          if (!isMounted.current) return;
-          setLoading(true);
-          setError(null);
-          
-          fetch(`https://wttr.in/?format=j1`)
-              .then(res => { 
-                  if (!res.ok) throw new Error('Failed to fetch weather data. The service might be temporarily unavailable.');
-                  return res.json(); 
-              })
-              .then(data => { 
-                  if (isMounted.current) setWeather(data); 
-              })
-              .catch(err => { 
-                  if (isMounted.current) setError(err.message); 
-              })
-              .finally(() => { 
-                  if (isMounted.current) setLoading(false); 
-              });
-        }, []);
-
-        useEffect(() => {
-          isMounted.current = true;
-          fetchWeather();
-          return () => { isMounted.current = false; };
-          // eslint-disable-next-line react-hooks/exhaustive-deps
-        }, []);
-
-        const isNight = (weatherData) => {
-          if (!weatherData?.weather?.[0]?.astronomy?.[0]) return false;
-          const { sunrise, sunset } = weatherData.weather[0].astronomy[0];
+      const WeatherContent = ({ weatherData, loading, error, onRetry }) => {
+        const getWeatherIconComponent = (code, weather) => {
+          if (!weather) return DefaultWeatherIcon;
+          const { sunrise, sunset } = weather.weather[0].astronomy[0];
           const now = new Date();
           const currentTimeInMinutes = now.getHours() * 60 + now.getMinutes();
 
-          const parseTime = (timeStr) => { // "06:30 AM"
+          const parseTime = (timeStr) => {
             const [time, modifier] = timeStr.split(' ');
             let [hours, minutes] = time.split(':').map(Number);
             if (modifier === 'PM' && hours < 12) hours += 12;
-            if (modifier === 'AM' && hours === 12) hours = 0; // Midnight case
+            if (modifier === 'AM' && hours === 12) hours = 0;
             return hours * 60 + minutes;
           };
-          try {
-            const sunriseInMinutes = parseTime(sunrise);
-            const sunsetInMinutes = parseTime(sunset);
-            return currentTimeInMinutes < sunriseInMinutes || currentTimeInMinutes > sunsetInMinutes;
-          } catch(e) {
-            console.error("Could not parse sunrise/sunset times:", e);
-            return false;
-          }
-        };
-
-        const getWeatherIconComponent = (code, weatherData) => {
-          const night = isNight(weatherData);
-          const codeNum = parseInt(code, 10);
           
+          let night = false;
+          try {
+            night = currentTimeInMinutes < parseTime(sunrise) || currentTimeInMinutes > parseTime(sunset);
+          } catch (e) { console.error("Could not parse sunrise/sunset time", e); }
+          
+          const codeNum = parseInt(code, 10);
           if (night) {
             if (codeNum === 113) return ClearNightIcon;
             if (codeNum === 116) return PartlyCloudyNightIcon;
           }
-          
           if (codeNum === 113) return SunnyIcon;
           if (codeNum === 116) return PartlyCloudyIcon;
           if (codeNum >= 119 && codeNum <= 122) return CloudyIcon;
@@ -441,34 +385,33 @@
           if (codeNum >= 323 && codeNum <= 338) return SnowyIcon;
           if (codeNum === 200) return StormyIcon;
           if (codeNum === 143 || codeNum === 248 || codeNum === 260) return FogIcon;
-          
           return DefaultWeatherIcon;
         };
         
         const renderContent = () => {
             if (loading) return <div className="flex flex-col items-center justify-center text-center"><div className="w-16 h-16 border-4 border-dashed rounded-full animate-spin border-accent-yellow mb-4"></div><p className="text-xl font-bold text-brand-muted">Fetching weather...</p></div>;
-            if (error) return <div className="text-center text-accent-red"><p className="font-bold text-lg">Oops!</p><p>{error}</p> <button onClick={fetchWeather} className="mt-4 bg-accent-yellow text-brand-border font-bold py-2 px-4 rounded-lg border-2 border-brand-border shadow-sharp transition-transform hover:scale-105">Try Again</button></div>;
+            if (error) return <div className="text-center text-accent-red"><p className="font-bold text-lg">Oops!</p><p>{error}</p> <button onClick={onRetry} className="mt-4 bg-accent-yellow text-brand-bg font-bold py-2 px-4 rounded-lg border-2 border-brand-border shadow-sharp transition-transform hover:scale-105">Try Again</button></div>;
             
-            const current = weather?.current_condition?.[0];
-            const area = weather?.nearest_area?.[0];
-            if (!weather || !current || !area) return <div className="text-center text-accent-red"><p>Incomplete weather data received.</p><button onClick={fetchWeather} className="mt-4 bg-accent-yellow text-brand-border font-bold py-2 px-4 rounded-lg border-2 border-brand-border shadow-sharp transition-transform hover:scale-105">Try Again</button></div>;
+            const current = weatherData?.current_condition?.[0];
+            const area = weatherData?.nearest_area?.[0];
+            if (!weatherData || !current || !area) return <div className="text-center text-accent-red"><p>Incomplete weather data.</p><button onClick={onRetry} className="mt-4 bg-accent-yellow text-brand-bg font-bold py-2 px-4 rounded-lg border-2 border-brand-border shadow-sharp transition-transform hover:scale-105">Try Again</button></div>;
             
-            const IconComponent = getWeatherIconComponent(current.weatherCode, weather);
+            const IconComponent = getWeatherIconComponent(current.weatherCode, weatherData);
             return (
               <div className="w-full h-full flex items-center justify-center">
-                <div className="bg-white/50 backdrop-blur-sm p-6 rounded-2xl border-4 border-brand-border/20 w-full max-w-sm text-center flex flex-col items-center justify-center gap-4 font-righteous">
-                    <div className="w-28 h-28 animate-pulse-slow">
-                        <IconComponent className="w-full h-full text-brand-text" />
+                <div className="bg-black/20 backdrop-blur-sm p-8 rounded-2xl border border-white/10 w-full max-w-sm text-center flex flex-col items-center justify-center gap-4 font-righteous">
+                    <div className="w-36 h-36 animate-pulse-slow">
+                        <IconComponent className="w-full h-full" />
+                    </div>
+                    <div className="-mt-4">
+                        <p className="text-7xl font-black text-accent-red">{current.temp_C}°C</p>
+                        <p className="text-2xl text-brand-muted">{current.weatherDesc[0].value}</p>
                     </div>
                     <div>
-                        <p className="text-5xl font-black text-accent-red">{current.temp_C}°C</p>
-                        <p className="text-xl text-brand-muted">{current.weatherDesc[0].value}</p>
+                        <p className="text-3xl font-bold text-brand-off-white">{area.areaName[0].value}, {area.country[0].value}</p>
+                        <p className="text-xl text-accent-green">Feels like {current.FeelsLikeC}°C</p>
                     </div>
-                    <div>
-                        <p className="text-2xl font-bold text-brand-muted">{area.areaName[0].value}, {area.country[0].value}</p>
-                        <p className="text-lg text-accent-green">Feels like {current.FeelsLikeC}°C</p>
-                    </div>
-                    <div className="text-base text-brand-text">
+                    <div className="text-lg text-brand-muted">
                         <p>Wind: {current.windspeedKmph} km/h</p>
                         <p>Humidity: {current.humidity}%</p>
                     </div>
@@ -483,21 +426,26 @@
       const MusicPlayer = ({ tracks, currentTrackIndex, isPlaying, progress, error, onTogglePlay, onNext, onPrev, onSelectTrack }) => {
         const currentTrack = tracks[currentTrackIndex];
         return (
-          <div className="flex flex-col h-full text-brand-text">
-            <div className="text-center pb-4 flex-shrink-0 border-b-4 border-gray-100">
-                <h2 className="font-righteous text-lg truncate" title={currentTrack.title}>{currentTrack.title}</h2>
-                <p className="text-sm text-brand-muted">{currentTrack.artist}</p>
-                {error && <p className="text-xs text-accent-red mt-1 font-bold">{error}</p>}
-            </div>
-            <div className="py-4 flex-shrink-0">
-                <div className="flex items-center justify-center gap-6">
+          <div className="flex flex-col h-full text-brand-off-white">
+             <div className="flex-shrink-0 flex items-center gap-6 p-4 border-b-2 border-white/10">
+                <div className={`w-28 h-28 bg-accent-green rounded-lg flex items-center justify-center border-2 border-black/20 flex-shrink-0 shadow-lg ${isPlaying ? 'animate-pulse-slow' : ''}`}>
+                    <MusicIcon className="w-16 h-16 text-brand-bg/70" />
+                </div>
+                <div className="flex-1 overflow-hidden">
+                    <h2 className="font-righteous text-3xl truncate" title={currentTrack.title}>{currentTrack.title}</h2>
+                    <p className="text-xl text-brand-muted">{currentTrack.artist}</p>
+                    {error && <p className="text-sm text-accent-red mt-1 font-bold">{error}</p>}
+                </div>
+             </div>
+            <div className="py-6 flex-shrink-0 flex flex-col items-center gap-5">
+                <div className="flex items-center justify-center gap-8">
                   <button onClick={onPrev} className="text-brand-muted hover:text-accent-red transition-colors" aria-label="Previous track"><PrevIcon/></button>
-                  <button onClick={onTogglePlay} className="w-14 h-14 rounded-full bg-accent-yellow text-brand-border border-4 border-brand-border flex items-center justify-center transition-transform hover:scale-110" aria-label={isPlaying ? 'Pause' : 'Play'}>
+                  <button onClick={onTogglePlay} className="w-20 h-20 rounded-full bg-accent-yellow text-brand-bg border-4 border-black/30 flex items-center justify-center transition-transform hover:scale-110 shadow-lg" aria-label={isPlaying ? 'Pause' : 'Play'}>
                     {isPlaying ? <PauseIcon /> : <PlayIcon />}
                   </button>
                   <button onClick={onNext} className="text-brand-muted hover:text-accent-red transition-colors" aria-label="Next track"><NextIcon/></button>
                 </div>
-                 <div className="w-full bg-gray-200 rounded-full h-2 mt-6 overflow-hidden border-2 border-gray-200">
+                 <div className="w-full max-w-sm bg-black/30 rounded-full h-3 overflow-hidden border-2 border-black/30">
                     <div className="bg-accent-green h-full rounded-full" style={{ width: `${progress}%`, transition: 'width 0.15s linear' }}></div>
                 </div>
             </div>
@@ -506,13 +454,33 @@
                 <div 
                   key={index} 
                   onClick={() => onSelectTrack(index)}
-                  className={`p-2 cursor-pointer rounded-lg mb-1 transition-all duration-200 border-4 ${index === currentTrackIndex ? 'bg-accent-red border-brand-border' : 'border-transparent hover:bg-gray-100 hover:translate-x-2'}`}
+                  className={`p-3 cursor-pointer rounded-lg mb-2 transition-all duration-200 border-2 ${index === currentTrackIndex ? 'bg-accent-red border-black/50' : 'border-transparent hover:bg-white/5 hover:translate-x-2'}`}
                 >
-                  <div className={`font-bold text-sm truncate ${index === currentTrackIndex ? 'text-brand-off-white' : 'text-brand-text'}`}>{track.title}</div>
-                  <div className={`text-xs ${index === currentTrackIndex ? 'text-brand-off-white/80' : 'text-brand-muted'}`}>{track.artist}</div>
+                  <div className={`font-bold text-lg truncate ${index === currentTrackIndex ? 'text-brand-off-white' : 'text-brand-off-white'}`}>{track.title}</div>
+                  <div className={`text-base ${index === currentTrackIndex ? 'text-brand-bg/80 font-bold' : 'text-brand-muted'}`}>{track.artist}</div>
                 </div>
               ))}
             </div>
+          </div>
+        );
+      };
+
+      const NotesContent = () => {
+        const [notes, setNotes] = useState(() => localStorage.getItem('pola-sovereign-notes') || '');
+        
+        useEffect(() => {
+          localStorage.setItem('pola-sovereign-notes', notes);
+        }, [notes]);
+
+        return (
+          <div className="h-full flex flex-col">
+            <textarea
+              className="w-full h-full bg-transparent text-brand-off-white font-nunito text-lg p-2 resize-none focus:outline-none placeholder-brand-muted/70"
+              placeholder="Start typing your thoughts here..."
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              spellCheck="false"
+            />
           </div>
         );
       };
@@ -523,6 +491,30 @@
           const [animationClass, setAnimationClass] = useState('animate-drop-in');
           const { audioRef, ...audioPlayerProps } = useAudioPlayer(tracksData);
           
+          const [date, setDate] = useState(new Date());
+          const [weather, setWeather] = useState(null);
+          const [weatherLoading, setWeatherLoading] = useState(true);
+          const [weatherError, setWeatherError] = useState(null);
+
+          useEffect(() => {
+            const timerId = setInterval(() => setDate(new Date()), 1000);
+            return () => clearInterval(timerId);
+          }, []);
+
+          const fetchWeather = useCallback(() => {
+            setWeatherLoading(true);
+            setWeatherError(null);
+            fetch(`https://wttr.in/?format=j1`)
+                .then(res => res.ok ? res.json() : Promise.reject('Weather service unavailable.'))
+                .then(data => setWeather(data))
+                .catch(err => setWeatherError(err.message || err))
+                .finally(() => setWeatherLoading(false));
+          }, []);
+
+          useEffect(() => {
+            fetchWeather();
+          }, [fetchWeather]);
+
           let audioCtx = useRef(null);
           const playSound = useCallback((type) => {
             if (!audioCtx.current) {
@@ -539,12 +531,12 @@
             if (type === 'open') {
               oscillator.type = 'triangle';
               oscillator.frequency.setValueAtTime(880, audioCtx.current.currentTime);
-              gainNode.gain.setValueAtTime(0.08, audioCtx.current.currentTime);
+              gainNode.gain.setValueAtTime(0.06, audioCtx.current.currentTime);
               gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.current.currentTime + 0.3);
             } else { // 'close'
               oscillator.type = 'sine';
               oscillator.frequency.setValueAtTime(660, audioCtx.current.currentTime);
-              gainNode.gain.setValueAtTime(0.08, audioCtx.current.currentTime);
+              gainNode.gain.setValueAtTime(0.06, audioCtx.current.currentTime);
               gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.current.currentTime + 0.2);
             }
             
@@ -561,9 +553,12 @@
           }, [activeView, playSound]);
 
           const openWindow = useCallback((id) => {
-              if (activeView === id) {
+              if (activeView === id && id !== 'home') {
+                  closeWindow();
                   return;
               }
+              if (activeView === id) return;
+
               playSound('open');
               if (activeView) {
                   setAnimationClass('animate-fall-out');
@@ -575,24 +570,29 @@
                   setActiveView(id);
                   setAnimationClass('animate-drop-in');
               }
-          }, [activeView, playSound]);
+          }, [activeView, playSound, closeWindow]);
 
           const renderContent = () => {
               if (!activeView) return null;
               switch (activeView) {
-                  case 'home': return <HomeContent />;
-                  case 'clock': return <ClockContent />;
-                  case 'weather': return <WeatherContent />;
+                  case 'home': return <HomeContent date={date} weather={weather} />;
+                  case 'clock': return <ClockContent date={date} />;
+                  case 'weather': return <WeatherContent weatherData={weather} loading={weatherLoading} error={weatherError} onRetry={fetchWeather} />;
                   case 'music': return <MusicPlayer tracks={tracksData} {...audioPlayerProps} />;
+                  case 'notes': return <NotesContent />;
                   default: return null;
               }
           };
 
-          const windowClass = activeView === 'home' ? 'max-w-sm max-h-[680px]' : 'max-w-md max-h-[600px]';
+          let windowClass = 'max-w-xl';
+          if (activeView === 'home') windowClass = 'max-w-2xl max-h-[720px]';
+          else if (activeView === 'music') windowClass = 'max-w-lg max-h-[700px]';
+          else if (activeView === 'notes') windowClass = 'max-w-lg max-h-[600px]';
+          else windowClass = 'max-w-xl max-h-[600px]';
+
 
           return (
               <Fragment>
-                  <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-sky-bright to-sky-deep opacity-80"></div>
                   <audio ref={audioRef} />
                   {activeView && (
                       <Window
@@ -611,21 +611,13 @@
       };
 
       // --- RENDER APP ---
-      window.onload = () => {
-        try {
-          const rootElement = document.getElementById('root');
-          const root = ReactDOM.createRoot(rootElement);
-          root.render(<App />);
-        } catch (error) {
-          console.error("Failed to render React app:", error);
-          document.getElementById('root').innerHTML = `
-            <div style="background-color: #FF5F57; color: #0F172A; padding: 2rem; border-radius: 1rem; border: 4px solid #0F172A; font-family: monospace;">
-              <h1 style="font-size: 1.5rem; font-weight: bold;">Oops! Application Failed to Load.</h1>
-              <p>There was a critical error. Please check the console for details.</p>
-            </div>
-          `;
-        }
-      };
+      const rootElement = document.getElementById('root');
+      if (rootElement) {
+        const root = ReactDOM.createRoot(rootElement);
+        root.render(<App />);
+      } else {
+        console.error("Root element not found. App could not be mounted.");
+      }
     </script>
 </body>
 </html>
