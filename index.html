@@ -1,623 +1,800 @@
-
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pola Sovereign OS</title>
+    <title>Pola's Interactive Portfolio</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Righteous&display=swap" rel="stylesheet">
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            fontFamily: {
-              nunito: ['Nunito', 'sans-serif'],
-              righteous: ['Righteous', 'cursive'],
-            },
-            colors: {
-              'sky-bright': '#00C6FF',
-              'sky-deep': '#0072FF',
-              'accent-yellow': '#FFD166',
-              'accent-red': '#FF5F57',
-              'accent-green': '#70C1B3',
-              'brand-border': '#0F172A',
-              'brand-text': '#0F172A',
-              'brand-text-light': '#F8F9FA',
-              'brand-muted': '#94A3B8', // Lighter for better contrast on dark bg
-              'brand-off-white': '#F8F9FA',
-              'brand-bg': '#1E293B', // Main background color
-            },
-            boxShadow: {
-              'sharp': '6px 6px 0 0 #0F172A',
-              'glow-sky': '0px 0px 25px 3px rgba(0, 198, 255, 0.8)',
-            },
-            keyframes: {
-              movePattern: {
-                '0%': { backgroundPosition: '0 0' },
-                '100%': { backgroundPosition: '-100px 100px' },
-              },
-              'drop-in': {
-                '0%': { transform: 'translateY(-110%) scale(0.9)', opacity: '0' },
-                '100%': { transform: 'translateY(0) scale(1)', opacity: '1' },
-              },
-              'fall-out': {
-                '0%': { transform: 'translateY(0) scale(1)', opacity: '1' },
-                '100%': { transform: 'translateY(110%) scale(0.9)', opacity: '0' },
-              },
-              'pulse-slow': {
-                '0%, 100%': { transform: 'scale(1)', opacity: '0.8' },
-                '50%': { transform: 'scale(1.05)', opacity: '1' },
-              },
-              'float': {
-                '0%, 100%': { transform: 'translateY(0px)' },
-                '50%': { transform: 'translateY(-12px)' },
-              },
-              'bg-glow': {
-                '0%': { transform: 'translate(100vw, -50vh) scale(1)', opacity: '0.3' },
-                '25%': { transform: 'translate(75vw, 50vh) scale(1.2)', opacity: '0.2' },
-                '50%': { transform: 'translate(0vw, 100vh) scale(1)', opacity: '0.3' },
-                '75%': { transform: 'translate(-50vw, 25vh) scale(1.2)', opacity: '0.2' },
-                '100%': { transform: 'translate(100vw, -50vh) scale(1)', opacity: '0.3' },
-              }
-            },
-            animation: {
-              movePattern: 'movePattern 15s linear infinite',
-              'drop-in': 'drop-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards',
-              'fall-out': 'fall-out 0.3s ease-in forwards',
-              'pulse-slow': 'pulse-slow 3s ease-in-out infinite',
-              'float': 'float 6s ease-in-out infinite',
-              'bg-glow': 'bg-glow 45s linear infinite',
-            }
-          },
-        },
-      }
-    </script>
+    
     <style>
-      html, body {
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-      }
-      #root {
-        height: 100vh;
-        width: 100vw;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: relative;
-        box-sizing: border-box;
-      }
-      body {
-        --sky-deep: #0072FF;
-        --pattern-color: rgba(255, 255, 255, 0.05);
-        background-color: #1E293B; /* brand-bg */
-        background-image: 
-          linear-gradient(45deg, var(--pattern-color) 25%, transparent 25%), 
-          linear-gradient(-45deg, var(--pattern-color) 25%, transparent 25%),
-          linear-gradient(45deg, transparent 75%, var(--pattern-color) 75%),
-          linear-gradient(-45deg, transparent 75%, var(--pattern-color) 75%);
-        background-size: 20px 20px;
-        background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
-        color: #F8F9FA;
-      }
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
 
-      body::before {
-        content: '';
+      body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #03008d;
+        background-image: radial-gradient(circle at 50% 150%, #004eff 0%, #03008d 70%);
+      }
+      
+      .animated-grid {
         position: absolute;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        pointer-events: none;
-        background: radial-gradient(circle at center, transparent, #1E293B 70%);
-        z-index: -1;
-      }
-
-      .bg-glow-element {
-        position: fixed;
-        width: 100vh;
-        height: 100vh;
-        background: radial-gradient(circle, #0072FF, transparent 60%);
-        filter: blur(100px);
+        background-image: 
+          linear-gradient(rgba(255,255,255,0.07) 1px, transparent 1px), 
+          linear-gradient(90deg, rgba(255,255,255,0.07) 1px, transparent 1px);
+        background-size: 3rem 3rem;
+        animation: pan-grid 200s linear infinite;
         z-index: -2;
-        will-change: transform;
+      }
+      
+      @keyframes pan-grid {
+        0% { background-position: 0% 0%; }
+        100% { background-position: 100% 100%; }
       }
 
-      ::-webkit-scrollbar { width: 12px; }
-      ::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.2); border-radius: 10px; }
-      ::-webkit-scrollbar-thumb { background-color: #70C1B3; border-radius: 10px; border: 3px solid transparent; }
-      ::-webkit-scrollbar-thumb:hover { background-color: #5aa89a; }
+      @keyframes float {
+        0% { transform: translateY(0px) rotate(0deg); opacity: 0; }
+        25% { opacity: 0.2; }
+        50% { transform: translateY(-50vh) rotate(180deg); }
+        75% { opacity: 0.2; }
+        100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+      }
+      
+      .name-shake:hover {
+        animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+      }
+
+      .music-note-dance:hover {
+        animation: dance 0.8s ease-in-out infinite;
+      }
+
+      .heart-beat:hover {
+        animation: heartbeat 1s ease-in-out infinite;
+      }
+      
+      @keyframes shake {
+        10%, 90% { transform: translate3d(-1px, 0, 0); }
+        20%, 80% { transform: translate3d(2px, 0, 0); }
+        30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+        40%, 60% { transform: translate3d(4px, 0, 0); }
+      }
+
+      @keyframes dance {
+        0%, 100% { transform: rotate(0deg); }
+        25% { transform: rotate(-15deg) scale(1.1); }
+        75% { transform: rotate(15deg) scale(1.1); }
+      }
+
+      @keyframes heartbeat {
+        0% { transform: scale(1); }
+        10% { transform: scale(1.3); }
+        20% { transform: scale(1); }
+        30% { transform: scale(1.3); }
+        40% { transform: scale(1); }
+        100% { transform: scale(1); }
+      }
+
+      @keyframes music-note-float {
+        from { transform: translateY(0) translateX(0) scale(1); opacity: 1; }
+        to { transform: translateY(-40px) translateX(var(--tx)) scale(0.5); opacity: 0; }
+      }
+
+      @keyframes rain-fall {
+        from { transform: translateY(-20px) scale(1); opacity: 1; }
+        to { transform: translateY(20px) scale(1); opacity: 0; }
+      }
+
+      @keyframes write-anim {
+        0% { transform: translate(-5px, 10px) rotate(-30deg); opacity: 0; }
+        20% { opacity: 1; }
+        40% { transform: translate(0px, 5px) rotate(-30deg); }
+        60% { transform: translate(5px, 10px) rotate(-30deg); }
+        80% { opacity: 1; }
+        100% { transform: translate(10px, 0px) rotate(-30deg); opacity: 0; }
+      }
+
+      /* Custom Scrollbar for Music Playlist */
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 8px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 10px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background-color: rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+        border: 2px solid transparent;
+        background-clip: content-box;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background-color: rgba(255, 255, 255, 0.4);
+      }
+      .custom-scrollbar {
+        scrollbar-width: thin;
+        scrollbar-color: rgba(255, 255, 255, 0.2) rgba(255, 255, 255, 0.05);
+      }
     </style>
+  <script type="importmap">
+    {
+      "imports": {
+        "react": "https://esm.sh/react@18.2.0",
+        "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+        "framer-motion": "https://esm.sh/framer-motion@10.12.16?external=react,react-dom"
+      }
+    }
+  </script>
 </head>
-<body class="font-nunito antialiased animate-movePattern">
-    <div id="root"></div>
-    <div class="bg-glow-element animate-bg-glow"></div>
+<body>
+  <div id="root"></div>
+  <script type="module">
+    import * as React from 'react';
+    import ReactDOM from 'react-dom/client';
+    import { motion, AnimatePresence } from 'framer-motion';
 
-    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    const { useState, useEffect, useRef, useCallback, useMemo } = React;
+
+    // ==========================================
+    // HOOK: useLocalStorage
+    // ==========================================
+    const useLocalStorage = (key, initialValue) => {
+        const [storedValue, setStoredValue] = useState(() => {
+            if (typeof window === 'undefined') {
+                return initialValue;
+            }
+            try {
+                const item = window.localStorage.getItem(key);
+                return item ? JSON.parse(item) : initialValue;
+            } catch (error) {
+                console.error(error);
+                return initialValue;
+            }
+        });
+
+        const setValue = (value) => {
+            try {
+                const valueToStore = value instanceof Function ? value(storedValue) : value;
+                setStoredValue(valueToStore);
+                if (typeof window !== 'undefined') {
+                    window.localStorage.setItem(key, JSON.stringify(valueToStore));
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        return [storedValue, setValue];
+    };
+
+    // ==========================================
+    // HOOK: useAudio
+    // ==========================================
+    const useAudio = () => {
+        const audioContextRef = useRef(null);
+
+        const playSound = useCallback((type) => {
+            if (!audioContextRef.current) {
+                try {
+                    audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
+                } catch (e) {
+                    console.error("Web Audio API is not supported in this browser.", e);
+                    return;
+                }
+            }
+            const audioContext = audioContextRef.current;
+            if (!audioContext || audioContext.state === 'suspended') {
+                audioContext.resume();
+            }
+
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+
+            switch (type) {
+                case 'click':
+                    gainNode.gain.linearRampToValueAtTime(0.2, audioContext.currentTime + 0.01);
+                    oscillator.type = 'triangle';
+                    oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + 0.1);
+                    break;
+                case 'hover':
+                    gainNode.gain.linearRampToValueAtTime(0.08, audioContext.currentTime + 0.01);
+                    oscillator.type = 'sine';
+                    oscillator.frequency.setValueAtTime(1200, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + 0.05);
+                    break;
+                case 'open':
+                    gainNode.gain.linearRampToValueAtTime(0.3, audioContext.currentTime + 0.01);
+                    oscillator.type = 'sawtooth';
+                    oscillator.frequency.setValueAtTime(200, audioContext.currentTime);
+                    oscillator.frequency.exponentialRampToValueAtTime(800, audioContext.currentTime + 0.15);
+                    gainNode.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + 0.2);
+                    break;
+                case 'swoosh':
+                    gainNode.gain.linearRampToValueAtTime(0.2, audioContext.currentTime + 0.01);
+                    oscillator.type = 'sine';
+                    oscillator.frequency.setValueAtTime(1500, audioContext.currentTime);
+                    oscillator.frequency.exponentialRampToValueAtTime(300, audioContext.currentTime + 0.2);
+                    gainNode.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + 0.2);
+                    break;
+                case 'error':
+                    gainNode.gain.linearRampToValueAtTime(0.3, audioContext.currentTime + 0.01);
+                    oscillator.type = 'square';
+                    oscillator.frequency.setValueAtTime(150, audioContext.currentTime);
+                    oscillator.frequency.exponentialRampToValueAtTime(100, audioContext.currentTime + 0.15);
+                    gainNode.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + 0.2);
+                    break;
+                case 'success':
+                    gainNode.gain.linearRampToValueAtTime(0.25, audioContext.currentTime + 0.01);
+                    oscillator.type = 'sine';
+                    oscillator.frequency.setValueAtTime(600, audioContext.currentTime);
+                    oscillator.frequency.linearRampToValueAtTime(1200, audioContext.currentTime + 0.2);
+                    gainNode.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + 0.25);
+                    break;
+                case 'close':
+                    gainNode.gain.linearRampToValueAtTime(0.3, audioContext.currentTime + 0.01);
+                    oscillator.type = 'sawtooth';
+                    oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+                    oscillator.frequency.exponentialRampToValueAtTime(200, audioContext.currentTime + 0.15);
+                    gainNode.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + 0.2);
+                    break;
+            }
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.25);
+        }, []);
+        return { playSound };
+    };
+
+    // ==========================================
+    // SERVICE: Weather Service
+    // ==========================================
+    const mapWmoToWeather = (wmoCode, isDay) => {
+        const dayNight = isDay ? 'd' : 'n';
+        if (wmoCode === 0) return { main: 'Clear', description: 'Clear sky', icon: `01${dayNight}` };
+        if (wmoCode >= 1 && wmoCode <= 3) return { main: 'Clouds', description: 'Cloudy', icon: `03${dayNight}` };
+        if (wmoCode === 45 || wmoCode === 48) return { main: 'Fog', description: 'Fog', icon: `50${dayNight}` };
+        if (wmoCode >= 51 && wmoCode <= 67) return { main: 'Rain', description: 'Rain', icon: `10${dayNight}` };
+        if (wmoCode >= 71 && wmoCode <= 77) return { main: 'Snow', description: 'Snow', icon: `13${dayNight}` };
+        if (wmoCode >= 80 && wmoCode <= 82) return { main: 'Rain', description: 'Rain showers', icon: `09${dayNight}` };
+        if (wmoCode >= 85 && wmoCode <= 86) return { main: 'Snow', description: 'Snow showers', icon: `13${dayNight}` };
+        if (wmoCode >= 95 && wmoCode <= 99) return { main: 'Thunderstorm', description: 'Thunderstorm', icon: `11${dayNight}` };
+        return { main: 'Clear', description: 'Clear sky', icon: `01${dayNight}` };
+    };
+
+    const getWeather = async (lat, lon) => {
+        try {
+            // No city name lookup needed if we get it from IP geo
+            const weatherResponse = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relativehumidity_2m,apparent_temperature,is_day,weathercode,windspeed_10m&windspeed_unit=ms`);
+            
+            if (!weatherResponse.ok) throw new Error('Failed to fetch weather data');
+            
+            const weatherData = await weatherResponse.json();
+            const current = weatherData.current;
+            const mappedWeather = mapWmoToWeather(current.weathercode, current.is_day);
+
+            return {
+                main: {
+                    temp: current.temperature_2m,
+                    feels_like: current.apparent_temperature,
+                    humidity: current.relativehumidity_2m,
+                },
+                weather: [mappedWeather],
+                wind: {
+                    speed: current.windspeed_10m,
+                },
+            };
+        } catch (error) {
+            console.error("Weather data fetching error:", error);
+            throw error;
+        }
+    };
     
-    <script type="text/babel" data-type="module">
-      const { useState, useCallback, useRef, useEffect, Fragment } = React;
+    // ==========================================
+    // ICONS
+    // ==========================================
+    const GithubIcon = () => (
+        React.createElement('svg', { xmlns: "http://www.w3.org/2000/svg", width: "2em", height: "2em", viewBox: "0 0 24 24" },
+            React.createElement('path', { fill: "currentColor", d: "M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5c.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34c-.46-1.16-1.11-1.47-1.11-1.47c-.91-.62.07-.6.07-.6c1 .07 1.53 1.03 1.53 1.03c.87 1.5 2.3.93 2.87.71c.09-.55.34-1.04.62-1.28c-2.19-.25-4.5-1.1-4.5-4.88c0-1.08.38-1.96.99-2.65c-.1-.25-.43-1.25.09-2.61c0 0 .83-.27 2.72 1.02A9.6 9.6 0 0 1 12 6.8c.85 0 1.7.11 2.5.33c1.89-1.29 2.72-1.02 2.72-1.02c.52 1.36.19 2.36.09 2.61c.61.69.99 1.57.99 2.65c0 3.79-2.31 4.63-4.5 4.88c.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2" })
+        )
+    );
 
-      // --- CONSTANTS ---
-       const tracksData = [
-          { url: "https://audio.jukehost.co.uk/ztGbM6nU1jGFif7kdo9pS3DIEcOgkuRw", title: "Holy Savior", artist: "SoundSurge" },
-          { url: "https://audio.jukehost.co.uk/ohe18ncftZviWmfGvdp7EGxTnmUXrSbL", title: "Shining Future", artist: "SoundSurge" },
-          { url: "https://audio.jukehost.co.uk/TUdyUcjx0FSA2SMx2X7J2cyFPYJFkkBa", title: "Fading Echo", artist: "SoundSurge" },
-          { url: "https://audio.jukehost.co.uk/WmpFI6ZFtDTnSEoUt2fS9V8PQuGS0i8E", title: "Virtual Angel", artist: "SoundSurge" },
-          { url: "https://audio.jukehost.co.uk/HrWMsAhD64LRNkzG2aQ9t2BUkoO6rTBm", title: "Electric Rush", artist: "SoundSurge" },
-      ];
-      const viewTitles = { home: 'Pola SOVEREIGN', music: 'Music Player', clock: 'Clock & Date', weather: 'Weather Forecast', notes: 'Notepad' };
-      
-      // --- ICONS ---
-      const HomeIcon = ({ className }) => (<svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M4 9.5V20a1 1 0 0 0 1 1h4M8 21V14h8v7m4-11.5V20a1 1 0 0 1-1 1h-4" /><path d="M2 10.5l10-8 10 8" /></svg>);
-      const MusicIcon = ({ className }) => (<svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18V5l12-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="18" cy="16" r="3" /></svg>);
-      const ClockIcon = ({ className }) => (<svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>);
-      const WeatherIcon = ({ className }) => (<svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>);
-      const NotesIcon = ({ className }) => (<svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M13.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8.5L13.5 2z" /><polyline points="13 2 13 9 20 9" /></svg>);
-      const PlayIcon = () => <svg viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8"><path d="M8 5v14l11-7z"></path></svg>;
-      const PauseIcon = () => <svg viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"></path></svg>;
-      const PrevIcon = () => <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"></path></svg>;
-      const NextIcon = () => <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"></path></svg>;
-      const GithubIcon = ({ className }) => (<svg className={className} viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.168 6.839 9.492.5.092.682-.217.682-.482 0-.237-.009-.868-.014-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.031-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.203 2.398.1 2.651.64.7 1.03 1.595 1.03 2.688 0 3.848-2.338 4.695-4.566 4.942.359.308.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.001 10.001 0 0022 12c0-5.523-4.477-10-10-10z" /></svg>);
-      const YoutubeIcon = ({ className }) => (<svg className={className} viewBox="0 0 24 24" fill="currentColor"><path d="M21.582,6.186c-0.23-0.86-0.908-1.538-1.768-1.768C18.25,4,12,4,12,4S5.75,4,4.186,4.418 c-0.86,0.23-1.538,0.908-1.768,1.768C2,7.75,2,12,2,12s0,4.25,0.418,5.814c0.23,0.86,0.908,1.538,1.768,1.768 C5.75,20,12,20,12,20s6.25,0,7.814-0.418c0.861-0.23,1.538-0.908,1.768-1.768C22,16.25,22,12,22,12S22,7.75,21.582,6.186z M10,15.464V8.536L16,12L10,15.464z" /></svg>);
+    const YoutubeIcon = () => (
+        React.createElement('svg', { xmlns: "http://www.w3.org/2000/svg", width: "2em", height: "2em", viewBox: "0 0 24 24" },
+            React.createElement('path', { fill: "currentColor", d: "M10 15v-6l5 3z" }),
+            React.createElement('path', { fill: "currentColor", d: "M21.5 8.009v7.982a2.5 2.5 0 0 1-2.5 2.5H5a2.5 2.5 0 0 1-2.5-2.5V8.009a2.5 2.5 0 0 1 2.5-2.5h14a2.5 2.5 0 0 1 2.5 2.5M23 8.009A4.5 4.5 0 0 0 18.5 3.5H5A4.5 4.5 0 0 0 .5 8.009v7.982A4.5 4.5 0 0 0 5 20.5h14a4.5 4.5 0 0 0 4.5-4.5z" })
+        )
+    );
+    
+    const HomeIcon = ({ isActive }) => (
+        React.createElement('div', { className: "w-10 h-10 flex items-center justify-center" },
+            React.createElement('svg', { xmlns: "http://www.w3.org/2000/svg", width: "1.5em", height: "1.5em", viewBox: "0 0 24 24", className: `transition-all duration-300 ${isActive ? 'text-blue-400 animate-pulse' : 'text-white/70 group-hover:text-white'}` },
+                React.createElement('path', { fill: "currentColor", d: "M10 20v-6h4v6h5v-8h3L12 3L2 12h3v8z" })
+            )
+        )
+    );
 
-      // --- WEATHER ICONS ---
-      const SunnyIcon = ({ className }) => (<svg className={className} viewBox="0 0 64 64" fill="none" stroke="#FFD166" strokeWidth="3"><circle cx="32" cy="32" r="10"/><path d="M32 2v6M32 56v6M2 32h6M56 32h6M8.7 8.7l4.2 4.2M51.1 51.1l-4.2-4.2M8.7 55.3l4.2-4.2M51.1 12.9l-4.2 4.2" strokeLinecap="round"/></svg>);
-      const ClearNightIcon = ({ className }) => (<svg className={className} viewBox="0 0 64 64" fill="#F8F9FA" stroke="#F8F9FA" strokeWidth="3"><path d="M42.2 45.8A16 16 0 1129.5 18a12 12 0 0017.3 17.3 16.2 16.2 0 01-4.6 10.5z"/></svg>);
-      const CloudyIcon = ({ className }) => (<svg className={className} viewBox="0 0 64 64" stroke="#F8F9FA" strokeWidth="3" fill="#F8F9FA"><path d="M46.7 42.5h-29a8 8 0 010-16h.3a12 12 0 0123.4-6 10 10 0 019.3 14v.2a8 8 0 01-4 7.8z"/></svg>);
-      const RainyIcon = ({ className }) => (<svg className={className} viewBox="0 0 64 64" fill="none" strokeWidth="3"><path d="M46.7 42.5h-29a8 8 0 010-16h.3a12 12 0 0123.4-6 10 10 0 019.3 14v.2a8 8 0 01-4 7.8z" fill="#F8F9FA" stroke="#F8F9FA"/><path d="M24 50l-2 4M32 50l-2 4M40 50l-2 4" stroke="#00C6FF" strokeLinecap="round"/></svg>);
-      const PartlyCloudyIcon = ({ className }) => (<svg className={className} viewBox="0 0 64 64" fill="none" strokeWidth="3"><circle cx="26" cy="26" r="10" fill="#FFD166" stroke="#FFD166"/><path d="M46.7 42.5h-29a8 8 0 010-16h.3a12 12 0 0123.4-6 10 10 0 019.3 14v.2a8 8 0 01-4 7.8z" fill="#F8F9FA" stroke="#F8F9FA"/></svg>);
-      const PartlyCloudyNightIcon = ({ className }) => (<svg className={className} viewBox="0 0 64 64" fill="none" strokeWidth="3"><path d="M38.2 43.8A12.1 12.1 0 1128 20.3a9 9 0 0014 14 12 12 0 01-3.8 9.5z" fill="#F8F9FA" stroke="#F8F9FA"/><path d="M46.7 42.5h-29a8 8 0 010-16h.3a12 12 0 0123.4-6 10 10 0 019.3 14v.2a8 8 0 01-4 7.8z" fill="#F8F9FA" stroke="#F8F9FA"/></svg>);
-      const StormyIcon = ({ className }) => (<svg className={className} viewBox="0 0 64 64" fill="none" strokeWidth="3"><path d="M46.7 42.5h-29a8 8 0 010-16h.3a12 12 0 0123.4-6 10 10 0 019.3 14v.2a8 8 0 01-4 7.8z" fill="#9CA3AF" stroke="#9CA3AF"/><path d="M34 44l-6 8h8l-4 8" stroke="#FFD166" strokeLinecap="round" strokeLinejoin="round"/></svg>);
-      const SnowyIcon = ({ className }) => (<svg className={className} viewBox="0 0 64 64" fill="none" strokeWidth="3"><path d="M46.7 42.5h-29a8 8 0 010-16h.3a12 12 0 0123.4-6 10 10 0 019.3 14v.2a8 8 0 01-4 7.8z" fill="#F8F9FA" stroke="#F8F9FA"/><path d="M26 52l4 4m-4-4l-4 4m4-4l0-6m0 10l0-6M42 52l4 4m-4-4l-4 4m4-4l0-6m0 10l0-6" stroke="#00C6FF" strokeLinecap="round"/></svg>);
-      const FogIcon = ({ className }) => (<svg className={className} viewBox="0 0 64 64" fill="none" strokeWidth="3"><path d="M46.7 42.5h-29a8 8 0 010-16h.3a12 12 0 0123.4-6 10 10 0 019.3 14v.2a8 8 0 01-4 7.8z" fill="#F8F9FA" stroke="#F8F9FA"/><path d="M12 52h40M16 58h32" stroke="#F8F9FA" strokeLinecap="round"/></svg>);
-      const DefaultWeatherIcon = ({ className }) => PartlyCloudyIcon({ className });
-
-      // --- HOOKS ---
-      const useAudioPlayer = (tracks) => {
-          const audioRef = useRef(null);
-          const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
-          const [isPlaying, setIsPlaying] = useState(false);
-          const [progress, setProgress] = useState(0);
-          const [error, setError] = useState(null);
-
-          const playNextTrack = useCallback(() => {
-              setCurrentTrackIndex(prev => (prev + 1) % tracks.length);
-          }, [tracks.length]);
-          
-          const handleAudioError = useCallback((e) => {
-              console.warn(`Failed to load track: ${tracks[currentTrackIndex].title}`, e);
-              setError(`Skipping: "${tracks[currentTrackIndex].title}"`);
-              setTimeout(playNextTrack, 1000);
-          }, [currentTrackIndex, tracks, playNextTrack]);
-
-          const resetError = () => setError(null);
-
-          useEffect(() => {
-              const audio = audioRef.current;
-              if (!audio || !tracks[currentTrackIndex]) return;
-              
-              audio.src = tracks[currentTrackIndex].url;
-              audio.load();
-              
-              if (isPlaying) {
-                  audio.play().catch(handleAudioError);
-              }
-          // eslint-disable-next-line react-hooks/exhaustive-deps
-          }, [currentTrackIndex, tracks]);
-
-          useEffect(() => {
-              const audio = audioRef.current;
-              if (!audio) return;
-              const updateProgress = () => setProgress(audio.duration ? (audio.currentTime / audio.duration) * 100 : 0);
-              const onEnded = () => playNextTrack();
-              const onPlay = () => { resetError(); setIsPlaying(true); };
-              const onPause = () => setIsPlaying(false);
-              
-              audio.addEventListener('timeupdate', updateProgress);
-              audio.addEventListener('ended', onEnded);
-              audio.addEventListener('play', onPlay);
-              audio.addEventListener('pause', onPause);
-              audio.addEventListener('error', handleAudioError);
-              
-              return () => {
-                  audio.removeEventListener('timeupdate', updateProgress);
-                  audio.removeEventListener('ended', onEnded);
-                  audio.removeEventListener('play', onPlay);
-                  audio.removeEventListener('pause', onPause);
-                  audio.removeEventListener('error', handleAudioError);
-              };
-          }, [handleAudioError, playNextTrack]);
-          
-          const onTogglePlay = () => {
-              const audio = audioRef.current;
-              if (!audio) return;
-              if (audio.paused) {
-                  audio.play().catch(handleAudioError);
-              } else {
-                  audio.pause();
-              }
-          };
-
-          const onNext = () => playNextTrack();
-          const onPrev = () => setCurrentTrackIndex(prev => (prev - 1 + tracks.length) % tracks.length);
-          const onSelectTrack = (index) => {
-              if(index !== currentTrackIndex) {
-                  setCurrentTrackIndex(index);
-              } else {
-                  onTogglePlay();
-              }
-          };
-
-          return { audioRef, currentTrackIndex, isPlaying, progress, error, onTogglePlay, onNext, onPrev, onSelectTrack };
-      };
-
-      // --- COMPONENTS ---
-      const Window = ({ children, title, onClose, animationClass, className = '' }) => (
-        <div className={`relative bg-brand-bg/70 backdrop-blur-2xl border-2 border-white/10 rounded-2xl flex flex-col w-[90vw] h-[85vh] overflow-hidden shadow-2xl shadow-black/30 transition-all duration-300 ${animationClass} ${className}`}>
-            <div className="bg-black/20 border-b-2 border-white/10 px-6 py-3 flex items-center justify-between rounded-t-xl flex-shrink-0">
-              <span className="font-righteous text-lg text-brand-off-white tracking-wider">{title}</span>
-              <button className="w-6 h-6 bg-accent-red border-2 border-black/50 rounded-full cursor-pointer hover:scale-110 transition-transform" onClick={onClose} aria-label="Close window"></button>
-            </div>
-            <div className="p-6 flex-grow overflow-hidden flex flex-col">{children}</div>
-        </div>
-      );
-
-      const Dock = ({ onIconClick, activeView }) => {
-        const dockItems = [
-          { id: 'home', icon: HomeIcon, color: 'text-accent-red' },
-          { id: 'music', icon: MusicIcon, color: 'text-accent-green' },
-          { id: 'clock', icon: ClockIcon, color: 'text-accent-yellow' },
-          { id: 'weather', icon: WeatherIcon, color: 'text-sky-bright' },
-          { id: 'notes', icon: NotesIcon, color: 'text-brand-off-white' },
+    const MusicIcon = ({ isActive }) => {
+        const notes = [
+            { tx: '-15px', delay: '0s' }, { tx: '15px', delay: '0.2s' }, { tx: '-10px', delay: '0.4s' },
         ];
-
-        return (
-          <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-black/30 backdrop-blur-md border border-white/20 rounded-2xl p-3 flex gap-4 z-50">
-            {dockItems.map(item => {
-              const Icon = item.icon;
-              const isActive = activeView === item.id;
-              return (
-                <div key={item.id} onClick={() => onIconClick(item.id)} className={`w-16 h-16 bg-brand-bg/80 border-2 border-white/10 rounded-xl flex items-center justify-center cursor-pointer transition-all duration-300 ease-in-out shadow-lg shadow-black/30 hover:-translate-y-2 hover:shadow-glow-sky ${isActive ? '-translate-y-2 shadow-glow-sky' : ''}`}>
-                  <Icon className={`w-10 h-10 ${item.color} transition-colors`} />
-                </div>
-              );
-            })}
-          </div>
+        return React.createElement('div', { className: "w-10 h-10 flex items-center justify-center relative" },
+            React.createElement('svg', { xmlns: "http://www.w3.org/2000/svg", width: "1.5em", height: "1.5em", viewBox: "0 0 24 24", className: `transition-all duration-300 ${isActive ? 'text-blue-400' : 'text-white/70 group-hover:text-white'}` },
+                React.createElement('path', { fill: "currentColor", d: "M12 3v10.55c-.59-.34-1.27-.55-2-.55c-2.21 0-4 1.79-4 4s1.79 4 4 4s4-1.79 4-4V7h4V3z" })
+            ),
+            isActive && notes.map((note, i) =>
+                React.createElement('div', { key: i, className: "absolute text-blue-400 text-xs", style: { '--tx': note.tx, animation: `music-note-float 1.2s ${note.delay} ease-out infinite` } }, '♪')
+            )
         );
-      };
+    };
 
-      const HomeContent = ({ date, weather }) => {
-        const timeOptions = { hour: '2-digit', minute: '2-digit', hour12: true };
-        const currentTemp = weather?.current_condition?.[0]?.temp_C;
-        const weatherDesc = weather?.current_condition?.[0]?.weatherDesc[0]?.value;
+    const WeatherIcon = ({ isActive }) => (
+        React.createElement('div', { className: "w-10 h-10 flex items-center justify-center relative overflow-hidden" },
+            React.createElement('svg', { xmlns: "http://www.w3.org/2000/svg", width: "1.5em", height: "1.5em", viewBox: "0 0 24 24", className: `transition-all duration-300 ${isActive ? 'text-blue-400' : 'text-white/70 group-hover:text-white'}` },
+                React.createElement('path', { fill: "currentColor", d: "M19.35 10.04A7.49 7.49 0 0 0 12 4C9.11 4 6.6 5.64 5.35 8.04A5.994 5.994 0 0 0 0 14a6 6 0 0 0 6 6h13a5 5 0 0 0 5-5c0-2.64-2.05-4.78-4.65-4.96" })
+            ),
+            isActive && Array.from({ length: 3 }).map((_, i) =>
+                React.createElement('div', { key: i, className: "absolute w-0.5 h-2 bg-blue-400 rounded-full", style: { left: `${25 + i * 25}%`, animation: `rain-fall 1s ${i * 0.2}s linear infinite` } })
+            )
+        )
+    );
 
-        return (
-            <div className="flex flex-col items-center justify-between text-center h-full py-6 px-4 overflow-y-auto">
-                <div className="w-full flex justify-between items-start">
-                    <div className="text-left">
-                        <p className="font-righteous text-5xl text-accent-red leading-none">{date.toLocaleTimeString('en-US', timeOptions).replace(' ', '')}</p>
-                    </div>
-                     <div className="text-right">
-                        {currentTemp && weatherDesc && (
-                            <Fragment>
-                                <p className="font-righteous text-5xl text-sky-deep leading-none">{currentTemp}°C</p>
-                                <p className="text-sm font-bold text-brand-muted">{weatherDesc}</p>
-                            </Fragment>
-                        )}
-                    </div>
-                </div>
+    const NotepadIcon = ({ isActive }) => (
+        React.createElement('div', { className: "w-10 h-10 flex items-center justify-center relative" },
+            React.createElement('svg', { xmlns: "http://www.w3.org/2000/svg", width: "1.5em", height: "1.5em", viewBox: "0 0 24 24", className: `transition-all duration-300 ${isActive ? 'text-blue-400' : 'text-white/70 group-hover:text-white'}` },
+                React.createElement('path', { fill: "currentColor", d: "M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zm2 16H8v-2h8zm0-4H8v-2h8zm-3-5V3.5L18.5 9H13Z" })
+            ),
+            isActive && React.createElement('div', { className: "absolute text-blue-400", style: { animation: `write-anim 1.5s ease-in-out infinite` } },
+                React.createElement('svg', { xmlns: "http://www.w3.org/2000/svg", width: "0.8em", height: "0.8em", viewBox: "0 0 24 24" },
+                    React.createElement('path', { fill: "currentColor", d: "m16.85 4.15l4 4L8.85 20.15l-4.5.5l.5-4.5zM16.85 2.74a2 2 0 0 1 2.83 0l2.83 2.83a2 2 0 0 1 0 2.83L9.66 21.26a1 1 0 0 1-.85.34H4a1 1 0 0 1-1-1v-4.81a1 1 0 0 1 .34-.85z" })
+                )
+            )
+        )
+    );
 
-                <div className="flex flex-col items-center gap-4 animate-float -mt-8">
-                    <div className="p-2 bg-accent-yellow rounded-full transition-transform duration-300 ease-in-out hover:scale-110 hover:-rotate-6 shadow-lg">
-                        <img src="https://xatimg.com/image/xHLWxrdb6TqD.png" alt="Pola Sovereign" className="w-36 h-36 object-cover rounded-full border-4 border-brand-bg"/>
-                    </div>
-                    <div>
-                        <h1 className="font-righteous text-5xl leading-none tracking-tighter"><span className="text-accent-red">POLA</span><span className="text-accent-yellow"> SOVEREIGN</span></h1>
-                        <p className="font-righteous text-xl text-brand-muted tracking-widest">BY GRACE</p>
-                    </div>
-                </div>
+    // ==========================================
+    // COMPONENT: DateTime
+    // ==========================================
+    const DateTime = () => {
+        const [now, setNow] = useState(new Date());
+        useEffect(() => {
+            const timer = setInterval(() => setNow(new Date()), 1000);
+            return () => clearInterval(timer);
+        }, []);
+        const timeString = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+        const dateString = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
-                <div className="flex flex-col items-center gap-6">
-                    <div className="max-w-md text-lg text-brand-off-white leading-relaxed">
-                        <p className="font-bold">Dominion is not seized, but granted.</p>
-                        <p className="italic text-brand-muted mt-1">"I can do all things through Christ who gives me strength."</p>
-                    </div>
-                    <div className="flex items-center justify-center bg-black/20 backdrop-blur-sm p-3 rounded-full gap-4 border border-white/10">
-                        <a href="https://github.com/bolae700" target="_blank" rel="noopener noreferrer" className="w-12 h-12 flex items-center justify-center rounded-full text-brand-muted hover:bg-white/10 hover:text-brand-off-white transition-all duration-300" aria-label="GitHub"><GithubIcon className="w-8 h-8" /></a>
-                        <a href="https://youtube.com/@SoundSurge3" target="_blank" rel="noopener noreferrer" className="w-12 h-12 flex items-center justify-center rounded-full text-brand-muted hover:bg-white/10 hover:text-brand-off-white transition-all duration-300" aria-label="YouTube"><YoutubeIcon className="w-9 h-9" /></a>
-                    </div>
-                </div>
-            </div>
+        return React.createElement('div', { className: "w-full mt-4 pt-4 border-t border-white/10 text-center text-xs text-white/60" },
+            React.createElement('p', null, timeString),
+            React.createElement('p', null, dateString)
         );
-      };
+    };
 
-      const ClockContent = ({ date }) => {
-        const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
-        const dateOptions = { weekday: 'long', month: 'long', day: 'numeric' };
-        
-        return (
-          <div className="flex flex-col items-center justify-center h-full text-center p-4">
-             <div className="font-righteous text-7xl sm:text-8xl font-black text-accent-red leading-none tracking-tighter">
-                 {date.toLocaleTimeString('en-US', timeOptions).replace(' ', '')}
-             </div>
-             <div className="font-righteous text-2xl sm:text-3xl text-accent-green mt-6 font-bold tracking-wider">
-                 {date.toLocaleDateString('en-US', dateOptions)}
-             </div>
-          </div>
-        );
-      };
-      
-      const WeatherContent = ({ weatherData, loading, error, onRetry }) => {
-        const getWeatherIconComponent = (code, weather) => {
-          if (!weather) return DefaultWeatherIcon;
-          const { sunrise, sunset } = weather.weather[0].astronomy[0];
-          const now = new Date();
-          const currentTimeInMinutes = now.getHours() * 60 + now.getMinutes();
-
-          const parseTime = (timeStr) => {
-            const [time, modifier] = timeStr.split(' ');
-            let [hours, minutes] = time.split(':').map(Number);
-            if (modifier === 'PM' && hours < 12) hours += 12;
-            if (modifier === 'AM' && hours === 12) hours = 0;
-            return hours * 60 + minutes;
-          };
-          
-          let night = false;
-          try {
-            night = currentTimeInMinutes < parseTime(sunrise) || currentTimeInMinutes > parseTime(sunset);
-          } catch (e) { console.error("Could not parse sunrise/sunset time", e); }
-          
-          const codeNum = parseInt(code, 10);
-          if (night) {
-            if (codeNum === 113) return ClearNightIcon;
-            if (codeNum === 116) return PartlyCloudyNightIcon;
-          }
-          if (codeNum === 113) return SunnyIcon;
-          if (codeNum === 116) return PartlyCloudyIcon;
-          if (codeNum >= 119 && codeNum <= 122) return CloudyIcon;
-          if ((codeNum >= 176 && codeNum <= 185) || (codeNum >= 263 && codeNum <= 308)) return RainyIcon;
-          if (codeNum >= 323 && codeNum <= 338) return SnowyIcon;
-          if (codeNum === 200) return StormyIcon;
-          if (codeNum === 143 || codeNum === 248 || codeNum === 260) return FogIcon;
-          return DefaultWeatherIcon;
+    // ==========================================
+    // WINDOW: Home
+    // ==========================================
+    const HomeWindow = () => {
+        const windowVariants = {
+            hidden: { opacity: 0, scale: 0.5, rotate: -90 },
+            visible: { opacity: 1, scale: 1, rotate: 0, transition: { type: 'spring', damping: 15, stiffness: 200 } },
+            exit: { opacity: 0, scale: 0.5, rotate: 90, transition: { duration: 0.3 } },
         };
-        
-        const renderContent = () => {
-            if (loading) return <div className="flex flex-col items-center justify-center text-center"><div className="w-16 h-16 border-4 border-dashed rounded-full animate-spin border-accent-yellow mb-4"></div><p className="text-xl font-bold text-brand-muted">Fetching weather...</p></div>;
-            if (error) return <div className="text-center text-accent-red"><p className="font-bold text-lg">Oops!</p><p>{error}</p> <button onClick={onRetry} className="mt-4 bg-accent-yellow text-brand-bg font-bold py-2 px-4 rounded-lg border-2 border-brand-border shadow-sharp transition-transform hover:scale-105">Try Again</button></div>;
-            
-            const current = weatherData?.current_condition?.[0];
-            const area = weatherData?.nearest_area?.[0];
-            if (!weatherData || !current || !area) return <div className="text-center text-accent-red"><p>Incomplete weather data.</p><button onClick={onRetry} className="mt-4 bg-accent-yellow text-brand-bg font-bold py-2 px-4 rounded-lg border-2 border-brand-border shadow-sharp transition-transform hover:scale-105">Try Again</button></div>;
-            
-            const IconComponent = getWeatherIconComponent(current.weatherCode, weatherData);
-            return (
-              <div className="w-full h-full flex items-center justify-center">
-                <div className="bg-black/20 backdrop-blur-sm p-8 rounded-2xl border border-white/10 w-full max-w-sm text-center flex flex-col items-center justify-center gap-4 font-righteous">
-                    <div className="w-36 h-36 animate-pulse-slow">
-                        <IconComponent className="w-full h-full" />
-                    </div>
-                    <div className="-mt-4">
-                        <p className="text-7xl font-black text-accent-red">{current.temp_C}°C</p>
-                        <p className="text-2xl text-brand-muted">{current.weatherDesc[0].value}</p>
-                    </div>
-                    <div>
-                        <p className="text-3xl font-bold text-brand-off-white">{area.areaName[0].value}, {area.country[0].value}</p>
-                        <p className="text-xl text-accent-green">Feels like {current.FeelsLikeC}°C</p>
-                    </div>
-                    <div className="text-lg text-brand-muted">
-                        <p>Wind: {current.windspeedKmph} km/h</p>
-                        <p>Humidity: {current.humidity}%</p>
-                    </div>
-                </div>
-              </div>
-            );
-        };
-        
-        return <div className="h-full flex items-center justify-center">{renderContent()}</div>;
-      };
-
-      const MusicPlayer = ({ tracks, currentTrackIndex, isPlaying, progress, error, onTogglePlay, onNext, onPrev, onSelectTrack }) => {
-        const currentTrack = tracks[currentTrackIndex];
-        return (
-          <div className="flex flex-col h-full text-brand-off-white">
-             <div className="flex-shrink-0 flex items-center gap-6 p-4 border-b-2 border-white/10">
-                <div className={`w-28 h-28 bg-accent-green rounded-lg flex items-center justify-center border-2 border-black/20 flex-shrink-0 shadow-lg ${isPlaying ? 'animate-pulse-slow' : ''}`}>
-                    <MusicIcon className="w-16 h-16 text-brand-bg/70" />
-                </div>
-                <div className="flex-1 overflow-hidden">
-                    <h2 className="font-righteous text-3xl truncate" title={currentTrack.title}>{currentTrack.title}</h2>
-                    <p className="text-xl text-brand-muted">{currentTrack.artist}</p>
-                    {error && <p className="text-sm text-accent-red mt-1 font-bold">{error}</p>}
-                </div>
-             </div>
-            <div className="py-6 flex-shrink-0 flex flex-col items-center gap-5">
-                <div className="flex items-center justify-center gap-8">
-                  <button onClick={onPrev} className="text-brand-muted hover:text-accent-red transition-colors" aria-label="Previous track"><PrevIcon/></button>
-                  <button onClick={onTogglePlay} className="w-20 h-20 rounded-full bg-accent-yellow text-brand-bg border-4 border-black/30 flex items-center justify-center transition-transform hover:scale-110 shadow-lg" aria-label={isPlaying ? 'Pause' : 'Play'}>
-                    {isPlaying ? <PauseIcon /> : <PlayIcon />}
-                  </button>
-                  <button onClick={onNext} className="text-brand-muted hover:text-accent-red transition-colors" aria-label="Next track"><NextIcon/></button>
-                </div>
-                 <div className="w-full max-w-sm bg-black/30 rounded-full h-3 overflow-hidden border-2 border-black/30">
-                    <div className="bg-accent-green h-full rounded-full" style={{ width: `${progress}%`, transition: 'width 0.15s linear' }}></div>
-                </div>
-            </div>
-            <div className="flex-grow overflow-y-auto pr-2">
-              {tracks.map((track, index) => (
-                <div 
-                  key={index} 
-                  onClick={() => onSelectTrack(index)}
-                  className={`p-3 cursor-pointer rounded-lg mb-2 transition-all duration-200 border-2 ${index === currentTrackIndex ? 'bg-accent-red border-black/50' : 'border-transparent hover:bg-white/5 hover:translate-x-2'}`}
-                >
-                  <div className={`font-bold text-lg truncate ${index === currentTrackIndex ? 'text-brand-off-white' : 'text-brand-off-white'}`}>{track.title}</div>
-                  <div className={`text-base ${index === currentTrackIndex ? 'text-brand-bg/80 font-bold' : 'text-brand-muted'}`}>{track.artist}</div>
-                </div>
-              ))}
-            </div>
-          </div>
+        return React.createElement(motion.div, { variants: windowVariants, initial: "hidden", animate: "visible", exit: "exit", className: "w-full max-w-sm h-auto bg-black/20 backdrop-blur-lg rounded-3xl p-6 text-center flex flex-col items-center shadow-2xl border border-white/10" },
+            React.createElement(motion.img, { src: "https://xatimg.com/image/xHLWxrdb6TqD.png", alt: "Pola's profile picture", className: "w-28 h-28 rounded-full border-4 border-white/30 object-cover shadow-lg", whileHover: { scale: 1.1, rotate: 5, transition: { type: 'spring', stiffness: 300 } } }),
+            React.createElement('h1', { className: "text-3xl font-bold mt-4 name-shake cursor-pointer flex items-center" }, React.createElement('span', null, "𝙋𝙊𝙇𝘼"), React.createElement('span', { className: "text-2xl ml-2 music-note-dance" }, "𝅘𝅥𝅮")),
+            React.createElement('p', { className: "mt-2 text-sm text-white/80 italic" }, "\"𝑰 𝒄𝒂𝒏 𝒅𝒐 𝒂𝒍𝒍 𝒕𝒉𝒊𝒏𝒈𝒔 𝒕𝒉𝒓𝒐𝒖𝒈𝒉 𝑪𝒉𝒓𝒊𝒔𝒕 𝒘𝒉𝒐 𝒈𝒊𝒗𝒆𝒔 𝒎𝒆 𝒔𝒕𝒓𝒆𝒏𝒈𝒕𝒉.\""),
+            React.createElement('div', { className: "flex space-x-6 mt-6" },
+                React.createElement('a', { href: "https://github.com/bolae700", target: "_blank", rel: "noopener noreferrer", className: "text-white/80 hover:text-white transition-colors" }, React.createElement(GithubIcon)),
+                React.createElement('a', { href: "https://www.youtube.com/@SoundSurge3", target: "_blank", rel: "noopener noreferrer", className: "text-white/80 hover:text-white transition-colors" }, React.createElement(YoutubeIcon))
+            ),
+            React.createElement('div', { className: "mt-6 text-lg font-semibold flex items-center space-x-2 cursor-default heart-beat" }, React.createElement('span', { className: "text-red-500 text-2xl" }, "❤"), React.createElement('span', null, "𝘎𝘖𝘋 𝘐𝘚 𝘓𝘖𝘝𝘌"), React.createElement('span', { className: "text-red-500 text-2xl" }, "❤")),
+            React.createElement(DateTime)
         );
-      };
+    };
 
-      const NotesContent = () => {
-        const [notes, setNotes] = useState(() => localStorage.getItem('pola-sovereign-notes') || '');
+    // ==========================================
+    // WINDOW: Music
+    // ==========================================
+    const MusicWindow = ({
+        tracksData, currentTrackIndex, isPlaying, progress, 
+        handlePlayPause, handlePlayNext, handlePlayPrev, handleSelectTrack
+    }) => {
+        const windowVariants = {
+            hidden: { opacity: 0, scale: 0.5, rotate: -90 },
+            visible: { opacity: 1, scale: 1, rotate: 0, transition: { type: 'spring', damping: 15, stiffness: 200 } },
+            exit: { opacity: 0, scale: 0.5, rotate: 90, transition: { duration: 0.3 } },
+        };
+        const currentTrack = tracksData[currentTrackIndex];
+        return React.createElement(motion.div, { variants: windowVariants, initial: "hidden", animate: "visible", exit: "exit", className: "w-full max-w-sm h-auto bg-black/20 backdrop-blur-lg rounded-3xl p-6 flex flex-col shadow-2xl border border-white/10" },
+            React.createElement('div', { className: "text-center mb-4" },
+                React.createElement('h2', { className: "text-xl font-bold truncate" }, currentTrack.title),
+                React.createElement('p', { className: "text-sm text-white/70" }, currentTrack.artist)
+            ),
+            React.createElement('div', { className: "w-full h-2 bg-white/20 rounded-full mb-4" },
+                React.createElement('div', { className: "h-full bg-blue-400 rounded-full", style: { width: `${progress}%` } })
+            ),
+            React.createElement('div', { className: "flex justify-center items-center space-x-6 text-3xl" },
+                React.createElement('button', { onClick: handlePlayPrev, className: "hover:text-blue-400 transition-colors" }, React.createElement('svg', { xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 24 24" }, React.createElement('path', { fill: "currentColor", d: "M17.59 18L19 16.59L14.42 12L19 7.41L17.59 6l-6 6zM11 18V6l-6 6z" }))),
+                React.createElement('button', { onClick: handlePlayPause, className: "bg-blue-500/50 hover:bg-blue-500 w-16 h-16 rounded-full flex items-center justify-center transition-colors" },
+                    isPlaying ? React.createElement('svg', { xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 24 24" }, React.createElement('path', { fill: "currentColor", d: "M14 19h4V5h-4zM6 19h4V5H6z" })) : React.createElement('svg', { xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 24 24" }, React.createElement('path', { fill: "currentColor", d: "M8 19V5l11 7z" }))
+                ),
+                React.createElement('button', { onClick: handlePlayNext, className: "hover:text-blue-400 transition-colors" }, React.createElement('svg', { xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 24 24" }, React.createElement('path', { fill: "currentColor", d: "M6.41 6L5 7.41L9.58 12L5 16.59L6.41 18l6-6zM13 6v12h2V6z" })))
+            ),
+            React.createElement('div', { className: "mt-4 h-40 overflow-y-auto custom-scrollbar pr-2" },
+                tracksData.map((track, index) => React.createElement('div', { key: index, onClick: () => handleSelectTrack(index), className: `p-2 rounded-lg cursor-pointer transition-colors ${index === currentTrackIndex ? 'bg-blue-500/30' : 'hover:bg-white/10'}` },
+                    React.createElement('p', { className: "font-semibold truncate" }, track.title),
+                    React.createElement('p', { className: "text-xs text-white/60" }, track.artist)
+                ))
+            ),
+            React.createElement(DateTime)
+        );
+    };
+
+    // ==========================================
+    // WINDOW: Weather
+    // ==========================================
+    const WeatherWindow = () => {
+        const [weather, setWeather] = useState(null);
+        const [error, setError] = useState(null);
+        const [loading, setLoading] = useState(true);
+        const windowVariants = {
+            hidden: { opacity: 0, scale: 0.5, rotate: -90 },
+            visible: { opacity: 1, scale: 1, rotate: 0, transition: { type: 'spring', damping: 15, stiffness: 200 } },
+            exit: { opacity: 0, scale: 0.5, rotate: 90, transition: { duration: 0.3 } },
+        };
         
         useEffect(() => {
-          localStorage.setItem('pola-sovereign-notes', notes);
-        }, [notes]);
+            const fetchWeatherByIp = async () => {
+                try {
+                    setLoading(true);
+                    // Fetch location from IP
+                    const ipGeoResponse = await fetch('https://ipapi.co/json/');
+                    if (!ipGeoResponse.ok) throw new Error('Could not determine location from IP.');
+                    const ipGeoData = await ipGeoResponse.json();
+                    
+                    if (ipGeoData.error) {
+                        throw new Error(ipGeoData.reason || 'IP Geolocation failed.');
+                    }
 
-        return (
-          <div className="h-full flex flex-col">
-            <textarea
-              className="w-full h-full bg-transparent text-brand-off-white font-nunito text-lg p-2 resize-none focus:outline-none placeholder-brand-muted/70"
-              placeholder="Start typing your thoughts here..."
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              spellCheck="false"
-            />
-          </div>
+                    const { latitude, longitude, city } = ipGeoData;
+
+                    // Fetch weather using coordinates
+                    const data = await getWeather(latitude, longitude);
+                    setWeather({ ...data, name: city || 'Your Location' });
+                    setError(null);
+                } catch (err) {
+                    console.error("Weather fetching error:", err);
+                    setError('Could not fetch weather data.');
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            fetchWeatherByIp();
+        }, []);
+
+
+        const WeatherIconDisplay = ({ iconCode }) => {
+            const iconMap = { '01': '☀️', '02': '⛅️', '03': '☁️', '04': '☁️', '09': '🌧️', '10': '🌦️', '11': '⛈️', '13': '❄️', '50': '🌫️' };
+            const icon = iconMap[iconCode.slice(0, 2)] || '🌍';
+            return React.createElement('div', { className: "text-7xl" }, icon);
+        };
+
+        return React.createElement(motion.div, { variants: windowVariants, initial: "hidden", animate: "visible", exit: "exit", className: "w-full max-w-sm h-auto bg-black/20 backdrop-blur-lg rounded-3xl p-6 flex flex-col items-center justify-center shadow-2xl border border-white/10" },
+            loading && React.createElement('p', null, "Getting your weather..."),
+            error && React.createElement('p', { className: "text-red-400 text-center" }, error),
+            weather && React.createElement('div', { className: "text-center w-full" },
+                React.createElement('h2', { className: "text-2xl font-bold" }, weather.name),
+                React.createElement('div', { className: "my-4" },
+                    React.createElement(WeatherIconDisplay, { iconCode: weather.weather[0].icon }),
+                    React.createElement('p', { className: "text-5xl font-bold" }, `${Math.round(weather.main.temp)}°`),
+                    React.createElement('p', { className: "text-white/80 capitalize" }, weather.weather[0].description)
+                ),
+                React.createElement('div', { className: "grid grid-cols-3 gap-4 text-sm w-full" },
+                    React.createElement('div', { className: "bg-white/10 p-2 rounded-lg" }, React.createElement('p', { className: "font-semibold" }, "Feels Like"), React.createElement('p', null, `${Math.round(weather.main.feels_like)}°`)),
+                    React.createElement('div', { className: "bg-white/10 p-2 rounded-lg" }, React.createElement('p', { className: "font-semibold" }, "Humidity"), React.createElement('p', null, `${weather.main.humidity}%`)),
+                    React.createElement('div', { className: "bg-white/10 p-2 rounded-lg" }, React.createElement('p', { className: "font-semibold" }, "Wind"), React.createElement('p', null, `${weather.wind.speed.toFixed(1)} m/s`))
+                )
+            ),
+            React.createElement(DateTime)
         );
-      };
+    };
 
-      // --- MAIN APP ---
-      const App = () => {
-          const [activeView, setActiveView] = useState('home');
-          const [animationClass, setAnimationClass] = useState('animate-drop-in');
-          const { audioRef, ...audioPlayerProps } = useAudioPlayer(tracksData);
-          
-          const [date, setDate] = useState(new Date());
-          const [weather, setWeather] = useState(null);
-          const [weatherLoading, setWeatherLoading] = useState(true);
-          const [weatherError, setWeatherError] = useState(null);
-
-          useEffect(() => {
-            const timerId = setInterval(() => setDate(new Date()), 1000);
-            return () => clearInterval(timerId);
-          }, []);
-
-          const fetchWeather = useCallback(() => {
-            setWeatherLoading(true);
-            setWeatherError(null);
-            fetch(`https://wttr.in/?format=j1`)
-                .then(res => res.ok ? res.json() : Promise.reject('Weather service unavailable.'))
-                .then(data => setWeather(data))
-                .catch(err => setWeatherError(err.message || err))
-                .finally(() => setWeatherLoading(false));
-          }, []);
-
-          useEffect(() => {
-            fetchWeather();
-          }, [fetchWeather]);
-
-          let audioCtx = useRef(null);
-          const playSound = useCallback((type) => {
-            if (!audioCtx.current) {
-              try { audioCtx.current = new (window.AudioContext || window.webkitAudioContext)(); } 
-              catch (e) { console.error("Web Audio API is not supported"); return; }
+    // ==========================================
+    // WINDOW: Notepad
+    // ==========================================
+    const NotepadWindow = () => {
+        const [content, setContent] = useLocalStorage('notepadContent', 'Start typing here...');
+        const editorRef = useRef(null);
+        const { playSound } = useAudio();
+        const windowVariants = {
+            hidden: { opacity: 0, scale: 0.5, rotate: -90 },
+            visible: { opacity: 1, scale: 1, rotate: 0, transition: { type: 'spring', damping: 15, stiffness: 200 } },
+            exit: { opacity: 0, scale: 0.5, rotate: 90, transition: { duration: 0.3 } },
+        };
+        
+        useEffect(() => {
+            if (editorRef.current && editorRef.current.innerHTML !== content) {
+                editorRef.current.innerHTML = content;
             }
-            if (audioCtx.current.state === 'suspended') audioCtx.current.resume();
-            
-            const oscillator = audioCtx.current.createOscillator();
-            const gainNode = audioCtx.current.createGain();
-            oscillator.connect(gainNode);
-            gainNode.connect(audioCtx.current.destination);
-            
-            if (type === 'open') {
-              oscillator.type = 'triangle';
-              oscillator.frequency.setValueAtTime(880, audioCtx.current.currentTime);
-              gainNode.gain.setValueAtTime(0.06, audioCtx.current.currentTime);
-              gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.current.currentTime + 0.3);
-            } else { // 'close'
-              oscillator.type = 'sine';
-              oscillator.frequency.setValueAtTime(660, audioCtx.current.currentTime);
-              gainNode.gain.setValueAtTime(0.06, audioCtx.current.currentTime);
-              gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.current.currentTime + 0.2);
+        }, []);
+
+        const handleCommand = (command, value = null) => {
+            playSound('click');
+            document.execCommand(command, false, value);
+            editorRef.current?.focus();
+            setContent(editorRef.current?.innerHTML || '');
+        };
+        
+        const handleClear = () => {
+            playSound('error');
+            setContent('');
+            if(editorRef.current) editorRef.current.innerHTML = '';
+        }
+
+        const colors = ['#FFFFFF', '#EF4444', '#3B82F6', '#22C55E'];
+
+        return React.createElement(motion.div, { variants: windowVariants, initial: "hidden", animate: "visible", exit: "exit", className: "w-full max-w-lg h-auto bg-black/20 backdrop-blur-lg rounded-3xl p-4 flex flex-col shadow-2xl border border-white/10" },
+            React.createElement('div', { className: "flex items-center flex-wrap gap-2 p-2 bg-white/10 rounded-t-lg" },
+                React.createElement('button', { onMouseDown: (e) => { e.preventDefault(); handleCommand('bold'); }, className: "w-8 h-8 rounded hover:bg-white/20 font-bold" }, "B"),
+                React.createElement('button', { onMouseDown: (e) => { e.preventDefault(); handleCommand('italic'); }, className: "w-8 h-8 rounded hover:bg-white/20 italic" }, "I"),
+                React.createElement('button', { onMouseDown: (e) => { e.preventDefault(); handleCommand('underline'); }, className: "w-8 h-8 rounded hover:bg-white/20 underline" }, "U"),
+                React.createElement('div', { className:"w-px h-6 bg-white/20"}),
+                colors.map(color => React.createElement('button', { key: color, onMouseDown: (e) => { e.preventDefault(); handleCommand('foreColor', color); }, className: "w-6 h-6 rounded-full hover:scale-110 border-2 border-white/30", style: { backgroundColor: color } })),
+                React.createElement('div', { className: "flex-grow" }),
+                React.createElement('button', { onClick: handleClear, className: "px-3 py-1 rounded bg-red-500/50 hover:bg-red-500/80 text-xs" }, "Clear")
+            ),
+            React.createElement('div', { 
+                ref: editorRef, 
+                contentEditable: true, 
+                suppressContentEditableWarning: true, 
+                onInput: (e) => setContent(e.currentTarget.innerHTML), 
+                className: "w-full h-64 bg-white/5 p-4 rounded-b-lg outline-none focus:ring-2 focus:ring-blue-400 focus:ring-inset overflow-y-auto text-white/90",
+                dir: "auto"
+             }),
+            React.createElement(DateTime)
+        );
+    };
+
+    // ==========================================
+    // COMPONENT: Background (Optimized)
+    // ==========================================
+    const FloatingShapes = React.memo(() => {
+        const memoizedElements = useMemo(() => {
+            const shapes = [
+                React.createElement('svg', { key: "s1", className: "w-8 h-8", viewBox: "0 0 24 24", fill: "currentColor" }, React.createElement('path', { d: "M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" })),
+                React.createElement('svg', { key: "s2", className: "w-4 h-4", viewBox: "0 0 24 24", fill: "currentColor" }, React.createElement('path', { d: "M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" })),
+                React.createElement('svg', { key: "h1", className: "w-6 h-6", viewBox: "0 0 24 24", fill: "currentColor" }, React.createElement('path', { d: "M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" })),
+                React.createElement('svg', { key: "h2", className: "w-10 h-10", viewBox: "0 0 24 24", fill: "currentColor" }, React.createElement('path', { d: "M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" })),
+                React.createElement('div', { key: "c1", className: "w-5 h-5 rounded-full bg-white" }),
+                React.createElement('div', { key: "c2", className: "w-12 h-12 rounded-full bg-white" }),
+                React.createElement('div', { key: "c3", className: "w-3 h-3 rounded-full bg-white" }),
+            ];
+            return Array.from({ length: 15 }).map((_, i) => {
+                const style = {
+                    left: `${Math.random() * 100}%`,
+                    animation: `float ${15 + Math.random() * 20}s ease-in-out infinite`,
+                    animationDelay: `${Math.random() * 15}s`,
+                };
+                return React.createElement('div', {
+                    key: i,
+                    className: "absolute bottom-[-150px] text-white/20",
+                    style: style
+                }, shapes[i % shapes.length]);
+            });
+        }, []);
+
+        return React.createElement('div', { className: "absolute top-0 left-0 w-full h-full z-[-1] overflow-hidden" }, memoizedElements);
+    });
+    FloatingShapes.displayName = 'FloatingShapes';
+    
+    const Background = React.memo(() => React.createElement(React.Fragment, null, React.createElement('div', { className: "animated-grid" }), React.createElement(FloatingShapes)));
+    Background.displayName = 'Background';
+    
+    // ==========================================
+    // COMPONENT: NavItem (Optimized)
+    // ==========================================
+    const NavItem = React.memo(({ name, children, isActive, onNavClick }) => {
+        const { playSound } = useAudio();
+
+        const navIconVariants = {
+            initial: { y: 0, scale: 1, rotate: 0, transition: { type: 'spring', stiffness: 300, damping: 20 } },
+            hover: { y: -12, scale: 1.3, rotate: 8, transition: { type: 'spring', stiffness: 400, damping: 10 } }
+        };
+
+        const handleClick = useCallback(() => onNavClick(name), [onNavClick, name]);
+        
+        const handleHoverStart = useCallback(() => {
+            if (!isActive) {
+                playSound('hover');
             }
+        }, [isActive, playSound]);
+
+        return React.createElement(motion.div, {
+            className: "relative p-3 cursor-pointer",
+            onClick: handleClick,
+            onHoverStart: handleHoverStart,
+            initial: "initial",
+            whileHover: isActive ? "initial" : "hover",
+            'aria-label': `Open ${name} window`
+        }, 
+            React.createElement(motion.div, {
+                variants: navIconVariants,
+            }, children)
+        );
+    });
+    NavItem.displayName = 'NavItem';
+
+    // ==========================================
+    // COMPONENT: Navbar (Optimized)
+    // ==========================================
+    const Navbar = React.memo(({ activeWindow, onNavClick }) => {
+        return React.createElement('nav', { className: "fixed bottom-4 md:bottom-8 bg-black/20 backdrop-blur-sm shadow-2xl z-50" },
+            React.createElement('div', { className: "flex items-center justify-center space-x-2 px-2" },
+                React.createElement(NavItem, { name: "home", isActive: activeWindow === 'home', onNavClick: onNavClick }, 
+                    React.createElement(HomeIcon, { isActive: activeWindow === 'home' })
+                ),
+                React.createElement(NavItem, { name: "music", isActive: activeWindow === 'music', onNavClick: onNavClick },
+                    React.createElement(MusicIcon, { isActive: activeWindow === 'music' })
+                ),
+                React.createElement(NavItem, { name: "weather", isActive: activeWindow === 'weather', onNavClick: onNavClick },
+                     React.createElement(WeatherIcon, { isActive: activeWindow === 'weather' })
+                ),
+                React.createElement(NavItem, { name: "notepad", isActive: activeWindow === 'notepad', onNavClick: onNavClick },
+                    React.createElement(NotepadIcon, { isActive: activeWindow === 'notepad' })
+                )
+            )
+        );
+    });
+    Navbar.displayName = 'Navbar';
+
+
+    // ==========================================
+    // APP
+    // ==========================================
+    const App = () => {
+        const [activeWindow, setActiveWindow] = useState('home');
+        const { playSound } = useAudio();
+        
+        // --- LIFTED MUSIC STATE ---
+        const tracksData = [
+            { url: "https://audio.jukehost.co.uk/ztGbM6nU1jGFif7kdo9pS3DIEcOgkuRw", title: "Holy Savior", artist: "SoundSurge" },
+            { url: "https://audio.jukehost.co.uk/ohe18ncftZviWmfGvdp7EGxTnmUXrSbL", title: "Shining Future", artist: "SoundSurge" },
+            { url: "https://audio.jukehost.co.uk/TUdyUcjx0FSA2SMx2X7J2cyFPYJFkkBa", title: "Fading Echo", artist: "SoundSurge" },
+            { url: "https://audio.jukehost.co.uk/WmpFI6ZFtDTnSEoUt2fS9V8PQuGS0i8E", title: "Virtual Angel", artist: "SoundSurge" },
+            { url: "https://audio.jukehost.co.uk/HrWMsAhD64LRNkzG2aQ9t2BUkoO6rTBm", title: "Electric Rush", artist: "SoundSurge" },
+        ];
+        const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
+        const [isPlaying, setIsPlaying] = useState(false);
+        const [progress, setProgress] = useState(0);
+        const audioRef = useRef(null);
+        
+        useEffect(() => {
+            audioRef.current = new Audio();
+            audioRef.current.volume = 1; // Set volume to 100%
+            const audio = audioRef.current;
+            return () => {
+                audio?.pause();
+            };
+        }, []);
+        
+        const playNext = useCallback(() => {
+            setCurrentTrackIndex((prev) => (prev + 1) % tracksData.length);
+        }, [tracksData.length]);
+
+        useEffect(() => {
+            const audio = audioRef.current;
+            if (!audio) return;
             
-            oscillator.start();
-            oscillator.stop(audioCtx.current.currentTime + 0.3);
-          }, []);
+            const handlePlay = async () => {
+                 try {
+                    await audio.play();
+                } catch (error) {
+                    if (error.name !== 'AbortError') {
+                        console.error("Audio playback failed:", error);
+                        setIsPlaying(false);
+                    }
+                }
+            };
 
-          const closeWindow = useCallback(() => {
-              if (activeView) {
-                  playSound('close');
-                  setAnimationClass('animate-fall-out');
-                  setTimeout(() => setActiveView(null), 300);
-              }
-          }, [activeView, playSound]);
+            if (isPlaying) {
+                const currentSrc = tracksData[currentTrackIndex].url;
+                if (audio.src !== currentSrc) {
+                    audio.src = currentSrc;
+                    audio.load();
+                    audio.addEventListener('canplaythrough', handlePlay, { once: true });
+                } else {
+                     handlePlay();
+                }
+            } else {
+                audio.pause();
+            }
+        }, [isPlaying, currentTrackIndex, tracksData]);
 
-          const openWindow = useCallback((id) => {
-              if (activeView === id && id !== 'home') {
-                  closeWindow();
-                  return;
-              }
-              if (activeView === id) return;
+        useEffect(() => {
+            const audio = audioRef.current;
+            if (!audio) return;
+            const updateProgress = () => setProgress(audio.duration ? (audio.currentTime / audio.duration) * 100 : 0);
+            const handleEnd = () => playNext();
+            
+            audio.addEventListener('timeupdate', updateProgress);
+            audio.addEventListener('ended', handleEnd);
+            audio.addEventListener('loadedmetadata', updateProgress);
+            
+            return () => {
+                audio.removeEventListener('timeupdate', updateProgress);
+                audio.removeEventListener('ended', handleEnd);
+                audio.removeEventListener('loadedmetadata', updateProgress);
+            };
+        }, [playNext]);
+        
+        const handlePlayPause = useCallback(() => {
+            setIsPlaying(prev => !prev);
+            playSound('click');
+        }, [playSound]);
 
-              playSound('open');
-              if (activeView) {
-                  setAnimationClass('animate-fall-out');
-                  setTimeout(() => {
-                      setActiveView(id);
-                      setAnimationClass('animate-drop-in');
-                  }, 300);
-              } else {
-                  setActiveView(id);
-                  setAnimationClass('animate-drop-in');
-              }
-          }, [activeView, playSound, closeWindow]);
+        const handleSelectTrack = useCallback((index) => {
+            if (currentTrackIndex === index) {
+                setIsPlaying(prev => !prev);
+            } else {
+                setCurrentTrackIndex(index);
+                setIsPlaying(true);
+            }
+            playSound('click');
+        }, [currentTrackIndex, playSound]);
 
-          const renderContent = () => {
-              if (!activeView) return null;
-              switch (activeView) {
-                  case 'home': return <HomeContent date={date} weather={weather} />;
-                  case 'clock': return <ClockContent date={date} />;
-                  case 'weather': return <WeatherContent weatherData={weather} loading={weatherLoading} error={weatherError} onRetry={fetchWeather} />;
-                  case 'music': return <MusicPlayer tracks={tracksData} {...audioPlayerProps} />;
-                  case 'notes': return <NotesContent />;
-                  default: return null;
-              }
-          };
+        const handlePlayPrev = useCallback(() => {
+            setCurrentTrackIndex((prev) => (prev - 1 + tracksData.length) % tracksData.length);
+            setIsPlaying(true);
+            playSound('swoosh');
+        }, [tracksData.length, playSound]);
 
-          let windowClass = 'max-w-xl';
-          if (activeView === 'home') windowClass = 'max-w-2xl max-h-[720px]';
-          else if (activeView === 'music') windowClass = 'max-w-lg max-h-[700px]';
-          else if (activeView === 'notes') windowClass = 'max-w-lg max-h-[600px]';
-          else windowClass = 'max-w-xl max-h-[600px]';
+        const handlePlayNext = useCallback(() => {
+            playNext();
+            setIsPlaying(true);
+            playSound('swoosh');
+        }, [playNext, playSound]);
+        
+        const musicPlayerProps = {
+            tracksData, currentTrackIndex, isPlaying, progress,
+            handlePlayPause, handlePlayNext, handlePlayPrev, handleSelectTrack,
+        };
+        // --- END LIFTED MUSIC STATE ---
 
+        const handleNavClick = useCallback((windowName) => {
+            if (windowName !== activeWindow) {
+                playSound('open');
+                setActiveWindow(windowName);
+            }
+        }, [activeWindow, playSound]);
 
-          return (
-              <Fragment>
-                  <audio ref={audioRef} />
-                  {activeView && (
-                      <Window
-                          key={activeView}
-                          title={viewTitles[activeView]}
-                          onClose={closeWindow}
-                          animationClass={animationClass}
-                          className={windowClass}
-                      >
-                          {renderContent()}
-                      </Window>
-                  )}
-                  <Dock onIconClick={openWindow} activeView={activeView} />
-              </Fragment>
-          );
-      };
+        const renderWindow = () => {
+            switch (activeWindow) {
+                case 'home': return React.createElement(HomeWindow, { key: "home" });
+                case 'music': return React.createElement(MusicWindow, { ...musicPlayerProps, key: "music" });
+                case 'weather': return React.createElement(WeatherWindow, { key: "weather" });
+                case 'notepad': return React.createElement(NotepadWindow, { key: "notepad" });
+                default: return null;
+            }
+        };
 
-      // --- RENDER APP ---
-      const rootElement = document.getElementById('root');
-      if (rootElement) {
-        const root = ReactDOM.createRoot(rootElement);
-        root.render(<App />);
-      } else {
-        console.error("Root element not found. App could not be mounted.");
-      }
-    </script>
+        return React.createElement('div', { className: "relative w-screen h-screen overflow-hidden text-white flex flex-col items-center justify-center" },
+            React.createElement(Background),
+            React.createElement('main', { className: "flex-grow flex items-center justify-center w-full p-4" },
+                React.createElement(AnimatePresence, { mode: "wait" }, renderWindow())
+            ),
+            React.createElement(Navbar, { activeWindow, onNavClick: handleNavClick })
+        );
+    };
+    
+    const rootElement = document.getElementById('root');
+    if (!rootElement) throw new Error("Could not find root element to mount to");
+    const root = ReactDOM.createRoot(rootElement);
+    root.render(React.createElement(React.StrictMode, null, React.createElement(App)));
+  </script>
 </body>
 </html>
