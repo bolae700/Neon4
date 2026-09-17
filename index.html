@@ -379,7 +379,7 @@
         return React.createElement(motion.div, { variants: windowVariants, initial: "hidden", animate: "visible", exit: "exit", className: "w-full max-w-sm h-auto bg-black/20 backdrop-blur-lg rounded-3xl p-6 text-center flex flex-col items-center shadow-2xl border border-white/10" },
             React.createElement(motion.img, { src: "https://xatimg.com/image/xHLWxrdb6TqD.png", alt: "Pola's profile picture", className: "w-28 h-28 rounded-full border-4 border-white/30 object-cover shadow-lg", whileHover: { scale: 1.1, rotate: 5, transition: { type: 'spring', stiffness: 300 } } }),
             React.createElement('h1', { className: "text-3xl font-bold mt-4 name-shake cursor-pointer flex items-center" }, React.createElement('span', null, "𝙋𝙊𝙇𝘼"), React.createElement('span', { className: "text-2xl ml-2 music-note-dance" }, "𝅘𝅥𝅮")),
-            React.createElement('p', { className: "mt-2 text-sm text-white/80 italic" }, "\"𝑰 𝒄𝒂𝒏 𝒅𝒐 𝒂𝒍𝒍 𝒕𝒉𝒊𝒏𝒈𝒔 𝒕𝒉𝒓𝒐𝒖𝒈𝒉 𝑪𝒉𝒓𝒊𝒔𝒕 𝒘𝒉𝒐 𝒈𝒊𝒗𝒆𝒔 𝒎𝒆 𝒔𝒕𝒓𝒆𝒏𝒈𝒕𝒉.\""),
+            React.createElement('p', { className: "mt-2 text-sm text-white/80 italic" }, "\"𝙄 𝘾𝘼𝙉 𝘿𝙊 𝘼𝙇𝙇 𝙏𝙃𝙄𝙉𝙂𝙎 𝙏𝙃𝙍𝙊𝙐𝙂𝙃 𝘾𝙃𝙍𝙄𝙎𝙏 𝙒𝙃𝙊 𝙂𝙄𝙑𝙀𝙎 𝙈𝙀 𝙎𝙏𝙍𝙀𝙉𝙂𝙏𝙃.\""),
             React.createElement('div', { className: "flex space-x-6 mt-6" },
                 React.createElement('a', { href: "https://github.com/bolae700", target: "_blank", rel: "noopener noreferrer", className: "text-white/80 hover:text-white transition-colors" }, React.createElement(GithubIcon))
             ),
@@ -654,11 +654,16 @@
         
         // --- LIFTED MUSIC STATE ---
         const tracksData = [
-            { url: "https://audio.jukehost.co.uk/01a0748f-4684-70fb-9d00-47fd8e25bf59", title: "Watch Us Roll", artist: "SoundSurge" },
-            { url: "https://audio.jukehost.co.uk/01a0748f-4785-733e-b5f7-426c7ab6190c", title: "Sweet Dreamer", artist: "SoundSurge" },
-            { url: "https://audio.jukehost.co.uk/01a0748f-4733-72c9-bdff-c427a9c7b6d4", title: "Silent Shadow Running", artist: "SoundSurge" },
-            { url: "https://audio.jukehost.co.uk/01a0748f-4749-7199-b3c1-f3c9de1189fd", title: "Falling For Your Rhythm", artist: "SoundSurge" },          
-            { url: "https://audio.jukehost.co.uk/01a0748f-46e1-735a-a51a-2ed071d2cf6f", title: "Dancing", artist: "SoundSurge" },              
+            { url: "https://audio.jukehost.co.uk/01a0ae97-672d-738c-911b-5f2853116db6", title: "Ana Get", artist: "Vivian El-Sudania" },
+            { url: "https://audio.jukehost.co.uk/01a0ae97-6837-7132-807c-d2b7dd9a5bba", title: "Aywa Elgrh", artist: "Vivian El-Sudania" },
+            { url: "https://audio.jukehost.co.uk/01a0ae97-6818-72c0-a2c6-118730485f3f", title: "Gare7", artist: "Vivian El-Sudania" },
+            { url: "https://audio.jukehost.co.uk/01a0ae97-695c-72f7-ad8e-f5d8942f9d12", title: "7ases Bd3fi", artist: "Vivian El-Sudania" },          
+            { url: "https://audio.jukehost.co.uk/01a0ae97-67ae-71d6-8dd5-2f328b994e1e", title: "Aish Bik", artist: "Vivian El-Sudania" },   
+            { url: "https://audio.jukehost.co.uk/01a0ae97-6787-70c4-b6bf-13ee8670c180", title: "3ndk Shb3i", artist: "Vivian El-Sudania" },
+            { url: "https://audio.jukehost.co.uk/01a0ae97-68f0-70ab-9778-f34fab907b29", title: "Frdt Eidik", artist: "Vivian El-Sudania" },
+            { url: "https://audio.jukehost.co.uk/01a0ae97-67de-70bc-92cf-9f083a3c9859", title: "La Mesh 7abki", artist: "Vivian El-Sudania" },
+            { url: "https://audio.jukehost.co.uk/01a0ae97-666b-71dd-ba5a-cd9d8f20a058", title: "Ya Mo7b", artist: "Vivian El-Sudania" },          
+            { url: "https://audio.jukehost.co.uk/01a0ae97-68fe-703b-b630-a945b59e8490", title: "Yalli Btgr7", artist: "Vivian El-Sudania" },              
         ];
         const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
         const [isPlaying, setIsPlaying] = useState(false);
